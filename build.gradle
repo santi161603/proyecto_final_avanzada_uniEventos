@@ -7,7 +7,7 @@ plugins {
 
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
-description = 'Breve descripción del proyecto'
+description = 'Este proyecto es un proyecto muy proyectoso'
 
 
 java {
