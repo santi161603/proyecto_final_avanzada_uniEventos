@@ -36,6 +36,14 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+#poyecto universidad#
+/.idea/
+*.class
+/.gradle/
+/*/bin/
+/*/build/
+/build/
+
 ### VS Code ###
 .vscode/
 
