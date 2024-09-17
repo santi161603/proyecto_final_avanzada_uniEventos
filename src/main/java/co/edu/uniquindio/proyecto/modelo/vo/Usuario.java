@@ -15,6 +15,4 @@ public class Usuario {
     EstadoCuenta estado;
     Notificacion notificacion;
     HistorialActividad historialActividad;
-
-
 }
