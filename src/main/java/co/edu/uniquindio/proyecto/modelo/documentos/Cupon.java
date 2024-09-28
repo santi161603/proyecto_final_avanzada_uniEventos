@@ -1,21 +1,13 @@
 package co.edu.uniquindio.proyecto.modelo.documentos;
 
-import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 @Document
-
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cupon {
     @Id
-    @EqualsAndHashCode.Include
     private String codigoCupon;
 
     private String nombreCupon;

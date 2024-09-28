@@ -3,23 +3,14 @@ package co.edu.uniquindio.proyecto.modelo.documentos;
 import co.edu.uniquindio.proyecto.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.modelo.enums.RolUsuario;
 import co.edu.uniquindio.proyecto.modelo.vo.*;
-import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Document
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-
 public class Cuenta extends Usuario {
-
     @Id
-    @EqualsAndHashCode.Include
     private String idUsuario;
 
     private CarritoCompras carrito;

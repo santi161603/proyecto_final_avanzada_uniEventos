@@ -1,21 +1,16 @@
 package co.edu.uniquindio.proyecto.modelo.documentos;
 
-import lombok.*;
+import co.edu.uniquindio.proyecto.modelo.vo.Localidad;
+import co.edu.uniquindio.proyecto.modelo.vo.Pago;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 @Document
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Compra {
 
     @Id
-    @EqualsAndHashCode.Include
     private String idCompra;
 
     private Cuenta cuenta;
