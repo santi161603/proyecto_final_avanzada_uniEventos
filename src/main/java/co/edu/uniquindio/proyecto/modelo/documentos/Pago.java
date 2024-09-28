@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.modelo.documentos;
 
+import co.edu.uniquindio.proyecto.modelo.enums.EstadoPago;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,18 +13,15 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Compra {
+public class Pago {
 
     @Id
     @EqualsAndHashCode.Include
-    private String idCompra;
+    private String idPago;
 
-    private Cuenta cuenta;
-    private Evento evento;
-    private Localidad localidad;
-    private Pago pago;
-    private int cantidadEntradas;
-    private double precioTotal;
-    private Date fechaCompra;
-    private Cupon cuponAplicado;
+    private String metodoPago; // MercadoPago, PayPal, etc.
+    private EstadoPago estadoPago; // completado, pendiente, fallido
+    private Date fechaPago;
+    private double montoTotal;
+
 }
