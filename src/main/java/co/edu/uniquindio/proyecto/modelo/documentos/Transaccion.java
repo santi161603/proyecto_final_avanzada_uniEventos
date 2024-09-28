@@ -1,24 +1,27 @@
 package co.edu.uniquindio.proyecto.modelo.documentos;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Document
-
+@Document()
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Cupon {
+public class Transaccion {
+
     @Id
     @EqualsAndHashCode.Include
-    private String codigoCupon;
+    private String codigo;
 
-    private String nombreCupon;
-    private double porcentajeDescuento;
-    private Date fechaVencimiento;
+    private List<Evento> productos;
+    private ObjectId idCliente;
+    private LocalDateTime fecha;
+    private ObjectId idPago;
 }
