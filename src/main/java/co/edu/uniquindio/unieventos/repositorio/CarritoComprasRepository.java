@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CarritoComprasRepository extends MongoRepository<CarritoCompras,String> {
+
 }
