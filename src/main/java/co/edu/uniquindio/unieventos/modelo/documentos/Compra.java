@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,5 +26,5 @@ public class Compra {
     private int cantidadEntradas;
     private double precioTotal;
     private Date fechaCompra;
-    private Cupon cuponAplicado;
+    private ObjectId cuponAplicado;
 }

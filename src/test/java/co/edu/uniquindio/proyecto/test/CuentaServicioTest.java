@@ -1,28 +1,28 @@
-package co.edu.uniquindio.unieventos.servicios.Implement;
+package co.edu.uniquindio.proyecto.test;
 
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@Service
-@Transactional
-@RequiredArgsConstructor
-public class CuentaServicioImp implements CuentaServicio {
+@SpringBootTest
 
-    private CuentaRepository Cuentarepo;
+public class CuentaServicioTest implements CuentaServicio {
+
+    private CuentaRepository cuentaRepo;
 
     @Override
-    public String crearCuenta(DTOCrearCuenta cuenta) {
+    public String crearCuenta(DTOCrearCuenta cuenta) throws Exception {
+
+        //TODO implementar codigo test
 
         Cuenta newCuenta = new Cuenta();
 
-        //TODO Crear logica de creacion de cuenta
-
         //TODO este es un ejemplo, se tiene que hacer sobre nuestro modelo de cuenta
+        //TODO recordar que el DTO tambien toca quemarlo para el test
+        
         /*
         nuevaCuenta.setEmail( cuenta.email() );
         nuevaCuenta.setPassword( cuenta.password() );
@@ -36,7 +36,7 @@ public class CuentaServicioImp implements CuentaServicio {
                 ));
         nuevaCuenta.setEstado( EstadoCuenta.INACTIVO );*/
 
-        Cuentarepo.save(newCuenta);
-        return newCuenta.getIdUsuario();
+        return "";
     }
 }
+
