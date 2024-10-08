@@ -10,13 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
+
+@Document(collection = "cuentas")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class Cuenta extends Usuario {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Cuenta {
 
     @Id
     @EqualsAndHashCode.Include
@@ -30,6 +31,18 @@ public class Cuenta extends Usuario {
     private RolUsuario rol;
     private CodigoVerificacion codigoVerificacion;
     private EstadoCuenta estado;
-    private String email;
-    private String contrasena;
+
+    @Builder
+
+    public Cuenta(ObjectId carrito, List<Transaccion> historialCompras, Usuario usuario, List<TicketSoporte> ticketsSoporte, List<Notificacion> notificaciones, RolUsuario rol, CodigoVerificacion codigoVerificacion, EstadoCuenta estado) {
+        this.carrito = carrito;
+        this.historialCompras = historialCompras;
+        this.usuario = usuario;
+        this.ticketsSoporte = ticketsSoporte;
+        this.notificaciones = notificaciones;
+        this.rol = rol;
+        this.codigoVerificacion = codigoVerificacion;
+        this.estado = estado;
+    }
 }
+

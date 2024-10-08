@@ -1,15 +1,13 @@
 package co.edu.uniquindio.unieventos.modelo.vo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Usuario {
     private String cedula;
@@ -18,4 +16,14 @@ public class Usuario {
     private List<String> telefono;
     private String email;
     private String contrasena;
+
+    @Builder
+    public Usuario(String cedula, String nombre, List<String> telefono, String direccion, String contrasena, String email) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.contrasena = contrasena;
+        this.email = email;
+    }
 }

@@ -1,9 +1,22 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
+import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
+import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
+
+import java.util.List;
 
 public interface CuentaServicio {
 
     String crearCuenta(DTOCrearCuenta cuenta) throws Exception;
+
+    // Método para eliminar una cuenta por su ID
+    void eliminarCuenta(String idUsuario)throws Exception;
+
+    // Método para actualizar una cuenta
+    Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada)throws Exception;
+
+    // Método para obtener todas las cuentas
+    List<Cuenta> obtenerTodasLasCuentas()throws Exception;
 
 }
