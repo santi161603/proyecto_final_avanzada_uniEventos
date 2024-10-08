@@ -21,12 +21,10 @@ public class Evento {
     private String idEvento;
 
     private String nombre;
-    private String direccion;
     private String ciudad;
     private String descripcion;
     private TipoEvento tipoEvento; // concierto, teatro, deporte, etc.
     private String imagenPoster;
-    private String imagenLocalidades;
-    private LocalDateTime fechaEvento;
-    private List<Localidad> localidades;
+    private List<LocalDateTime> fechaEvento;
+    private List<LocalidadEvento> localidades;
 }

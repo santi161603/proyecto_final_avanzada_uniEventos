@@ -21,4 +21,5 @@ public class Cupon {
     private String nombreCupon;
     private double porcentajeDescuento;
     private Date fechaVencimiento;
+    private int cantidad;
 }

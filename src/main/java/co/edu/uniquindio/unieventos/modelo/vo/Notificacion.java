@@ -14,5 +14,4 @@ import java.util.Date;
 public class Notificacion {
     private String mensaje;
     private Date fechaEnvio;
-    private boolean leida;
 }

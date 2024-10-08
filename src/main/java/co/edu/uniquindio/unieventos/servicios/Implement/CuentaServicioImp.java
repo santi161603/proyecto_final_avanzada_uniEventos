@@ -2,6 +2,8 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.unieventos.modelo.vo.Usuario;
 import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import lombok.RequiredArgsConstructor;
@@ -15,28 +17,29 @@ public class CuentaServicioImp implements CuentaServicio {
 
     private CuentaRepository Cuentarepo;
 
-    @Override
-    public String crearCuenta(DTOCrearCuenta cuenta) {
+    public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) {
+        // Crear una nueva instancia de Cuenta
+        Cuenta nuevaCuenta = new Cuenta();
 
-        Cuenta newCuenta = new Cuenta();
+        // Asignar los valores del DTO a la entidad Cuenta
+        nuevaCuenta.setEmail(dtoCrearCuenta.email());
+        nuevaCuenta.setContrasena(dtoCrearCuenta.contrasena());
+        nuevaCuenta.setRol(dtoCrearCuenta.rol());
+        nuevaCuenta.setEstado(EstadoCuenta.INACTIVO);  // Por defecto inactivo
 
-        //TODO Crear logica de creacion de cuenta
+        // Crear una instancia de Usuario dentro de Cuenta
+        Usuario usuario = new Usuario();
+        usuario.setCedula(dtoCrearCuenta.cedula());
+        usuario.setNombre(dtoCrearCuenta.nombre());
+        usuario.setDireccion(dtoCrearCuenta.direccion());
+        usuario.setTelefono(dtoCrearCuenta.telefono());
 
-        //TODO este es un ejemplo, se tiene que hacer sobre nuestro modelo de cuenta
-        /*
-        nuevaCuenta.setEmail( cuenta.email() );
-        nuevaCuenta.setPassword( cuenta.password() );
-        nuevaCuenta.setRol( Rol.CLIENTE );
-        nuevaCuenta.setFechaRegistro( LocalDateTime.now() );
-        nuevaCuenta.setUsuario( new Usuario(
-           cuenta.cedula(),
-           cuenta.nombre(),
-           cuenta.telefono(),
-           cuenta.direccion()
-                ));
-        nuevaCuenta.setEstado( EstadoCuenta.INACTIVO );*/
+        nuevaCuenta.setUsuario(usuario);
 
-        Cuentarepo.save(newCuenta);
-        return newCuenta.getIdUsuario();
+        // Guardar la cuenta en la base de datos
+        Cuentarepo.save(nuevaCuenta);
+
+        // Retornar el ID del usuario creado
+        return nuevaCuenta.getIdUsuario();
     }
 }

@@ -22,6 +22,6 @@ public class Transaccion {
 
     private List<Evento> productos;
     private ObjectId idCliente;
-    private LocalDateTime fecha;
     private ObjectId idPago;
+    private String qr;
 }

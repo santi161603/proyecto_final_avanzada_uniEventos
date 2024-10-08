@@ -23,11 +23,12 @@ public class Cuenta extends Usuario {
     private String idUsuario;
 
     private ObjectId carrito;
-    private List<Compra> historialCompras;
-    private List<Cupon> cupones;
+    private List<Transaccion> historialCompras;
     private Usuario usuario;
+    private List<Notificacion> notificaciones;
     private List<TicketSoporte> ticketsSoporte;
     private RolUsuario rol;
+    private CodigoVerificacion codigoVerificacion;
     private EstadoCuenta estado;
     private String email;
     private String contrasena;
