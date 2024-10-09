@@ -11,10 +11,10 @@ public interface CuentaServicio {
     String crearCuenta(DTOCrearCuenta cuenta) throws Exception;
 
     // Método para eliminar una cuenta por su ID
-    void eliminarCuenta(String idUsuario)throws Exception;
+    Boolean eliminarCuenta(String idUsuario)throws Exception;
 
     // Método para actualizar una cuenta
-    Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada)throws Exception;
+    Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada) throws Exception;
 
     // Método para obtener todas las cuentas
     List<Cuenta> obtenerTodasLasCuentas()throws Exception;

@@ -24,7 +24,7 @@ public class Cuenta {
     private String idUsuario;
 
     private ObjectId carrito;
-    private List<Transaccion> historialCompras;
+    private List<ObjectId> historialCompras;
     private Usuario usuario;
     private List<Notificacion> notificaciones;
     private List<TicketSoporte> ticketsSoporte;
@@ -34,7 +34,7 @@ public class Cuenta {
 
     @Builder
 
-    public Cuenta(ObjectId carrito, List<Transaccion> historialCompras, Usuario usuario, List<TicketSoporte> ticketsSoporte, List<Notificacion> notificaciones, RolUsuario rol, CodigoVerificacion codigoVerificacion, EstadoCuenta estado) {
+    public Cuenta(ObjectId carrito, List<ObjectId> historialCompras, Usuario usuario, List<TicketSoporte> ticketsSoporte, List<Notificacion> notificaciones, RolUsuario rol, CodigoVerificacion codigoVerificacion, EstadoCuenta estado) {
         this.carrito = carrito;
         this.historialCompras = historialCompras;
         this.usuario = usuario;

@@ -20,6 +20,6 @@ public class CarritoCompras {
     private String idCarritoCompras;      // Identificador único del carrito
 
     private ObjectId usuarioId;
-    private List<Evento> items;
+    private List<ObjectId> items;
     private Double totalPrecio;
 }
