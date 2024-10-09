@@ -20,7 +20,7 @@ public interface CarritoServicio {
     List<Carrito> obtenerTodosLosCarritos() throws Exception;
 
     // Método para recibir un evento relacionado con el carrito
-    void procesarEvento(DTOEventoCarrito evento) throws Exception;
+    void añadirEventoCarrito(String idevento) throws Exception;
 }
 
 
