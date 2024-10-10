@@ -16,9 +16,6 @@ public interface CarritoServicio {
     // Método para eliminar un carrito por su ID
     void eliminarCarrito(String idCarrito) throws Exception;
 
-    // Método para actualizar un carrito
-    CarritoCompras actualizarCarrito(String idCarrito, DTOActualizarCarrito carritoActualizado) throws Exception;
-
     // Método para obtener un carrito por su ID
     CarritoCompras obtenerCarritoPorId(String idCarrito) throws Exception;
 
@@ -26,7 +23,9 @@ public interface CarritoServicio {
     List<CarritoCompras> obtenerTodosLosCarritos() throws Exception;
 
     // Método para recibir un evento relacionado con el carrito
-    void añadirEventoCarrito(String idevento) throws Exception;
+    void añadirEventoCarrito(String idevento, String idCliente) throws Exception;
+
+    void eliminarEventoCarrito(String idEvento, String idCliente) throws Exception;
 }
 
 
