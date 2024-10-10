@@ -2,6 +2,8 @@ package co.edu.uniquindio.unieventos.servicios.interfases;
 
 import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
+import co.edu.uniquindio.unieventos.dto.LoginDTO;
+import co.edu.uniquindio.unieventos.dto.TokenDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 
 import java.util.List;
@@ -18,5 +20,7 @@ public interface CuentaServicio {
 
     // Método para obtener todas las cuentas
     List<Cuenta> obtenerTodasLasCuentas()throws Exception;
+
+    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
 }

@@ -1,6 +1,8 @@
 package co.edu.uniquindio.unieventos.test;
 
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
+import co.edu.uniquindio.unieventos.dto.LoginDTO;
+import co.edu.uniquindio.unieventos.dto.TokenDTO;
 import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,18 @@ public class CuentaServicioTest {
         assertTrue(result);
     }
 
+    @Test
+    public void iniciarSesionTest() throws Exception{
+
+        LoginDTO loginDTO = new LoginDTO( "password123","johndoe@example.com");
+
+        TokenDTO tokenDTO = cuentaServicio.iniciarSesion(loginDTO);
+
+        System.out.println(tokenDTO);
+
+        assertNotNull(tokenDTO);
+
+    }
 
 
 
