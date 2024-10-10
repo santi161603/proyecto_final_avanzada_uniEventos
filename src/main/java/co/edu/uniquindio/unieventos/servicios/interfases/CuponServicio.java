@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
 public interface CuponServicio {
+/*
 
     // Método para crear un cupón
     String crearCupon(DTOCrearCupon cupon) throws Exception;
@@ -16,6 +17,7 @@ public interface CuponServicio {
 
     // Método para obtener todos los cupones
     List<Cupon> obtenerTodosLosCupones() throws Exception;
+*/
 
 }
 

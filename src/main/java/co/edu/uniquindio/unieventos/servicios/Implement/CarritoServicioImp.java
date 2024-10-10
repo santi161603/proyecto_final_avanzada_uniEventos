@@ -17,11 +17,14 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+public class CarritoServicioImp {
+/*
+    private final CarritoComprasRepository comprasRepository;
 public class CarritoServicioImp implements CarritoServicio {
 
     private final CarritoComprasRepository carritoRepository;
     private final EventoRepository eventoRepository;
-    
+
     @Override
     public String crearCarrito(ObjectId usuarioId) throws Exception {
         CarritoCompras carrito = new CarritoCompras();
@@ -123,5 +126,4 @@ public class CarritoServicioImp implements CarritoServicio {
     }
 }
 */
-
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CarritoComprasRepository extends MongoRepository<CarritoCompras,String> {
-    // Consulta para buscar un carrito por el ObjectId del usuario
+
     @Query(value = "{ 'usuarioId' : ?0 }")
     CarritoCompras findByUsuarioId(ObjectId usuarioId);
 }
