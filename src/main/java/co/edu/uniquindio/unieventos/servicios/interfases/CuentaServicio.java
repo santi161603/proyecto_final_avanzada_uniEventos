@@ -18,9 +18,13 @@ public interface CuentaServicio {
     // Método para actualizar una cuenta
     Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada) throws Exception;
 
+    void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception;
+
     // Método para obtener todas las cuentas
     List<Cuenta> obtenerTodasLasCuentas()throws Exception;
 
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
+
+    void  reenviarToken(String idUsuario) throws Exception;
 
 }

@@ -21,13 +21,27 @@ public class CuentaServicioTest {
     private CuentaServicio cuentaServicio;
 
     @Test
-    public void crearCuentaTest() throws Exception{
-        DTOCrearCuenta dto = new DTOCrearCuenta("1234567890", "John Doe", List.of("3111111111"), "123 Calle Falsa", "johndoe@example.com", "password123", RolUsuario.CLIENTE);
+    public void crearCuentaTest() throws Exception {
+        DTOCrearCuenta dto = new DTOCrearCuenta("1005088484", "Sebastian David", List.of("3108286354"), "Barrio Miraflorez Carrera 19a #36-3", "davideg3007@gmail.com", "david123", RolUsuario.MODERADOR);
         //Llamada al método que se está probando
         String idUsuario = cuentaServicio.crearCuenta(dto);
         // Verificación
         assertNotNull(idUsuario);
     }
+
+    @Test
+    public void reenviarToken() throws Exception {
+        cuentaServicio.reenviarToken("670830e86b8c621efd663bc2");
+    }
+
+    @Test
+    public void activarCuenta()throws Exception{
+
+        cuentaServicio.activarCuenta("670830e86b8c621efd663bc2",2396);
+
+    }
+    
+    
 
     @Test
     public void eliminarCuentaTest() throws Exception{
@@ -38,7 +52,7 @@ public class CuentaServicioTest {
     @Test
     public void iniciarSesionTest() throws Exception{
 
-        LoginDTO loginDTO = new LoginDTO( "password123","johndoe@example.com");
+        LoginDTO loginDTO = new LoginDTO( "david123","davideg3007@gmail.com");
 
         TokenDTO tokenDTO = cuentaServicio.iniciarSesion(loginDTO);
 

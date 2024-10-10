@@ -1,16 +1,14 @@
 package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.config.JWTUtils;
-import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
-import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
-import co.edu.uniquindio.unieventos.dto.LoginDTO;
-import co.edu.uniquindio.unieventos.dto.TokenDTO;
+import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventos.modelo.vo.CodigoVerificacion;
 import co.edu.uniquindio.unieventos.modelo.vo.Usuario;
 import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.EmailServicio;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +28,8 @@ public class CuentaServicioImp implements CuentaServicio {
 
     private final CuentaRepository Cuentarepo;
     private final JWTUtils jwtUtils;
+    private final EmailServicio emailServicio;
+    private final CuentaRepository cuentaRepository;
 
     @Override
     public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) {
@@ -61,6 +61,20 @@ public class CuentaServicioImp implements CuentaServicio {
 
         // Guardar la cuenta en la base de datos
         Cuentarepo.save(nuevaCuenta);
+
+        // Enviar el código de verificación por correo
+        String asunto = "Código de verificación para activar tu cuenta en UniEventos";
+        String cuerpo = "Hola " + dtoCrearCuenta.nombre() + ",\n\n" +
+                "Gracias por registrarte en UniEventos. Tu código de verificación es: " + codigoVerificacion + "\n\n" +
+                "Este código es válido por 15 minutos.";
+
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, dtoCrearCuenta.email());
+        try {
+            emailServicio.enviarCorreo(emailDTO);
+        } catch (Exception e) {
+            // Manejar la excepción en caso de fallo en el envío del correo
+            throw new RuntimeException("Error al enviar el correo de verificación", e);
+        }
 
         // Retornar el ID del usuario creado
         return nuevaCuenta.getIdUsuario();
@@ -103,6 +117,67 @@ public class CuentaServicioImp implements CuentaServicio {
             throw new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario);
         }
     }
+    
+    @Override
+    public void reenviarToken(String idUsuario) throws Exception {
+        // Buscar la cuenta en el repositorio usando el ID del usuario
+        Cuenta cuenta = cuentaRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
+
+        // Generar un nuevo código de verificación
+        int nuevoCodigoVerificacion = generarCodigoVerificacion();
+        CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
+
+        // Asignar el nuevo código y la fecha actual
+        codigoVerif.setCodigo(nuevoCodigoVerificacion);
+        codigoVerif.setFecha(LocalDateTime.now());
+
+        // Guardar los cambios en la base de datos
+        cuentaRepository.save(cuenta);
+
+        // Enviar el código de verificación por correo
+        String asunto = "Nuevo código de verificación para activar tu cuenta en UniEventos";
+        String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                "Tu nuevo código de verificación es: " + nuevoCodigoVerificacion + "\n\n" +
+                "Este código es válido por 15 minutos.";
+
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, cuenta.getUsuario().getEmail());
+
+        try {
+            emailServicio.enviarCorreo(emailDTO);
+        } catch (Exception e) {
+            // Manejar la excepción en caso de fallo en el envío del correo
+            throw new RuntimeException("Error al enviar el nuevo correo de verificación", e);
+        }
+    }
+
+    @Override
+    public void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception {
+        // Buscar la cuenta en el repositorio usando el ID del usuario
+        Cuenta cuenta = cuentaRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
+
+        // Obtener el objeto CodigoVerificacion de la cuenta
+        CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
+
+        // Validar si el código ha expirado (más de 15 minutos de antigüedad)
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (codigoVerif.getFecha().plusMinutes(15).isBefore(fechaActual)) {
+            throw new RuntimeException("El código de verificación ha expirado. Solicite uno nuevo.");
+        }
+
+        // Validar si el código recibido es igual al guardado en la cuenta
+        if (codigoVerif.getCodigo() != codigoVerificacionRecibido) {
+            throw new RuntimeException("El código de verificación es incorrecto.");
+        }
+
+        // Si el código es correcto, activar la cuenta
+        cuenta.setEstado(EstadoCuenta.ACTIVO);
+
+        // Guardar los cambios en la base de datos
+        cuentaRepository.save(cuenta);
+    }
+
 
     // Obtener todas las cuentas
     @Override
@@ -115,6 +190,11 @@ public class CuentaServicioImp implements CuentaServicio {
     public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception {
 
         Cuenta cuenta = obtenerPorEmail(loginDTO.email());
+
+        if (cuenta.getEstado() != EstadoCuenta.ACTIVO) {
+            throw new Exception("La cuenta está inactiva. Por favor, actívala para continuar.");
+        }
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if( !passwordEncoder.matches(loginDTO.contrasena(), cuenta.getUsuario().getContrasena()) ) {
