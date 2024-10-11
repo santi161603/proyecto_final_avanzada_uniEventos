@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document()
+@Document(collection = "transacciones")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +22,6 @@ public class Transaccion {
 
     private List<Evento> productos;
     private ObjectId idCliente;
-    private LocalDateTime fecha;
     private ObjectId idPago;
+    private String qr;
 }

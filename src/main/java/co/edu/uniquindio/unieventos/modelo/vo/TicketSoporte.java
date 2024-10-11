@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 
@@ -18,6 +19,6 @@ public class TicketSoporte {
     private String descripcionProblema;
     private Date fechaCreacion;
     private String estado;
-    private Cuenta cuenta;
+    private ObjectId usuario;
 
 }

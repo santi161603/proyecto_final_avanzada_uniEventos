@@ -1,12 +1,13 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
+@Document (collection = "carritos_compras")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,9 +18,7 @@ public class CarritoCompras {
     @Id
     @EqualsAndHashCode.Include
     private String idCarritoCompras;      // Identificador único del carrito
-
-    private Long usuarioId;       // Identificador del usuario dueño del carrito
-    private List<Evento> items;         // Lista de ítems (entradas) en el carrito
-    private Double totalPrecio;              // Precio total de los ítems en el carrito
-    private String estado;
+    private ObjectId usuarioId;
+    private List<ObjectId> items;
+    private Double totalPrecio;
 }

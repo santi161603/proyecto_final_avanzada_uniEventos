@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document
-
+@Document(collection = "cupones")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,4 +20,5 @@ public class Cupon {
     private String nombreCupon;
     private double porcentajeDescuento;
     private Date fechaVencimiento;
+    private int cantidad;
 }
