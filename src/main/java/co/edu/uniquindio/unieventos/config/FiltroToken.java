@@ -42,11 +42,12 @@ public class FiltroToken extends OncePerRequestFilter {
             return; // Detener la cadena aquí si es un preflight request
         }
 
+
+
         // Obtener la URI de la petición que se está realizando
         String requestURI = request.getRequestURI();
 
         List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" );
-
         // Si la URI solicitada es pública, no validar el token, simplemente continuar
         if (urisPublicas.stream().anyMatch(requestURI::startsWith)) {
             filterChain.doFilter(request, response); // Continuar sin validación
@@ -58,14 +59,14 @@ public class FiltroToken extends OncePerRequestFilter {
 
         try {
             // Si la petición es para la ruta /api/cliente, se verifica que el token exista y el rol sea CLIENTE
-            if (requestURI.startsWith("/api/cliente")) {
-                if (!validarToken(token, RolUsuario.CLIENTE)) {
+            if (requestURI.startsWith("/servicios/cuenta-autenticada")) {
+                if (validarToken(token, RolUsuario.CLIENTE)) {
                     crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
                     return; // Detener el filtro si la validación falla
                 }
             } else if (requestURI.startsWith("/api/admin")) {
                 // Validación para administrador
-                if (!validarToken(token, RolUsuario.ADMINISTRADOR)) {
+                if (validarToken(token, RolUsuario.ADMINISTRADOR)) {
                     crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
                     return; // Detener el filtro si la validación falla
                 }

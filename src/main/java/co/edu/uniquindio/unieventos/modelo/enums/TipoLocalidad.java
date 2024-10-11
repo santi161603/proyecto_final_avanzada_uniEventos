@@ -10,5 +10,5 @@ public enum TipoLocalidad {
     PARQUE,
     CLUB_NOCTURNO,
     SALON,
-    PLAZA;
+    PLAZA
 }

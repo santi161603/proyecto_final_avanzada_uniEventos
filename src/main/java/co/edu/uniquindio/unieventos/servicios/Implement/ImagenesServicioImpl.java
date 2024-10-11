@@ -15,7 +15,7 @@ public class ImagenesServicioImpl implements ImagenesServicio {
     public String subirImagen(MultipartFile multipartFile) throws Exception{
         Bucket bucket = StorageClient.getInstance().bucket();
 
-        String fileName = String.format( "%s-%s", UUID.randomUUID().toString(), multipartFile.getOriginalFilename() );
+        String fileName = String.format( "%s-%s", UUID.randomUUID(), multipartFile.getOriginalFilename() );
 
         Blob blob = bucket.create( fileName, multipartFile.getInputStream(), multipartFile.getContentType() );
 

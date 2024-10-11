@@ -17,7 +17,6 @@ public class CuentaAutenticadaControlador {
 
     private final CuentaServicio cuentaServicio;
 
-
     @DeleteMapping("/eliminar-cuenta-definitivo/{idUsuario}")
     public ResponseEntity<MensajeDTO<Boolean>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
         Boolean result = cuentaServicio.eliminarCuenta(idUsuario);
