@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
+import co.edu.uniquindio.unieventos.modelo.vo.subEvento;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,6 +26,5 @@ public class Evento {
     private String descripcion;
     private TipoEvento tipoEvento; // concierto, teatro, deporte, etc.
     private String imagenPoster;
-    private List<LocalDateTime> fechaEvento;
-    private List<LocalidadEvento> localidades;
+    private List<subEvento> subEvent;
 }

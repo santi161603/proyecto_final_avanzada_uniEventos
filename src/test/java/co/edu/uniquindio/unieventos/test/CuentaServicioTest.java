@@ -37,7 +37,7 @@ public class CuentaServicioTest {
     @Test
     public void activarCuenta()throws Exception{
 
-        cuentaServicio.activarCuenta("670830e86b8c621efd663bc2",2396);
+        cuentaServicio.activarCuenta("67084a0bb792395ec850e773",4061);
 
     }
     

@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.cloud.storage.*;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 import java.util.UUID;
 
 @Service
@@ -13,6 +13,7 @@ public class ImagenesServicioImpl implements ImagenesServicio {
 
     @Override
     public String subirImagen(MultipartFile multipartFile) throws Exception{
+
         Bucket bucket = StorageClient.getInstance().bucket();
 
         String fileName = String.format( "%s-%s", UUID.randomUUID(), multipartFile.getOriginalFilename() );
@@ -25,7 +26,13 @@ public class ImagenesServicioImpl implements ImagenesServicio {
                 blob.getName()
         );
     }
-    
+
+    @Override
+    public String ActualizarImagen(String imagen, MultipartFile multipartFile) throws Exception {
+        eliminarImagen(imagen);
+        return subirImagen(multipartFile);
+    }
+
     @Override
     public void eliminarImagen(String nombreImagen) throws Exception{
         Bucket bucket = StorageClient.getInstance().bucket();

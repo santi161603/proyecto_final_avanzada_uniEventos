@@ -11,21 +11,20 @@ import java.util.List;
 public interface CarritoServicio {
 
     // Método para crear un carrito
-    String crearCarrito(ObjectId usuarioId) throws Exception;
+    String crearCarrito(String usuarioId) throws Exception;
 
-    // Método para eliminar un carrito por su ID
-    void eliminarCarrito(String idCarrito) throws Exception;
+    //Metodo para añadir items al carrito
+    void anadirItem(List<ObjectId> items, ObjectId usuarioId ) throws Exception;
 
-    // Método para obtener un carrito por su ID
-    CarritoCompras obtenerCarritoPorId(String idCarrito) throws Exception;
+    // Método para eliminar un item del carrito
+    void eliminarItem(ObjectId item,ObjectId usuarioId) throws Exception;
 
-    // Método para obtener todos los carritos
-    List<CarritoCompras> obtenerTodosLosCarritos() throws Exception;
+    // Método para obtener lista de items
+    List<ObjectId> obtenerListaItems(ObjectId usuarioId) throws Exception;
 
-    // Método para recibir un evento relacionado con el carrito
-    void añadirEventoCarrito(String idevento, String idCliente) throws Exception;
+    // Limpiar carrito
+    void limpiarCarrito(ObjectId usuarioId) throws Exception;
 
-    void eliminarEventoCarrito(String idEvento, String idCliente) throws Exception;
 }
 
 

@@ -17,113 +17,114 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CarritoServicioImp {
-/*
-    private final CarritoComprasRepository comprasRepository;
 public class CarritoServicioImp implements CarritoServicio {
 
     private final CarritoComprasRepository carritoRepository;
     private final EventoRepository eventoRepository;
 
     @Override
-    public String crearCarrito(ObjectId usuarioId) throws Exception {
+    public String crearCarrito(String usuarioId) throws Exception {
         CarritoCompras carrito = new CarritoCompras();
 
-        carrito.setUsuarioId(usuarioId);
+        carrito.setUsuarioId(new ObjectId(usuarioId));
 
         carritoRepository.save(carrito);
 
         return carrito.getIdCarritoCompras();
     }
-
     @Override
-    public void eliminarCarrito(String idCarrito) throws Exception {
-        CarritoCompras carrito = carritoRepository.findById(idCarrito)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
+    public void anadirItem(List<ObjectId> items, ObjectId usuarioId) throws Exception {
 
-        carritoRepository.deleteById(idCarrito);
-    }
+        // Buscar el carrito del cliente por su ID
+        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
 
-    @Override
-    public CarritoCompras obtenerCarritoPorId(String idCarrito) throws Exception {
-        // Buscar carrito por ID
-        return carritoRepository.findById(idCarrito)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
-    }
-
-    @Override
-    public List<CarritoCompras> obtenerTodosLosCarritos() throws Exception {
-        // Obtener todos los carritos
-        return carritoRepository.findAll();
-    }
-
-    @Override
-    public void añadirEventoCarrito(String idEvento, String idCliente) throws Exception {
-
-        Optional<Evento> eventoOptional = eventoRepository.findById(idEvento);
-
-        if (eventoOptional.isEmpty()) {
-            throw new Exception("Evento no encontrado");
+        // Verificar si el carrito del usuario fue encontrado
+        if (carritoCompras == null || carritoCompras.getIdCarritoCompras().isEmpty()) {
+            throw new Exception("Carrito no encontrado para el usuario: " + usuarioId);
         }
 
-        // Buscar el carrito del cliente por su id
-        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(new ObjectId(idCliente));
+        // Añadir todos los items al carrito (suponiendo que 'items' es una lista de IDs de eventos u objetos)
+        for (ObjectId itemId : items) {
+            // Comprobar que el evento/item existe (opcional, depende de tu lógica)
+            Optional<Evento> eventoOptional = eventoRepository.findById(String.valueOf(itemId));
 
-        if (carritoCompras.getIdCarritoCompras().isEmpty()) {
-            throw new Exception("Carrito no encontrado para el usuario: " + idCliente);
+            if (eventoOptional.isEmpty()) {
+                throw new Exception("Item con ID " + itemId + " no encontrado");
+            }
+
+            // Añadir el item al carrito
+            carritoCompras.getItems().add(itemId);
         }
 
-        // Añadir el evento al carrito (suponiendo que items es una lista de IDs de eventos u objetos)
-        carritoCompras.getItems().add(new ObjectId(idEvento));
+        // Guardar el carrito actualizado con los items añadidos
+        carritoRepository.save(carritoCompras);
+    }
 
-        // Guardar el carrito actualizado con el evento añadido
+
+    @Override
+    public void eliminarItem(ObjectId item, ObjectId usuarioId) throws Exception {
+
+        // Buscar el carrito del cliente por su ID
+        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
+
+        // Verificar si el carrito del usuario fue encontrado
+        if (carritoCompras == null || carritoCompras.getIdCarritoCompras().isEmpty()) {
+            throw new Exception("Carrito no encontrado para el usuario: " + usuarioId);
+        }
+
+        // Verificar si el item existe en el carrito
+        if (!carritoCompras.getItems().contains(item)) {
+            throw new Exception("Item con ID " + item + " no encontrado en el carrito del usuario: " + usuarioId);
+        }
+
+        // Eliminar el item del carrito
+        carritoCompras.getItems().remove(item);
+
+        // Guardar el carrito actualizado sin el item
         carritoRepository.save(carritoCompras);
     }
 
     @Override
-    public void eliminarEventoCarrito(String idEvento, String idCliente) throws Exception {Optional<Evento> eventoOptional = eventoRepository.findById(idEvento);
+    public List<ObjectId> obtenerListaItems(ObjectId usuarioId) throws Exception {
 
-        if (eventoOptional.isEmpty()) {
-            throw new Exception("Evento no encontrado");
+        // Buscar el carrito del cliente por su ID de usuario
+        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
+
+        // Verificar si el carrito fue encontrado
+        if (carritoCompras == null || carritoCompras.getIdCarritoCompras().isEmpty()) {
+            throw new Exception("Carrito no encontrado para el usuario: " + usuarioId);
         }
 
-        // Buscar el carrito del cliente por su id
-        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(new ObjectId(idCliente));
+        // Obtener la lista de items (IDs de los eventos) en el carrito
+        List<ObjectId> items = carritoCompras.getItems();
 
-        if (carritoCompras.getIdCarritoCompras().isEmpty()) {
-            throw new Exception("Carrito no encontrado para el usuario: " + idCliente);
+        // Si el carrito está vacío, devolver una lista vacía o manejar como sea necesario
+        if (items.isEmpty()) {
+            throw new Exception("El carrito está vacío para el usuario: " + usuarioId);
         }
 
-        // Añadir el evento al carrito (suponiendo que items es una lista de IDs de eventos u objetos)
-        carritoCompras.getItems().add(new ObjectId(idEvento));
+        // Devolver la lista de items
+        return items;
+    }
 
-        // Guardar el carrito actualizado con el evento añadido
+
+    @Override
+    public void limpiarCarrito(ObjectId usuarioId) throws Exception {
+
+        // Buscar el carrito del cliente por su ID de usuario
+        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
+
+        // Verificar si el carrito fue encontrado
+        if (carritoCompras == null || carritoCompras.getIdCarritoCompras().isEmpty()) {
+            throw new Exception("Carrito no encontrado para el usuario: " + usuarioId);
+        }
+
+        // Limpiar la lista de items
+        carritoCompras.getItems().clear();
+
+        // Guardar el carrito actualizado (vacío)
         carritoRepository.save(carritoCompras);
     }
 
-    /*
-    @Override
-    public void procesarEvento(DTOEventoCarrito evento) throws Exception {
-        // Procesar diferentes tipos de eventos
-        switch (evento.tipoEvento()) {
-            case "CREAR":
-                DTOCrearCarrito dtoCrearCarrito = // Lógica para crear un DTO desde el evento
-                crearCarrito(dtoCrearCarrito);
-                break;
 
-            case "ACTUALIZAR":
-                DTOActualizarCarrito dtoActualizarCarrito = // Lógica para crear un DTO desde el evento
-                actualizarCarrito(evento.idCarrito(), dtoActualizarCarrito);
-                break;
-
-            case "ELIMINAR":
-                eliminarCarrito(evento.idCarrito());
-                break;
-
-            default:
-                throw new Exception("Tipo de evento no soportado: " + evento.tipoEvento());
-        }
-    }
-}
-*/
 }

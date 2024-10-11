@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.dto;
 import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
@@ -14,6 +15,6 @@ public record DTOCrearCuenta(
         @Length(max = 100) String direccion,
         @NotBlank @Length(max = 50) @Email String email,
         @NotBlank @Length(min = 7, max = 20) String contrasena,
-        @NotBlank RolUsuario rol  // O puedes cambiarlo por un tipo específico de RolUsuario
+        @NotNull RolUsuario rol  // O puedes cambiarlo por un tipo específico de RolUsuario
 ) {
 }
