@@ -11,6 +11,7 @@ import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.EmailServicio;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,8 +98,8 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada) {
-        Optional<Cuenta> cuentaOpt = Cuentarepo.findById(idUsuario);
+    public Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) {
+        /*//Optional<Cuenta> cuentaOpt = Cuentarepo.findById();
         if (cuentaOpt.isPresent()) {
 
             Cuenta cuenta = cuentaOpt.get();
@@ -114,8 +115,9 @@ public class CuentaServicioImp implements CuentaServicio {
             // Guardar la cuenta actualizada en la base de datos
             return Cuentarepo.save(cuenta);
         } else {
-            throw new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario);
-        }
+            throw new EntityNotFoundException("No se encontró la cuenta con ID: ");
+        }*/
+        return null;
     }
     
     @Override
@@ -187,7 +189,7 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception {
+    public TokenDTO iniciarSesion( LoginDTO loginDTO) throws Exception {
 
         Cuenta cuenta = obtenerPorEmail(loginDTO.email());
 
@@ -209,14 +211,14 @@ public class CuentaServicioImp implements CuentaServicio {
         return passwordEncoder.encode( password );
     }
 
-    private Map<String, Object> construirClaims(Cuenta cuenta) {
+    private Map<String, Object> construirClaims(@NotNull Cuenta cuenta) {
         return Map.of(
                 "rol", cuenta.getRol(),
                 "nombre", cuenta.getUsuario().getNombre(),
                 "id", cuenta.getIdUsuario()
         );
     }
-    private Cuenta obtenerPorEmail(String email) {
+    private @NotNull Cuenta obtenerPorEmail(String email) {
         Cuenta cuenta = Cuentarepo.findByUsuarioEmail(email);
         if (cuenta == null) {
             throw new EntityNotFoundException("No se encontró una cuenta con el email: " + email);

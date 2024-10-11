@@ -16,7 +16,6 @@ public class JWTUtils {
 
         Instant now = Instant.now();
 
-
         return Jwts.builder()
                 .claims(claims)
                 .subject(email)

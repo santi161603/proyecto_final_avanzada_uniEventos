@@ -8,5 +8,4 @@ public record EmailDTO(
         @NotBlank @Length(max = 200) String cuerpo,
         @NotBlank @Length(max = 20) String destinatario
 ) {
-
 }

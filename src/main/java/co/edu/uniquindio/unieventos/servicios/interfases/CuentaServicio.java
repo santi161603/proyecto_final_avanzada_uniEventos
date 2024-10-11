@@ -16,7 +16,7 @@ public interface CuentaServicio {
     Boolean eliminarCuenta(String idUsuario)throws Exception;
 
     // Método para actualizar una cuenta
-    Cuenta actualizarCuenta(String idUsuario, DTOActualizarCuenta cuentaActualizada) throws Exception;
+    Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
 
     void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception;
 
