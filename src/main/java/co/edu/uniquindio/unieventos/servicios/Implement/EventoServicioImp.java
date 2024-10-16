@@ -149,11 +149,13 @@ public class EventoServicioImp implements EventoServicio{
 
     @Override
     public List<Evento> obtenerTodosLosEventos() throws Exception {
-        return List.of();
+        return eventoRepository.findAll();
     }
 
     @Override
-    public void obtenerEventoCategoria(TipoEvento evento) throws Exception {
-
+    public List<Evento> obtenerEventoCategoria(TipoEvento tipoEvento) throws Exception {
+        return eventoRepository.findByCategoria(tipoEvento);
     }
+
+    
 }

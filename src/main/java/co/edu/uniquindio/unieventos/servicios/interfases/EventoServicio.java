@@ -25,6 +25,6 @@ public interface EventoServicio {
     List<Evento> obtenerTodosLosEventos() throws Exception;
 
     // Método para obtener un evento por categoria
-    void obtenerEventoCategoria(TipoEvento evento) throws Exception;
+    List<Evento> obtenerEventoCategoria(TipoEvento evento) throws Exception;
 }
 

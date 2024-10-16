@@ -28,7 +28,6 @@ public class CuentaAutenticadaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta actualizada con exito"));
     }
 
-    //cambiar a administrador
     @GetMapping("/obtener-todas-las-cuentas")
     public ResponseEntity<MensajeDTO<List<Cuenta>>> obtenerTodasLasCuentas() throws Exception{
         List<Cuenta> cuentaList = cuentaServicio.obtenerTodasLasCuentas();
