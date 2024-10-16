@@ -81,6 +81,23 @@ public class CuentaServicioImp implements CuentaServicio {
         return nuevaCuenta.getIdUsuario();
     }
 
+    @Override
+    public Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) {
+
+        Cuenta cuenta = obtenerPorEmail(cuentaActualizada.email());
+
+        // Actualizar la información del usuario
+        Usuario usuario = cuenta.getUsuario();
+        usuario.setCedula(cuentaActualizada.cedula());
+        usuario.setNombre(cuentaActualizada.nombre());
+        usuario.setDireccion(cuentaActualizada.direccion());
+        usuario.setTelefono(cuentaActualizada.telefono());
+        cuenta.setUsuario(usuario);
+
+        // Guardar la cuenta actualizada en la base de datos
+        return Cuentarepo.save(cuenta);
+    }
+
     private int generarCodigoVerificacion() {
         Random random = new Random();
         return 1000 + random.nextInt(9000); // Genera un número entre 1000 y 9999
@@ -97,29 +114,6 @@ public class CuentaServicioImp implements CuentaServicio {
         }
     }
 
-    @Override
-    public Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) {
-        /*//Optional<Cuenta> cuentaOpt = Cuentarepo.findById();
-        if (cuentaOpt.isPresent()) {
-
-            Cuenta cuenta = cuentaOpt.get();
-
-            // Actualizar la información del usuario
-            Usuario usuario = cuenta.getUsuario();
-            usuario.setCedula(cuentaActualizada.cedula());
-            usuario.setNombre(cuentaActualizada.nombre());
-            usuario.setDireccion(cuentaActualizada.direccion());
-            usuario.setTelefono(cuentaActualizada.telefono());
-            cuenta.setUsuario(usuario);
-
-            // Guardar la cuenta actualizada en la base de datos
-            return Cuentarepo.save(cuenta);
-        } else {
-            throw new EntityNotFoundException("No se encontró la cuenta con ID: ");
-        }*/
-        return null;
-    }
-    
     @Override
     public void reenviarToken(String idUsuario) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
