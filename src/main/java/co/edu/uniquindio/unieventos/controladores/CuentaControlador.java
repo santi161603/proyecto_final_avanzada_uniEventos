@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.controladores;
 import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
+import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import jakarta.validation.Valid;
@@ -49,6 +50,12 @@ public class CuentaControlador {
     public ResponseEntity<MensajeDTO<List<Evento>>> obtenerTodosLosEventos() throws Exception{
         List<Evento> eventosList = eventoServicio.obtenerTodosLosEventos();
         return ResponseEntity.ok(new MensajeDTO<>(false,eventosList));
+    }
+
+    @GetMapping("/obtener-todos-los-eventos-Por-Categoria")
+    public ResponseEntity<MensajeDTO<List<Evento>>> obtenerEventosPorCategoria(TipoEvento evento) throws Exception{
+        List<Evento> eventosCategoriaList = eventoServicio.obtenerEventoCategoria(evento);
+        return ResponseEntity.ok(new MensajeDTO<>(false,eventosCategoriaList));
     }
 
 

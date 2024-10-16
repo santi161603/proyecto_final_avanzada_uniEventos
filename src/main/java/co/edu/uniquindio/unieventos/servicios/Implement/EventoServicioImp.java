@@ -156,6 +156,4 @@ public class EventoServicioImp implements EventoServicio{
     public List<Evento> obtenerEventoCategoria(TipoEvento tipoEvento) throws Exception {
         return eventoRepository.findByCategoria(tipoEvento);
     }
-
-    
 }
