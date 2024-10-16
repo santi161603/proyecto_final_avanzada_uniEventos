@@ -27,7 +27,7 @@ public class ImagenServicioTest {
     public void subirImagentest() throws Exception{
 
         // Ruta del archivo de imagen local
-        String filePath = "C:\\Users\\Juan Pablo\\IdeaProjects\\proyecto_final_avanzada_uniEventos\\src\\main\\resources\\Image\\pexels-apasaric-2411688.jpg";
+        String filePath = "src/main/resources/Image/pexels-apasaric-2411688.jpg";
 
         // Cargar el archivo de imagen
         File imageFile = new File(filePath);

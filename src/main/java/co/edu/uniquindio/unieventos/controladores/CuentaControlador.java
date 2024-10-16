@@ -41,15 +41,9 @@ public class CuentaControlador {
     }
 
     @GetMapping("/obtener-evento")
-    public ResponseEntity<MensajeDTO<Evento>> obtenerEvento(@PathVariable String idEvento) throws Exception{
+    public ResponseEntity<MensajeDTO<Evento>> obtenerEvento(@PathVariable String idEvento) throws Exception {
         Evento evento = eventoServicio.obtenerEventoPorId(idEvento);
-        return ResponseEntity.ok(new MensajeDTO<>(false,evento));
-    }
-
-    @GetMapping("/obtener-todos-los-eventos")
-    public ResponseEntity<MensajeDTO<List<Evento>>> obtenerTodosLosEventos() throws Exception{
-        List<Evento> eventosList = eventoServicio.obtenerTodosLosEventos();
-        return ResponseEntity.ok(new MensajeDTO<>(false,eventosList));
+        return ResponseEntity.ok(new MensajeDTO<>(false, evento));
     }
 
     @GetMapping("/obtener-todos-los-eventos-Por-Categoria")
