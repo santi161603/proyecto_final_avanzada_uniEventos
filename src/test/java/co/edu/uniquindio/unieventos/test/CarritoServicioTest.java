@@ -18,7 +18,9 @@ public class CarritoServicioTest {
     @Test
     public void crearCarritoTest() throws Exception {
 
-      String carritoId = carritoServicio.crearCarrito("67084a0bb792395ec850e773");
+        //aqui le pasamos al crear carrito el id del usuario para asociarselo, el nos retorna el id del carrito
+        // luego miramos que non sea nulo
+      String carritoId = carritoServicio.crearCarrito("670828b643d3265f08e1e0b6");
 
       assertNotNull(carritoId);
 

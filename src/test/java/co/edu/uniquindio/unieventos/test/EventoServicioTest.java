@@ -42,6 +42,7 @@ public class EventoServicioTest {
 
         // Crear subeventos de prueba
         List<DTOSubEventos> subEventos = Arrays.asList(
+                //los sub eventos tienen la hora del evento, el id de la localidad y la cantidad de entradas
                 new DTOSubEventos(LocalDateTime.now(), new ObjectId(), 50),
                 new DTOSubEventos(LocalDateTime.now().plusDays(1), new ObjectId(), 100)
         );
@@ -52,7 +53,7 @@ public class EventoServicioTest {
                 "Bogotá",            // ciudad
                 "Gran concierto de rock en Bogotá", // descripción
                 TipoEvento.CONCIERTO, // tipo de evento
-                imagenPoster,               // cantidad de entradas
+                imagenPoster,               // el poster
                 subEventos            // lista de subeventos
         );
 
@@ -61,11 +62,6 @@ public class EventoServicioTest {
 
         // Verificar que se haya creado correctamente el evento
         assertNotNull(idEvento, "El ID del evento no debe ser nulo");
-    }
-
-    @Test
-    public void eliminarEventoTest() throws Exception {
-        eventoServicio.eliminarEvento("6708885ceb87717e585a0b40");
     }
 
     @Test
@@ -97,6 +93,11 @@ public class EventoServicioTest {
 
         eventoServicio.actualizarEvento(idEvento, dtoActualizarEvento);
 
+    }
+
+    @Test
+    public void eliminarEventoTest() throws Exception {
+        eventoServicio.eliminarEvento("6708885ceb87717e585a0b40");
     }
 
 
