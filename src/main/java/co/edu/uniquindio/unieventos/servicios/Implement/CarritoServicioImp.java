@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class CarritoServicioImp implements CarritoServicio {
         CarritoCompras carrito = new CarritoCompras();
 
         carrito.setUsuarioId(usuarioId);
+        carrito.setItems(new ArrayList<>());
 
         carritoRepository.save(carrito);
 

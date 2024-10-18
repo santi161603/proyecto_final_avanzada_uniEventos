@@ -40,11 +40,6 @@ public class EventoServicioImp implements EventoServicio{
         nuevoEvento.setDescripcion(evento.descripcion());
         nuevoEvento.setTipoEvento(evento.tipoEvento());
 
-        if(evento.imagenPoster() != null) {
-            String urlImagen = imagenesServicio.subirImagen(evento.imagenPoster());
-            nuevoEvento.setImagenPoster(urlImagen);
-        }
-
         // Mapear la lista de subeventos
         List<subEvento> subEventos = new ArrayList<>();
             // Usar un bucle for para mapear y guardar los subeventos

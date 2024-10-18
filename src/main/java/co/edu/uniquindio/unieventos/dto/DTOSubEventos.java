@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public record DTOSubEventos(
 
         @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime fechaEvento,
-        @NotNull ObjectId localidades,
+        @NotNull String localidades,
         @Min(1) int cantidadEntradas
 
 ) {
