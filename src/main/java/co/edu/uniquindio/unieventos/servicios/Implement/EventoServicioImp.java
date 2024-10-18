@@ -12,7 +12,13 @@ import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +57,63 @@ public class EventoServicioImp implements EventoServicio{
             }
             // Agregar la lista de subeventos al evento
         nuevoEvento.setSubEvent(subEventos);
+
+        //crear imagen de perfil
+        // Ruta del archivo de imagen local
+        String filePath = "src/main/resources/Image/evento.jpg";
+
+        // Cargar el archivo de imagen
+        File imageFile = new File(filePath);
+        String fileName = imageFile.getName(); // Obtener el nombre del archivo
+        String contentType = Files.probeContentType(imageFile.toPath()); // Detectar el tipo de contenido
+
+        // Crear el MultipartFile implementando la interfaz manualmente
+        MultipartFile multipartFile = new MultipartFile() {
+            @Override
+            public String getName() {
+                return fileName;
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return fileName;
+            }
+
+            @Override
+            public String getContentType() {
+                return contentType;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return imageFile.length() == 0;
+            }
+
+            @Override
+            public long getSize() {
+                return imageFile.length();
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return Files.readAllBytes(imageFile.toPath());
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return new FileInputStream(imageFile);
+            }
+
+            @Override
+            public void transferTo(File dest) throws IOException, IllegalStateException {
+                Files.copy(imageFile.toPath(), dest.toPath());
+            }
+        };
+
+        // Llamar al método subirImagen
+        String imageUrl = imagenesServicio.subirImagen(multipartFile);
+
+        nuevoEvento.setImagenPoster(imageUrl);
 
             eventoRepository.save(nuevoEvento);
 

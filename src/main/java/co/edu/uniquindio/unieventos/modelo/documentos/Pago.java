@@ -23,6 +23,6 @@ public class Pago {
     private String metodoPago; // MercadoPago, PayPal, etc.
     private EstadoPago estadoPago; // completado, pendiente, fallido
     private Date fechaPago;
-    private ObjectId cupon;
+    private String cupon;
     private double montoTotal;
 }

@@ -19,6 +19,6 @@ public class TicketSoporte {
     private String descripcionProblema;
     private Date fechaCreacion;
     private String estado;
-    private ObjectId usuario;
+    private String usuario;
 
 }

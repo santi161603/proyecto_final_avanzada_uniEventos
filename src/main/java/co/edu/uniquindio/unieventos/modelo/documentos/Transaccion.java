@@ -21,7 +21,7 @@ public class Transaccion {
     private String codigo;
 
     private List<Evento> productos;
-    private ObjectId idCliente;
-    private ObjectId idPago;
+    private String idCliente;
+    private String idPago;
     private String qr;
 }
