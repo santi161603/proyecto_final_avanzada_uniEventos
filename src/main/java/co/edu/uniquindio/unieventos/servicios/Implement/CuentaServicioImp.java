@@ -162,11 +162,23 @@ public class CuentaServicioImp implements CuentaServicio {
 
         // Actualizar la información del usuario
         Usuario usuario = cuenta.getUsuario();
+
+        if(cuentaActualizada.nombre() != null && !cuentaActualizada.nombre().equals(usuario.getNombre())) {
+            usuario.setNombre(cuentaActualizada.nombre());
+        }
+        if(cuentaActualizada.cedula() != null && !cuentaActualizada.cedula().equals(usuario.getCedula())) {
         usuario.setCedula(cuentaActualizada.cedula());
-        usuario.setNombre(cuentaActualizada.nombre());
-        usuario.setApellido(cuentaActualizada.apellido());
-        usuario.setDireccion(cuentaActualizada.direccion());
-        usuario.setTelefono(cuentaActualizada.telefono());
+        }
+        if(cuentaActualizada.apellido() != null && !cuentaActualizada.apellido().equals(usuario.getApellido())) {
+            usuario.setApellido(cuentaActualizada.apellido());
+        }
+        if (cuentaActualizada.direccion() != null && !cuentaActualizada.direccion().equals(usuario.getDireccion())) {
+            usuario.setDireccion(cuentaActualizada.direccion());
+        }
+        if(cuentaActualizada.telefono() != null && !cuentaActualizada.telefono().equals(usuario.getTelefono())) {
+            usuario.setTelefono(cuentaActualizada.telefono());
+        }
+
         cuenta.setUsuario(usuario);
 
         // Guardar la cuenta actualizada en la base de datos
