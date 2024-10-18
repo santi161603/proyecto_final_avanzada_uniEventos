@@ -131,7 +131,11 @@ public class CuentaServicioImp implements CuentaServicio {
 
             String id = nuevaCuenta.getIdUsuario();
 
-            carritoServicio.crearCarrito(id);
+            String idCarrito = carritoServicio.crearCarrito(id);
+
+            nuevaCuenta.setCarrito(idCarrito);
+
+            cuentaRepository.save(nuevaCuenta);
 
             // Enviar el código de verificación por correo
             String asunto = "Código de verificación para activar tu cuenta en UniEventos";

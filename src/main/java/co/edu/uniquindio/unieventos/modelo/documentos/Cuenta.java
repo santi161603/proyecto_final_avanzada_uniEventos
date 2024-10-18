@@ -23,8 +23,8 @@ public class Cuenta {
     @EqualsAndHashCode.Include
     private String idUsuario;
 
-    private ObjectId carrito;
-    private List<ObjectId> historialCompras;
+    private String carrito;
+    private List<String> historialCompras;
     private Usuario usuario;
     private List<Notificacion> notificaciones;
     private List<TicketSoporte> ticketsSoporte;
