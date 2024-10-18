@@ -22,7 +22,7 @@ public class EmailServicioTest {
     }
     @Test
     public void EnviarEmailImagentest() throws Exception {
-        EmailDTO emailDTO = new EmailDTO("Prueba","Esto es una prueba","garciaflorezz24@gmail.com");
+        EmailDTO emailDTO = new EmailDTO("Prueba","Esto es una prueba","santiagoaceroospina@gmail.com");
         String reference = "https://cdn.pixabay.com/photo/2022/06/11/09/20/snake-7256057_1280.jpg";
         emailServicio.enviarCorreoImagen(emailDTO, reference);
     }

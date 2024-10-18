@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -43,11 +44,11 @@ public class FiltroToken extends OncePerRequestFilter {
         }
 
 
-
         // Obtener la URI de la petición que se está realizando
         String requestURI = request.getRequestURI();
 
-        List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" );
+        List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/", "/v3/api-docs/","/swagger-ui/index.html","/swagger-ui/swagger-initializer.js","/v3/api-docs");
+        List<String> urisclientes = List.of("/servicios/cuenta-autenticada");
         // Si la URI solicitada es pública, no validar el token, simplemente continuar
         if (urisPublicas.stream().anyMatch(requestURI::startsWith)) {
             filterChain.doFilter(request, response); // Continuar sin validación
@@ -56,35 +57,43 @@ public class FiltroToken extends OncePerRequestFilter {
 
         // Se obtiene el token de la petición del encabezado del mensaje HTTP
         String token = getToken(request);
-
         try {
-            // Si la petición es para la ruta /api/cliente, se verifica que el token exista y el rol sea CLIENTE
-            if (requestURI.startsWith("/servicios/cuenta-autenticada")) {
-                if (validarToken(token, RolUsuario.CLIENTE)) {
+
+            // Si no hay token y no es una ruta pública, rechazar el acceso
+            if (token == null) {
+                crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
+                return;
+            }
+
+            // Validar acceso según el rol
+            if (!validarToken(token, RolUsuario.ADMINISTRADOR)) {
+                // Si el usuario es administrador, permitir acceso a todas las rutas
+                filterChain.doFilter(request, response);
+            } else if (!validarToken(token, RolUsuario.CLIENTE)) {
+                // Si el usuario es cliente, permitir acceso solo a rutas públicas y de cliente
+                if (urisclientes.stream().anyMatch(requestURI::startsWith) || urisPublicas.stream().anyMatch(requestURI::startsWith)) {
+                    filterChain.doFilter(request, response);
+                } else {
                     crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
-                    return; // Detener el filtro si la validación falla
                 }
-            } else if (requestURI.startsWith("/api/admin")) {
-                // Validación para administrador
-                if (validarToken(token, RolUsuario.ADMINISTRADOR)) {
-                    crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
-                    return; // Detener el filtro si la validación falla
-                }
+            } else {
+                // Si el rol del token no es ni administrador ni cliente, rechazar el acceso
+                crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
             }
 
         } catch (MalformedJwtException | SignatureException e) {
             crearRespuestaError("El token es incorrecto", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si hay un error en el token
+            // Detener el flujo si hay un error en el token
         } catch (ExpiredJwtException e) {
             crearRespuestaError("El token está vencido", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si el token está expirado
+            // Detener el flujo si el token está expirado
         } catch (Exception e) {
             crearRespuestaError(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si hay otro error
+            // Detener el flujo si hay otro error
         }
 
         // Si no hay errores, se continúa con la petición
-        filterChain.doFilter(request, response);
+        // filterChain.doFilter(request, response);
     }
 
 
@@ -106,7 +115,7 @@ public class FiltroToken extends OncePerRequestFilter {
     }
 
 
-    private boolean validarToken(String token, RolUsuario rol){
+    private boolean validarToken(String token, RolUsuario rol) {
         boolean error = true;
         if (token != null) {
             Jws<Claims> jws = jwtUtils.parseJwt(token);
@@ -116,7 +125,6 @@ public class FiltroToken extends OncePerRequestFilter {
         }
         return error;
     }
-
 
 
 }

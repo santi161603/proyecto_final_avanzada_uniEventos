@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 @ToString
 public class subEvento {
     private LocalDateTime fechaEvento;
-    private ObjectId localidades;
+    private String localidades;
     private int cantidadEntradas;
 }

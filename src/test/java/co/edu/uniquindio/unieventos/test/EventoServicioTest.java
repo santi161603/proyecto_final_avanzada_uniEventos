@@ -4,6 +4,7 @@ import co.edu.uniquindio.unieventos.dto.DTOActualizarEvento;
 import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
 import co.edu.uniquindio.unieventos.dto.DTOSubEventos;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.servicios.Implement.EventoServicioImp;
@@ -42,17 +43,17 @@ public class EventoServicioTest {
 
         // Crear subeventos de prueba
         List<DTOSubEventos> subEventos = Arrays.asList(
-                new DTOSubEventos(LocalDateTime.now(), new ObjectId(), 50),
-                new DTOSubEventos(LocalDateTime.now().plusDays(1), new ObjectId(), 100)
+                //los sub eventos tienen la hora del evento, el id de la localidad y la cantidad de entradas
+                new DTOSubEventos(LocalDateTime.now(), "094ut09j3ifj290", 50),
+                new DTOSubEventos(LocalDateTime.now().plusDays(1), "eoihfwijfojeok", 100)
         );
 
         // Crear DTO del evento
         DTOCrearEvento dtoEvento = new DTOCrearEvento(
                 "Concierto de Rock", // nombre
-                "Bogotá",            // ciudad
+                Ciudades.BOGOTA,            // ciudad
                 "Gran concierto de rock en Bogotá", // descripción
-                TipoEvento.CONCIERTO, // tipo de evento
-                imagenPoster,               // cantidad de entradas
+                TipoEvento.CONCIERTO, // tipo de evento// el poster
                 subEventos            // lista de subeventos
         );
 
@@ -61,11 +62,6 @@ public class EventoServicioTest {
 
         // Verificar que se haya creado correctamente el evento
         assertNotNull(idEvento, "El ID del evento no debe ser nulo");
-    }
-
-    @Test
-    public void eliminarEventoTest() throws Exception {
-        eventoServicio.eliminarEvento("6708885ceb87717e585a0b40");
     }
 
     @Test
@@ -80,8 +76,8 @@ public class EventoServicioTest {
 
         // Crear subeventos de prueba actualizados
         List<DTOSubEventos> subEventosActualizados = Arrays.asList(
-                new DTOSubEventos(LocalDateTime.now(), new ObjectId(), 75),
-                new DTOSubEventos(LocalDateTime.now().plusDays(2), new ObjectId(), 150)
+                new DTOSubEventos(LocalDateTime.now(), "oeifw09ur02924", 75),
+                new DTOSubEventos(LocalDateTime.now().plusDays(2), "wopuf092fio2f", 150)
         );
 
         // Crear DTO del evento a actualizar
@@ -97,6 +93,11 @@ public class EventoServicioTest {
 
         eventoServicio.actualizarEvento(idEvento, dtoActualizarEvento);
 
+    }
+
+    @Test
+    public void eliminarEventoTest() throws Exception {
+        eventoServicio.eliminarEvento("6708885ceb87717e585a0b40");
     }
 
 

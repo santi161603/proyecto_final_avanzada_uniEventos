@@ -5,6 +5,7 @@ import co.edu.uniquindio.unieventos.servicios.interfases.EmailServicio;
 import jakarta.activation.DataSource;
 import jakarta.activation.FileDataSource;
 import jakarta.activation.URLDataSource;
+import lombok.RequiredArgsConstructor;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.api.mailer.config.TransportStrategy;
@@ -12,12 +13,15 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.net.URL;
 
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class EmailServicioImp implements EmailServicio {
 
     @Override

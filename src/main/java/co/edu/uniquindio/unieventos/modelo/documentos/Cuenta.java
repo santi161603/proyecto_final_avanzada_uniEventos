@@ -23,26 +23,15 @@ public class Cuenta {
     @EqualsAndHashCode.Include
     private String idUsuario;
 
-    private ObjectId carrito;
-    private List<ObjectId> historialCompras;
+    private String carrito;
+    private List<String> historialCompras;
     private Usuario usuario;
     private List<Notificacion> notificaciones;
     private List<TicketSoporte> ticketsSoporte;
     private RolUsuario rol;
     private CodigoVerificacion codigoVerificacion;
     private EstadoCuenta estado;
+    private String imageProfile;
 
-    @Builder
-
-    public Cuenta(ObjectId carrito, List<ObjectId> historialCompras, Usuario usuario, List<TicketSoporte> ticketsSoporte, List<Notificacion> notificaciones, RolUsuario rol, CodigoVerificacion codigoVerificacion, EstadoCuenta estado) {
-        this.carrito = carrito;
-        this.historialCompras = historialCompras;
-        this.usuario = usuario;
-        this.ticketsSoporte = ticketsSoporte;
-        this.notificaciones = notificaciones;
-        this.rol = rol;
-        this.codigoVerificacion = codigoVerificacion;
-        this.estado = estado;
-    }
 }
 
