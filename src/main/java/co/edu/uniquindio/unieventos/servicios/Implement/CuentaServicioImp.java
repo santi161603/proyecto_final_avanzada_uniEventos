@@ -39,6 +39,7 @@ public class CuentaServicioImp implements CuentaServicio {
     private final EmailServicio emailServicio;
     private final CuentaRepository cuentaRepository;
     private final ImagenesServicio imagenesServicio;
+    private final CarritoServicioImp carritoServicio;
 
     @Override
     public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) throws Exception {
@@ -127,6 +128,10 @@ public class CuentaServicioImp implements CuentaServicio {
 
             // Guardar la cuenta en la base de datos
             Cuentarepo.save(nuevaCuenta);
+
+            String id = nuevaCuenta.getIdUsuario();
+
+            carritoServicio.crearCarrito(id);
 
             // Enviar el código de verificación por correo
             String asunto = "Código de verificación para activar tu cuenta en UniEventos";
