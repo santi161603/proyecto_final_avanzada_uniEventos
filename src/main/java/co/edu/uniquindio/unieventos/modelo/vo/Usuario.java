@@ -12,6 +12,7 @@ import java.util.List;
 public class Usuario {
     private String cedula;
     private String nombre;
+    private String apellido;
     private String direccion;
     private List<String> telefono;
     private String email;

@@ -18,7 +18,8 @@ public class CarritoCompras {
     @Id
     @EqualsAndHashCode.Include
     private String idCarritoCompras;      // Identificador único del carrito
-    private ObjectId usuarioId;
-    private List<ObjectId> items;
+
+    private String usuarioId;
+    private List<String> items;
     private Double totalPrecio;
 }

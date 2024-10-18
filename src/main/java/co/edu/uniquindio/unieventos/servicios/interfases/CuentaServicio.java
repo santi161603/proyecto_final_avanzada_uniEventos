@@ -5,6 +5,7 @@ import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
 import co.edu.uniquindio.unieventos.dto.LoginDTO;
 import co.edu.uniquindio.unieventos.dto.TokenDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,5 +27,7 @@ public interface CuentaServicio {
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
     void  reenviarToken(String idUsuario) throws Exception;
+
+    void subirImagenPerfilUsuario(String usuarioId, MultipartFile imagen) throws Exception;
 
 }

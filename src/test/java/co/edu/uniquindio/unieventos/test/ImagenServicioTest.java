@@ -49,6 +49,30 @@ public class ImagenServicioTest {
 
         // Por ejemplo, verificar que la URL contenga el nombre del bucket o el nombre del archivo
     }
+
+    @Test
+    public void actualizarImagenTest() throws Exception{
+
+        String nombreImagen = "4cec8585-cf52-433c-b36d-422be264b5cf-pexels-apasaric-2411688.jpg";
+
+        String filePath = "src/main/resources/Image/mD.jpg";
+
+        // Cargar el archivo de imagen
+        File imageFile = new File(filePath);
+        String fileName = imageFile.getName(); // Obtener el nombre del archivo
+        String contentType = Files.probeContentType(imageFile.toPath()); // Obtener el tipo de contenido
+
+        // Crear MultipartFile a partir del archivo
+        MultipartFile multipartFile;
+        try (FileInputStream inputStream = new FileInputStream(imageFile)) {
+            multipartFile = new MockMultipartFile(fileName, fileName, contentType, inputStream);
+        }
+
+        String uri = imagenesServicio.ActualizarImagen(nombreImagen, multipartFile);
+
+        assertNotNull(uri);
+    }
+
     @Test
         public void eliminarImagen() throws Exception {
         String nombreImagen = "4cec8585-cf52-433c-b36d-422be264b5cf-pexels-apasaric-2411688.jpg";
@@ -63,6 +87,8 @@ public class ImagenServicioTest {
         // La imagen debería ser nula después de la eliminación
         assertNull(blob);
     }
+
+
 }
 
 

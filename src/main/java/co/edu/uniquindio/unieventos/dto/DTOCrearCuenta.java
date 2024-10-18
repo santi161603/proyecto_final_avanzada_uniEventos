@@ -13,6 +13,7 @@ import java.util.List;
 public record DTOCrearCuenta(
         @NotBlank @Length(max = 10) String cedula,
         @NotBlank @Length(max = 100) String nombre,
+        @NotBlank @Length(max = 100) String apellido,
         @NotEmpty(message = "La lista de teléfonos no puede estar vacía")
         List<@Valid @NotBlank(message = "El número de teléfono no puede estar en blanco") @Length(max = 10) String> telefono,
         @Length(max = 100) String direccion,

@@ -17,6 +17,10 @@ public record DTOActualizarCuenta(
         @Length(max = 100, message = "El nombre no puede tener más de 100 caracteres")
         String nombre,
 
+        @NotBlank(message="El apellido no puede estar vacío")
+        @Length(max = 100, message = "El apellido no puede tener más de 100 caracteres")
+        String apellido,
+
         @Length(max = 100, message = "La dirección no puede tener más de 100 caracteres")
         String direccion,
 

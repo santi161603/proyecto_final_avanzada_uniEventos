@@ -33,8 +33,11 @@ public class EventoServicioImp implements EventoServicio{
         nuevoEvento.setCiudad(evento.ciudad());
         nuevoEvento.setDescripcion(evento.descripcion());
         nuevoEvento.setTipoEvento(evento.tipoEvento());
-        String urlImagen = imagenesServicio.subirImagen(evento.imagenPoster());
-        nuevoEvento.setImagenPoster(urlImagen);
+
+        if(evento.imagenPoster() != null) {
+            String urlImagen = imagenesServicio.subirImagen(evento.imagenPoster());
+            nuevoEvento.setImagenPoster(urlImagen);
+        }
 
         // Mapear la lista de subeventos
         List<subEvento> subEventos = new ArrayList<>();
@@ -80,10 +83,9 @@ public class EventoServicioImp implements EventoServicio{
         if (evento.imagenPoster() != null) {
             // Obtener la URL de la imagen actual del evento
             String urlImagenActual = eventoActualizado.getImagenPoster();
-            String nameImage = extraerNombreImagen(urlImagenActual);
 
             // Llamar al servicio de imágenes para actualizar la imagen
-            String nuevaUrlImagen = imagenesServicio.ActualizarImagen(nameImage, evento.imagenPoster());
+            String nuevaUrlImagen = imagenesServicio.ActualizarImagen(urlImagenActual, evento.imagenPoster());
 
             // Asignar la nueva URL de la imagen al evento
             eventoActualizado.setImagenPoster(nuevaUrlImagen);
@@ -91,17 +93,29 @@ public class EventoServicioImp implements EventoServicio{
 
         // Actualizar la lista de subeventos si se proporciona
         if (evento.subEventos() != null && !evento.subEventos().isEmpty()) {
-            List<subEvento> subEventos = new ArrayList<>();
+            List<subEvento> subEventosActualizados = new ArrayList<>();
+
             for (DTOSubEventos subeventoDTO : evento.subEventos()) {
-                subEvento subevento = new subEvento();
-                subevento.setFechaEvento(subeventoDTO.fechaEvento());
-                subevento.setLocalidades(subeventoDTO.localidades());
-                subevento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
-                subEventos.add(subevento); // Agregar el subevento actualizado a la lista
+                Optional<subEvento> subeventoExistenteOptional = eventoRepository.findBySubEventoFecha(subeventoDTO.fechaEvento());
+
+                if (subeventoExistenteOptional.isPresent()) {
+                    // Si el subevento con la misma fecha ya existe, actualizarlo
+                    subEvento subeventoExistente = subeventoExistenteOptional.get();
+                    subeventoExistente.setLocalidades(subeventoDTO.localidades());
+                    subeventoExistente.setCantidadEntradas(subeventoDTO.cantidadEntradas());
+                    subEventosActualizados.add(subeventoExistente); // Agregar el subevento actualizado a la lista
+                } else {
+                    // Si no existe un subevento con esa fecha, crear uno nuevo
+                    subEvento nuevoSubEvento = new subEvento();
+                    nuevoSubEvento.setFechaEvento(subeventoDTO.fechaEvento());
+                    nuevoSubEvento.setLocalidades(subeventoDTO.localidades());
+                    nuevoSubEvento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
+                    subEventosActualizados.add(nuevoSubEvento); // Agregar el nuevo subevento a la lista
+                }
             }
 
-            // Reemplazar los subeventos existentes con los nuevos
-            eventoActualizado.setSubEvent(subEventos);
+            // Reemplazar los subeventos existentes del evento con los nuevos o actualizados
+            eventoActualizado.setSubEvent(subEventosActualizados);
         }
 
         // Guardar los cambios en la base de datos
@@ -123,23 +137,8 @@ public class EventoServicioImp implements EventoServicio{
 
         String urlIm = eventoOptional.get().getImagenPoster();
         // Si el evento existe, eliminarlo
-        imagenesServicio.eliminarImagen(extraerNombreImagen(urlIm));
+        imagenesServicio.eliminarImagen(urlIm);
         eventoRepository.delete(eventoOptional.get());
-    }
-
-    public String extraerNombreImagen(String urlImagen) {
-        // Buscar la posición donde empieza el nombre de la imagen (después de "/o/")
-        int indiceInicio = urlImagen.indexOf("/o/") + 3;
-
-        // Buscar el final de la imagen antes del parámetro "?alt"
-        int indiceFin = urlImagen.indexOf("?alt");
-
-        // Extraer el nombre de la imagen entre "/o/" y "?alt"
-        if (indiceInicio != -1 && indiceFin != -1) {
-            return urlImagen.substring(indiceInicio, indiceFin);
-        } else {
-            throw new IllegalArgumentException("URL no contiene una imagen válida");
-        }
     }
 
     @Override

@@ -31,18 +31,7 @@ public class Cuenta {
     private RolUsuario rol;
     private CodigoVerificacion codigoVerificacion;
     private EstadoCuenta estado;
+    private String imageProfile;
 
-    @Builder
-
-    public Cuenta(ObjectId carrito, List<ObjectId> historialCompras, Usuario usuario, List<TicketSoporte> ticketsSoporte, List<Notificacion> notificaciones, RolUsuario rol, CodigoVerificacion codigoVerificacion, EstadoCuenta estado) {
-        this.carrito = carrito;
-        this.historialCompras = historialCompras;
-        this.usuario = usuario;
-        this.ticketsSoporte = ticketsSoporte;
-        this.notificaciones = notificaciones;
-        this.rol = rol;
-        this.codigoVerificacion = codigoVerificacion;
-        this.estado = estado;
-    }
 }
 

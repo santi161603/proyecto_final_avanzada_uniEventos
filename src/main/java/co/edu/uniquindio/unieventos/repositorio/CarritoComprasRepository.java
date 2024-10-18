@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface CarritoComprasRepository extends MongoRepository<CarritoCompras,String> {
 
     @Query(value = "{ 'usuarioId' : ?0 }")
-    CarritoCompras findByUsuarioId(ObjectId usuarioId);
+    CarritoCompras findByUsuarioId(String usuarioId);
 
 }
