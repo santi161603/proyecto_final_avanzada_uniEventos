@@ -51,7 +51,7 @@ public class ImagenServicioTest {
     }
     @Test
         public void eliminarImagen() throws Exception {
-        String nombreImagen = "4219a1d8-f66c-4b34-9ff0-a3f8aa5c86ca-pexels-apasaric-2411688.jpg";
+        String nombreImagen = "4cec8585-cf52-433c-b36d-422be264b5cf-pexels-apasaric-2411688.jpg";
 
         // Llamar al método eliminarImagen
         imagenesServicio.eliminarImagen(nombreImagen);
