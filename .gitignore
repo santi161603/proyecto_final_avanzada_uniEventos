@@ -48,5 +48,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-src/main/resources/unieventos-d397.json
+src/main/resources/**
 src/main/java/co/edu/uniquindio/unieventos/config/FirebaseConfig.java
