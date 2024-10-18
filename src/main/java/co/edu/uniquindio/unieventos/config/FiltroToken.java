@@ -48,7 +48,7 @@ public class FiltroToken extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/", "/v3/api-docs/","/swagger-ui/index.html","/swagger-ui/swagger-initializer.js","/v3/api-docs");
-        List<String> urisclientes = Arrays.asList("/servicios/cuenta-autenticada");
+        List<String> urisclientes = List.of("/servicios/cuenta-autenticada");
         // Si la URI solicitada es pública, no validar el token, simplemente continuar
         if (urisPublicas.stream().anyMatch(requestURI::startsWith)) {
             filterChain.doFilter(request, response); // Continuar sin validación
@@ -83,13 +83,13 @@ public class FiltroToken extends OncePerRequestFilter {
 
         } catch (MalformedJwtException | SignatureException e) {
             crearRespuestaError("El token es incorrecto", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si hay un error en el token
+            // Detener el flujo si hay un error en el token
         } catch (ExpiredJwtException e) {
             crearRespuestaError("El token está vencido", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si el token está expirado
+            // Detener el flujo si el token está expirado
         } catch (Exception e) {
             crearRespuestaError(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            return; // Detener el flujo si hay otro error
+            // Detener el flujo si hay otro error
         }
 
         // Si no hay errores, se continúa con la petición

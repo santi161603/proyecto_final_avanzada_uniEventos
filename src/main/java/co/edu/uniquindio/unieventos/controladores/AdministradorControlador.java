@@ -26,7 +26,7 @@ public class AdministradorControlador {
     private final ImagenesServicio imagenesServicio;
 
     @PostMapping("/crear-evento")
-    public ResponseEntity<MensajeDTO<String>> crearEvento(DTOCrearEvento dtoCrearEvento) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> crearEvento(@Valid @RequestBody DTOCrearEvento dtoCrearEvento) throws Exception {
         String result = eventoAdministrador.crearEvento(dtoCrearEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, result));
     }
@@ -56,13 +56,13 @@ public class AdministradorControlador {
     }
 
     @PostMapping("/crear-localidad")
-    public ResponseEntity<MensajeDTO<String>> crearLocalidad(@RequestBody DTOCrearLocalidad localidad) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> crearLocalidad(@Valid @RequestBody DTOCrearLocalidad localidad) throws Exception {
         localidadServicio.crearLocalidad(localidad);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Localidad creada exitosamente"));
     }
 
     @PutMapping("/actualizar-localidad/{localidadId}")
-    public ResponseEntity<MensajeDTO<String>> actualizarLocalidad(@RequestBody DTOActualizarLocalidad localidad,
+    public ResponseEntity<MensajeDTO<String>> actualizarLocalidad(@Valid @RequestBody DTOActualizarLocalidad localidad,
                                                                 @PathVariable String localidadId) throws Exception {
         localidadServicio.actualizarLocalidad(localidad, localidadId);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Localidad actualizada exitosamente"));
