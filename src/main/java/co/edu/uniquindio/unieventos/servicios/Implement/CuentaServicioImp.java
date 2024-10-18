@@ -41,7 +41,7 @@ public class CuentaServicioImp implements CuentaServicio {
     private final ImagenesServicio imagenesServicio;
 
     @Override
-    public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) throws IOException {
+    public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) throws Exception {
         // Crear una nueva instancia de Cuenta
         Cuenta nuevaCuenta = new Cuenta();
         // Asignar los valores del DTO a la entidad Cuenta
@@ -75,8 +75,6 @@ public class CuentaServicioImp implements CuentaServicio {
         String fileName = imageFile.getName(); // Obtener el nombre del archivo
         String contentType = Files.probeContentType(imageFile.toPath()); // Detectar el tipo de contenido
 
-        // Crear un FileInputStream para leer el archivo
-        try (FileInputStream inputStream = new FileInputStream(imageFile)) {
             // Crear el MultipartFile implementando la interfaz manualmente
             MultipartFile multipartFile = new MultipartFile() {
                 @Override
@@ -123,6 +121,7 @@ public class CuentaServicioImp implements CuentaServicio {
             // Llamar al método subirImagen
             String imageUrl = imagenesServicio.subirImagen(multipartFile);
 
+            nuevaCuenta.setImageProfile(imageUrl);
             nuevaCuenta.setUsuario(usuario);
             nuevaCuenta.setCodigoVerificacion(codigoVerif);
 
@@ -145,9 +144,6 @@ public class CuentaServicioImp implements CuentaServicio {
 
             // Retornar el ID del usuario creado
             return nuevaCuenta.getIdUsuario();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al intentar subir la imagen");
-        }
     }
 
     @Override
