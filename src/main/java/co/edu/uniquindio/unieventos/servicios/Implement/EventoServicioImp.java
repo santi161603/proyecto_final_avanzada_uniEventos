@@ -201,7 +201,7 @@ public class EventoServicioImp implements EventoServicio{
 
     @Override
     public Evento obtenerEventoPorId(String idEvento) throws Exception {
-        return null;
+        return eventoRepository.findById(idEvento).get();
     }
 
     @Override
