@@ -58,7 +58,7 @@ public class CuentaAutenticadaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Carrito limpiado exitosamente"));
     }
 
-    @PostMapping("/actualizar-imagen-perfil")
+    @PostMapping("/actualizar-imagen-perfil/{usuarioId}")
     public ResponseEntity<MensajeDTO<String>> subirImagenPerdil(@PathVariable String usuarioId,@Valid @RequestBody MultipartFile imagen) throws Exception {
         cuentaServicio.subirImagenPerfilUsuario(usuarioId,imagen);
         return ResponseEntity.ok(new MensajeDTO<>(false,"Imagen de perfil actualizada exitosamente"));

@@ -38,13 +38,13 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
-    @PutMapping("/reenviar-token")
+    @PutMapping("/reenviar-token/{idUsuario}")
     public ResponseEntity<MensajeDTO<String>> reenviarToken(@PathVariable String idUsuario) throws Exception{
         cuentaServicio.reenviarToken(idUsuario);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Token reenviado"));
     }
 
-    @GetMapping("/obtener-evento")
+    @GetMapping("/obtener-evento/{idEvento}")
     public ResponseEntity<MensajeDTO<Evento>> obtenerEvento(@PathVariable String idEvento) throws Exception {
         Evento evento = eventoServicio.obtenerEventoPorId(idEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, evento));
