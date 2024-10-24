@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 import co.edu.uniquindio.unieventos.dto.DTOActualizarCarrito;
 import co.edu.uniquindio.unieventos.modelo.documentos.CarritoCompras;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
+import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.repositorio.CarritoComprasRepository;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.CarritoServicio;
@@ -11,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class CarritoServicioImp implements CarritoServicio {
     }
 
     @Override
-    public void anadirItem(List<String> items, String usuarioId) throws Exception {
+    public void anadirItem(List<ItemCarritoVO> items, String usuarioId) throws Exception {
 
         // Buscar el carrito del cliente por su ID
         CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
@@ -47,7 +49,7 @@ public class CarritoServicioImp implements CarritoServicio {
         }
 
         // Añadir todos los items al carrito (suponiendo que 'items' es una lista de IDs de eventos u objetos)
-        for (String itemId : items) {
+        for (ItemCarritoVO itemId : items) {
             // Comprobar que el evento/item existe (opcional, depende de tu lógica)
             Optional<Evento> eventoOptional = eventoRepository.findById(String.valueOf(itemId));
 
@@ -65,7 +67,7 @@ public class CarritoServicioImp implements CarritoServicio {
 
 
     @Override
-    public void eliminarItem(List<String> items, String usuarioId) throws Exception {
+    public void eliminarItem(List<LocalDateTime> items, String usuarioId) throws Exception {
 
         // Buscar el carrito del cliente por su ID
         CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
@@ -81,11 +83,18 @@ public class CarritoServicioImp implements CarritoServicio {
         }
 
         // Eliminar los items de la lista del carrito
-        for (String item : items) {
-            if (carritoCompras.getItems().contains(item)) {
-                carritoCompras.getItems().remove(item);
+        // Eliminar los items de la lista del carrito
+        for (LocalDateTime fechaItem : items) {
+            // Buscar el ItemCarritoVO correspondiente en el carrito
+            Optional<ItemCarritoVO> itemCarritoOptional = carritoCompras.getItems().stream()
+                    .filter(item -> item.getFecha().equals(fechaItem))
+                    .findFirst();
+
+            if (itemCarritoOptional.isPresent()) {
+                // Eliminar el item del carrito
+                carritoCompras.getItems().remove(itemCarritoOptional.get());
             } else {
-                throw new Exception("Item con ID " + item + " no encontrado en el carrito del usuario: " + usuarioId);
+                throw new Exception("Item con la fecha " + fechaItem + " no encontrado en el carrito del usuario: " + usuarioId);
             }
         }
 
@@ -94,7 +103,7 @@ public class CarritoServicioImp implements CarritoServicio {
     }
 
     @Override
-    public List<String> obtenerListaItems(String usuarioId) throws Exception {
+    public List<ItemCarritoVO> obtenerListaItems(String usuarioId) throws Exception {
 
         // Buscar el carrito del cliente por su ID de usuario
         CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
@@ -105,7 +114,7 @@ public class CarritoServicioImp implements CarritoServicio {
         }
 
         // Obtener la lista de items (IDs de los eventos) en el carrito
-        List<String> items = carritoCompras.getItems();
+        List<ItemCarritoVO> items = carritoCompras.getItems();
 
         // Si el carrito está vacío, devolver una lista vacía o manejar como sea necesario
         if (items.isEmpty()) {

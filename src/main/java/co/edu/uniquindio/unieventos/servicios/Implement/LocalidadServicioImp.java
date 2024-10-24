@@ -2,6 +2,7 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.dto.DTOActualizarLocalidad;
 import co.edu.uniquindio.unieventos.dto.DTOCrearLocalidad;
+import co.edu.uniquindio.unieventos.dto.LocalidadEventoObtenidoDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,8 +40,13 @@ public class LocalidadServicioImp implements LocalidadServicio {
     }
 
     @Override
-    public List<LocalidadEvento> obtenerLocalidades() throws Exception {
-        return localidadRepository.findAll();
+    public List<LocalidadEventoObtenidoDTO> obtenerLocalidades() throws Exception {
+
+        List<LocalidadEvento> localidadEventos =  localidadRepository.findAll();
+
+        return localidadEventos.stream()
+                .map(this::mapearALocalidadEventoObtenidoDTO) // Mapea cada localidad a LocalidadEventoObtenidoDTO
+                .collect(Collectors.toList()); // Recoge el resultado en una lista
     }
 
     @Override
@@ -87,18 +94,31 @@ public class LocalidadServicioImp implements LocalidadServicio {
     }
 
     @Override
-    public LocalidadEvento obtenerLocalidadPorId(String localidadId) throws Exception {
+    public LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String localidadId) throws Exception {
 
-        Optional<LocalidadEvento> localidadEvento = localidadRepository.findById(localidadId);
+        LocalidadEvento localidadEvento = localidadRepository.findById(localidadId).orElseThrow(() -> new Exception("Evento no encontrado con ID: " + localidadId));
 
-        if(localidadEvento.isEmpty()) return localidadRepository.findById(localidadId).get();
-        else{
-            throw new Exception("No se encontro la localidad");
-        }
+      return mapearALocalidadEventoObtenidoDTO(localidadEvento);
+
     }
 
     @Override
-    public List<LocalidadEvento> obtenerLocalidadesPorCiudad(Ciudades ciudad) throws Exception {
-        return localidadRepository.findByCity(ciudad);
+    public List<LocalidadEventoObtenidoDTO> obtenerLocalidadesPorCiudad(Ciudades ciudad) throws Exception {
+        List<LocalidadEvento> localidadEventos = localidadRepository.findByCity(ciudad);
+
+        return localidadEventos.stream()
+                .map(this::mapearALocalidadEventoObtenidoDTO) // Mapea cada localidad a LocalidadEventoObtenidoDTO
+                .collect(Collectors.toList()); // Recoge el resultado en una lista
+    }
+
+    private LocalidadEventoObtenidoDTO mapearALocalidadEventoObtenidoDTO(LocalidadEvento localidad) {
+        return new LocalidadEventoObtenidoDTO(
+                localidad.getNombreLocalidad(),
+                localidad.getDireccion(),
+                localidad.getCiudad(),
+                localidad.getTipoLocalidad(),
+                localidad.getCapacidadMaxima(),
+                localidad.getCapacidadDisponible()
+        );
     }
 }

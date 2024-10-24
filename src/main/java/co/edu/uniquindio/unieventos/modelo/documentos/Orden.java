@@ -1,27 +1,25 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
+
+import co.edu.uniquindio.unieventos.modelo.vo.Pago;
+import co.edu.uniquindio.unieventos.modelo.vo.Transaccion;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-@Document(collection = "transacciones")
+@Document(collection = "ordenes")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Transaccion {
+public class Orden {
 
     @Id
     @EqualsAndHashCode.Include
-    private String codigo;
+    private String idOrden;
 
-    private List<Evento> productos;
-    private String idCliente;
-    private String idPago;
-    private String qr;
+    private String codigoPasarela;
+    private Transaccion transaccion;
+    private Pago pago;
 }

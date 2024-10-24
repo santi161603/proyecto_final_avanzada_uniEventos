@@ -2,12 +2,11 @@ package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
-import co.edu.uniquindio.unieventos.modelo.vo.subEvento;
+import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "eventos")
@@ -27,5 +26,5 @@ public class Evento {
     private String descripcion;
     private TipoEvento tipoEvento; // concierto, teatro, deporte, etc.
     private String imagenPoster;
-    private List<subEvento> subEvent;
+    private List<SubEvento> subEvent;
 }

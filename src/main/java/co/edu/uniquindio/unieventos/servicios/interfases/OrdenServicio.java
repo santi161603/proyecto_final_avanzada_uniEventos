@@ -1,8 +1,15 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
+import co.edu.uniquindio.unieventos.dto.DTOActualizarOrden;
+import co.edu.uniquindio.unieventos.dto.DTOCrearOrden;
+import co.edu.uniquindio.unieventos.dto.OrdenInfoDTO;
+import java.util.Map;
+import com.mercadopago.resources.preference.Preference;
+
+import java.util.List;
+
 public interface OrdenServicio {
 
-    /*
     // Método para crear una orden
     String crearOrden(DTOCrearOrden orden) throws Exception;
 
@@ -10,17 +17,22 @@ public interface OrdenServicio {
     void eliminarOrden(String idOrden) throws Exception;
 
     // Método para actualizar una orden
-    Orden actualizarOrden(String idOrden, DTOActualizarOrden ordenActualizada) throws Exception;
+    DTOActualizarOrden actualizarOrden(String idOrden, DTOActualizarOrden ordenActualizada) throws Exception;
 
     // Método para obtener una orden por su ID
-    Orden obtenerOrdenPorId(String idOrden) throws Exception;
+    OrdenInfoDTO obtenerOrdenPorId(String idOrden) throws Exception;
 
     // Método para obtener todas las órdenes
-    List<Orden> obtenerTodasLasOrdenes() throws Exception;
+    List<OrdenInfoDTO> obtenerTodasLasOrdenes() throws Exception;
 
-    // Método para procesar un evento relacionado con una orden
-    void procesarEvento(DTOEventoOrden evento) throws Exception;
+    //metodo para crear una orden atravez del carrito
+    String crearOrdenDesdeCarrito(String idCarrito) throws Exception;
 
-     */
+
+    //Realizar pago
+    Preference realizarPago(String idOrden) throws Exception;
+
+    void recibirNotificacionMercadoPago(Map<String, Object> request);
+
 }
 

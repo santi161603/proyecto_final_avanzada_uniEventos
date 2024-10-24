@@ -1,5 +1,8 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
+import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CarritoServicio {
@@ -8,13 +11,13 @@ public interface CarritoServicio {
     String crearCarrito(String usuarioId) throws Exception;
 
     //Metodo para añadir items al carrito
-    void anadirItem(List<String> items, String usuarioId ) throws Exception;
+    void anadirItem(List<ItemCarritoVO> items, String usuarioId ) throws Exception;
 
     // Método para eliminar un item del carrito
-    void eliminarItem(List<String> item,String usuarioId) throws Exception;
+    void eliminarItem(List<LocalDateTime> item, String usuarioId) throws Exception;
 
     // Método para obtener lista de items
-    List<String> obtenerListaItems(String usuarioId) throws Exception;
+    List<ItemCarritoVO> obtenerListaItems(String usuarioId) throws Exception;
 
     // Limpiar carrito
     void limpiarCarrito(String usuarioId) throws Exception;

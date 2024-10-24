@@ -2,6 +2,7 @@ package co.edu.uniquindio.unieventos.servicios.interfases;
 
 import co.edu.uniquindio.unieventos.dto.DTOActualizarEvento;
 import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
+import co.edu.uniquindio.unieventos.dto.EventoObtenidoDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 
@@ -19,12 +20,12 @@ public interface EventoServicio {
     void eliminarEvento(String idEvento) throws Exception;
 
     // Método para obtener un evento por su ID
-    Evento obtenerEventoPorId(String idEvento) throws Exception;
+    EventoObtenidoDTO obtenerEventoPorId(String idEvento) throws Exception;
 
     // Método para obtener todos los eventos
-    List<Evento> obtenerTodosLosEventos() throws Exception;
+    List<EventoObtenidoDTO> obtenerTodosLosEventos() throws Exception;
 
     // Método para obtener un evento por categoria
-    List<Evento> obtenerEventoCategoria(TipoEvento evento) throws Exception;
+    List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEvento evento) throws Exception;
 }
 

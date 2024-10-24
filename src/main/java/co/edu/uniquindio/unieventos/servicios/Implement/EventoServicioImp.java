@@ -1,11 +1,9 @@
 package co.edu.uniquindio.unieventos.servicios.Implement;
 
-import co.edu.uniquindio.unieventos.dto.DTOActualizarEvento;
-import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
-import co.edu.uniquindio.unieventos.dto.DTOSubEventos;
+import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
-import co.edu.uniquindio.unieventos.modelo.vo.subEvento;
+import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
@@ -22,6 +20,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,10 +40,10 @@ public class EventoServicioImp implements EventoServicio{
         nuevoEvento.setTipoEvento(evento.tipoEvento());
 
         // Mapear la lista de subeventos
-        List<subEvento> subEventos = new ArrayList<>();
+        List<SubEvento> subEventos = new ArrayList<>();
             // Usar un bucle for para mapear y guardar los subeventos
             for (DTOSubEventos subeventoDTO : evento.subEventos()) {
-                subEvento subevento = new subEvento();
+                SubEvento subevento = new SubEvento();
                 subevento.setFechaEvento(subeventoDTO.fechaEvento());
                 subevento.setLocalidades(subeventoDTO.localidades());
                 subevento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
@@ -151,20 +150,20 @@ public class EventoServicioImp implements EventoServicio{
 
         // Actualizar la lista de subeventos si se proporciona
         if (evento.subEventos() != null && !evento.subEventos().isEmpty()) {
-            List<subEvento> subEventosActualizados = new ArrayList<>();
+            List<SubEvento> subEventosActualizados = new ArrayList<>();
 
             for (DTOSubEventos subeventoDTO : evento.subEventos()) {
-                Optional<subEvento> subeventoExistenteOptional = eventoRepository.findBySubEventoFecha(subeventoDTO.fechaEvento());
+                Optional<SubEvento> subeventoExistenteOptional = eventoRepository.findBySubEventoFecha(subeventoDTO.fechaEvento());
 
                 if (subeventoExistenteOptional.isPresent()) {
                     // Si el subevento con la misma fecha ya existe, actualizarlo
-                    subEvento subeventoExistente = subeventoExistenteOptional.get();
+                    SubEvento subeventoExistente = subeventoExistenteOptional.get();
                     subeventoExistente.setLocalidades(subeventoDTO.localidades());
                     subeventoExistente.setCantidadEntradas(subeventoDTO.cantidadEntradas());
                     subEventosActualizados.add(subeventoExistente); // Agregar el subevento actualizado a la lista
                 } else {
                     // Si no existe un subevento con esa fecha, crear uno nuevo
-                    subEvento nuevoSubEvento = new subEvento();
+                    SubEvento nuevoSubEvento = new SubEvento();
                     nuevoSubEvento.setFechaEvento(subeventoDTO.fechaEvento());
                     nuevoSubEvento.setLocalidades(subeventoDTO.localidades());
                     nuevoSubEvento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
@@ -200,17 +199,60 @@ public class EventoServicioImp implements EventoServicio{
     }
 
     @Override
-    public Evento obtenerEventoPorId(String idEvento) throws Exception {
-        return null;
+    public EventoObtenidoDTO obtenerEventoPorId(String idEvento) throws Exception {
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new Exception("Evento no encontrado con ID: " + idEvento));
+
+            return mapearAEventoObtenidoDTO(evento);
+
     }
 
     @Override
-    public List<Evento> obtenerTodosLosEventos() throws Exception {
-        return eventoRepository.findAll();
+    public List<EventoObtenidoDTO> obtenerTodosLosEventos() throws Exception {
+
+        List<Evento> evento = eventoRepository.findAll();
+
+        return evento.stream()
+                .map(this::mapearAEventoObtenidoDTO)
+                .collect(Collectors.toList());
+
     }
 
     @Override
-    public List<Evento> obtenerEventoCategoria(TipoEvento tipoEvento) throws Exception {
-        return eventoRepository.findByCategoria(tipoEvento);
+    public List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEvento tipoEvento) throws Exception {
+
+        List<Evento> eventos = eventoRepository.findByCategoria(tipoEvento);
+
+        return eventos.stream()
+                .map(this::mapearAEventoObtenidoDTO)
+                .collect(Collectors.toList());
+    }
+
+    private EventoObtenidoDTO mapearAEventoObtenidoDTO(Evento evento) {
+
+        return new EventoObtenidoDTO(
+                evento.getNombre(),
+                evento.getCiudad(),
+                evento.getDescripcion(),
+                evento.getTipoEvento(),
+                mapearListaDeSubEventos(evento.getSubEvent()), // Ahora pasas la lista correctamente mapeada
+                evento.getImagenPoster()
+                );}
+
+    private List<DTOSubEventos> mapearListaDeSubEventos(List<SubEvento> subEventos) {
+        return subEventos.stream()
+                .map(this::mapearASubEventoDTO) // Mapea cada subEvento a DTOSubEventos
+                .collect(Collectors.toList()); // Recoge el resultado en una lista
+    }
+
+        // Método para mapear subEvento a DTOSubEventos
+        private DTOSubEventos mapearASubEventoDTO(SubEvento subEvento) {
+            return new DTOSubEventos(
+                    subEvento.getFechaEvento(), // Ajusta según los campos reales
+                    subEvento.getLocalidades(),
+                    subEvento.getCantidadEntradas()// Ajusta según los campos reales
+                    // Continúa mapeando los demás campos necesarios
+            );
+
     }
 }

@@ -1,11 +1,8 @@
 package co.edu.uniquindio.unieventos.repositorio;
 
-import co.edu.uniquindio.unieventos.modelo.documentos.CarritoCompras;
-import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
-import co.edu.uniquindio.unieventos.modelo.vo.subEvento;
-import org.bson.types.ObjectId;
+import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,6 +18,6 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
     List<Evento> findByCategoria(TipoEvento categoria);
 
     @Query(value = "{ 'subEvent.fechaEvento' : ?0 }", fields = "{ 'subEvent.$': 1 }")
-    Optional<subEvento> findBySubEventoFecha(LocalDateTime localDateTime);
+    Optional<SubEvento> findBySubEventoFecha(LocalDateTime localDateTime);
 
 }

@@ -1,9 +1,6 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
-import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
-import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
-import co.edu.uniquindio.unieventos.dto.LoginDTO;
-import co.edu.uniquindio.unieventos.dto.TokenDTO;
+import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,12 +14,12 @@ public interface CuentaServicio {
     Boolean eliminarCuenta(String idUsuario)throws Exception;
 
     // Método para actualizar una cuenta
-    Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
+    void actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
 
     void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception;
 
     // Método para obtener todas las cuentas
-    List<Cuenta> obtenerTodasLasCuentas()throws Exception;
+    List<CuentaListadaDTO> obtenerTodasLasCuentas()throws Exception;
 
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 

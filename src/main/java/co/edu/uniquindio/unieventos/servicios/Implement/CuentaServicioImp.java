@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -156,7 +157,7 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public Cuenta actualizarCuenta(DTOActualizarCuenta cuentaActualizada) {
+    public void actualizarCuenta(DTOActualizarCuenta cuentaActualizada) {
 
         Cuenta cuenta = obtenerPorEmail(cuentaActualizada.email());
 
@@ -182,7 +183,7 @@ public class CuentaServicioImp implements CuentaServicio {
         cuenta.setUsuario(usuario);
 
         // Guardar la cuenta actualizada en la base de datos
-        return Cuentarepo.save(cuenta);
+        Cuentarepo.save(cuenta);
     }
 
     private int generarCodigoVerificacion() {
@@ -283,9 +284,30 @@ public class CuentaServicioImp implements CuentaServicio {
 
     // Obtener todas las cuentas
     @Override
-    public List<Cuenta> obtenerTodasLasCuentas() {
-        // Devolver todas las cuentas almacenadas en la base de datos
-        return Cuentarepo.findAll();
+    public List<CuentaListadaDTO> obtenerTodasLasCuentas() {
+        // Obtener todas las cuentas de la base de datos
+        List<Cuenta> cuentas = Cuentarepo.findAll();
+
+        // Convertir cada Cuenta a CuentaListadaDTO
+        return cuentas.stream()
+                .map(this::mapearACuentaListadaDTO)
+                .collect(Collectors.toList());
+    }
+
+    private CuentaListadaDTO mapearACuentaListadaDTO(Cuenta cuenta) {
+
+        Usuario usuario  = cuenta.getUsuario();
+
+        return new CuentaListadaDTO(
+                usuario.getCedula(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getTelefono(), // Asumiendo que esto ya es una lista
+                usuario.getDireccion(),
+                usuario.getEmail(),
+                usuario.getContrasena(),
+                cuenta.getRol()
+        );
     }
 
     @Override

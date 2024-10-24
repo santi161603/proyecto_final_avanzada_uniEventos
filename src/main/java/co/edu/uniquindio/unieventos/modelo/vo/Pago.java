@@ -1,28 +1,23 @@
-package co.edu.uniquindio.unieventos.modelo.documentos;
+package co.edu.uniquindio.unieventos.modelo.vo;
 
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoPago;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Document(collection = "pagos")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Pago {
-
-    @Id
-    @EqualsAndHashCode.Include
-    private String idPago;
 
     private String metodoPago; // MercadoPago, PayPal, etc.
     private EstadoPago estadoPago; // completado, pendiente, fallido
-    private Date fechaPago;
+    private LocalDateTime fechaPago;
     private String cupon;
     private double montoTotal;
 }

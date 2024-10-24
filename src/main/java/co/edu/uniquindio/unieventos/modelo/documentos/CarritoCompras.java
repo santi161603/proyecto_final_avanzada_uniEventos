@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
+import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -20,6 +21,6 @@ public class CarritoCompras {
     private String idCarritoCompras;      // Identificador único del carrito
 
     private String usuarioId;
-    private List<String> items;
+    private List<ItemCarritoVO> items;
     private Double totalPrecio;
 }

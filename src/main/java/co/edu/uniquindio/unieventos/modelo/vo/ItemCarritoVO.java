@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @ToString
-public class SubEvento {
-    private LocalDateTime fechaEvento;
-    private String localidades;
+public class ItemCarritoVO {
+
+    private String eventoId;
+    private LocalDateTime fecha;
     private int cantidadEntradas;
-    private int precioEntrada;
+
 }
