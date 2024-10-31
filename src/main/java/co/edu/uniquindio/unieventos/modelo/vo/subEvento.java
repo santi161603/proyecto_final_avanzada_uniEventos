@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -13,7 +14,8 @@ import java.time.LocalDateTime;
 @ToString
 public class SubEvento {
     private LocalDateTime fechaEvento;
-    private String localidades;
+    private LocalTime horaEvento;
+    private String localidad;
     private int cantidadEntradas;
-    private int precioEntrada;
+    private float precioEntrada;
 }

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventos.dto;
 
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -17,6 +18,7 @@ public record DTOCrearCuenta(
         @NotEmpty(message = "La lista de teléfonos no puede estar vacía")
         List<@Valid @NotBlank(message = "El número de teléfono no puede estar en blanco") @Length(max = 10) String> telefono,
         @Length(max = 100) String direccion,
+        @NotNull Ciudades ciudad,
         @NotBlank @Length(max = 50) @Email String email,
         @NotBlank @Length(min = 7, max = 20) String contrasena,
         @NotNull RolUsuario rol

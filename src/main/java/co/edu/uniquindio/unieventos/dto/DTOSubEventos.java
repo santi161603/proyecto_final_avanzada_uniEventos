@@ -3,15 +3,19 @@ package co.edu.uniquindio.unieventos.dto;
 import com.google.firebase.database.annotations.NotNull;
 import jakarta.validation.constraints.Min;
 import org.bson.types.ObjectId;
+import org.checkerframework.checker.units.qual.Time;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public record DTOSubEventos(
 
-        @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime fechaEvento,
-        @NotNull String localidades,
-        @Min(1) int cantidadEntradas
+        @NotNull LocalDateTime fechaEvento,
+        @NotNull String localidad,
+        @NotNull LocalTime horaEvento, // Eliminado @Time
+        @Min(1) int cantidadEntradas,
+        @Min(100) float precioEntrada
 
 ) {
 }

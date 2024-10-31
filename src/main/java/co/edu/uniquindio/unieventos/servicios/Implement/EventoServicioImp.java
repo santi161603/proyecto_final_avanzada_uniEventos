@@ -2,6 +2,7 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
@@ -35,7 +36,7 @@ public class EventoServicioImp implements EventoServicio{
 // Mapear DTO a entidad Evento
         Evento nuevoEvento = new Evento();
         nuevoEvento.setNombre(evento.nombre());
-        nuevoEvento.setCiudad(evento.ciudad());
+        nuevoEvento.setEstadoEvento(EstadoCuenta.ACTIVO);
         nuevoEvento.setDescripcion(evento.descripcion());
         nuevoEvento.setTipoEvento(evento.tipoEvento());
 
@@ -45,8 +46,10 @@ public class EventoServicioImp implements EventoServicio{
             for (DTOSubEventos subeventoDTO : evento.subEventos()) {
                 SubEvento subevento = new SubEvento();
                 subevento.setFechaEvento(subeventoDTO.fechaEvento());
-                subevento.setLocalidades(subeventoDTO.localidades());
+                subevento.setLocalidad(subeventoDTO.localidad());
+                subevento.setHoraEvento(subeventoDTO.horaEvento());
                 subevento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
+                subevento.setPrecioEntrada(subeventoDTO.precioEntrada());
                 subEventos.add(subevento); // Agregar el subevento a la lista
             }
             // Agregar la lista de subeventos al evento
@@ -109,7 +112,7 @@ public class EventoServicioImp implements EventoServicio{
 
         nuevoEvento.setImagenPoster(imageUrl);
 
-            eventoRepository.save(nuevoEvento);
+        eventoRepository.save(nuevoEvento);
 
         // Persistir el evento en la base de datos
         return nuevoEvento.getIdEvento();
@@ -148,6 +151,10 @@ public class EventoServicioImp implements EventoServicio{
             eventoActualizado.setImagenPoster(nuevaUrlImagen);
         }
 
+        if(evento.estadoEvento() != null && !evento.estadoEvento().equals(eventoActualizado.getEstadoEvento())) {
+            eventoActualizado.setEstadoEvento(evento.estadoEvento());
+        }
+
         // Actualizar la lista de subeventos si se proporciona
         if (evento.subEventos() != null && !evento.subEventos().isEmpty()) {
             List<SubEvento> subEventosActualizados = new ArrayList<>();
@@ -158,15 +165,19 @@ public class EventoServicioImp implements EventoServicio{
                 if (subeventoExistenteOptional.isPresent()) {
                     // Si el subevento con la misma fecha ya existe, actualizarlo
                     SubEvento subeventoExistente = subeventoExistenteOptional.get();
-                    subeventoExistente.setLocalidades(subeventoDTO.localidades());
+                    subeventoExistente.setLocalidad(subeventoDTO.localidad());
+                    subeventoExistente.setHoraEvento(subeventoDTO.horaEvento());
                     subeventoExistente.setCantidadEntradas(subeventoDTO.cantidadEntradas());
+                    subeventoExistente.setPrecioEntrada(subeventoDTO.precioEntrada());
                     subEventosActualizados.add(subeventoExistente); // Agregar el subevento actualizado a la lista
                 } else {
                     // Si no existe un subevento con esa fecha, crear uno nuevo
                     SubEvento nuevoSubEvento = new SubEvento();
                     nuevoSubEvento.setFechaEvento(subeventoDTO.fechaEvento());
-                    nuevoSubEvento.setLocalidades(subeventoDTO.localidades());
+                    nuevoSubEvento.setLocalidad(subeventoDTO.localidad());
+                    nuevoSubEvento.setHoraEvento(subeventoDTO.horaEvento());
                     nuevoSubEvento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
+                    nuevoSubEvento.setPrecioEntrada(subeventoDTO.precioEntrada());
                     subEventosActualizados.add(nuevoSubEvento); // Agregar el nuevo subevento a la lista
                 }
             }
@@ -188,14 +199,10 @@ public class EventoServicioImp implements EventoServicio{
         Optional<Evento> eventoOptional = eventoRepository.findById(idEvento);
 
         // Si el evento no existe, lanzar una excepción
-        if (!eventoOptional.isPresent()) {
+        if (eventoOptional.isEmpty()) {
             throw new Exception("El evento con ID " + idEvento + " no existe.");
         }
-
-        String urlIm = eventoOptional.get().getImagenPoster();
-        // Si el evento existe, eliminarlo
-        imagenesServicio.eliminarImagen(urlIm);
-        eventoRepository.delete(eventoOptional.get());
+        eventoOptional.get().setEstadoEvento(EstadoCuenta.ELIMINADO);
     }
 
     @Override
@@ -232,8 +239,8 @@ public class EventoServicioImp implements EventoServicio{
 
         return new EventoObtenidoDTO(
                 evento.getNombre(),
-                evento.getCiudad(),
                 evento.getDescripcion(),
+                evento.getEstadoEvento(),
                 evento.getTipoEvento(),
                 mapearListaDeSubEventos(evento.getSubEvent()), // Ahora pasas la lista correctamente mapeada
                 evento.getImagenPoster()
@@ -249,7 +256,7 @@ public class EventoServicioImp implements EventoServicio{
         private DTOSubEventos mapearASubEventoDTO(SubEvento subEvento) {
             return new DTOSubEventos(
                     subEvento.getFechaEvento(), // Ajusta según los campos reales
-                    subEvento.getLocalidades(),
+                    subEvento.getLocalidad(),
                     subEvento.getCantidadEntradas()// Ajusta según los campos reales
                     // Continúa mapeando los demás campos necesarios
             );

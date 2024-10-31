@@ -5,6 +5,7 @@ import co.edu.uniquindio.unieventos.modelo.enums.TipoLocalidad;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection = "localidades_eventos")
 @Getter
@@ -21,6 +22,7 @@ public class LocalidadEvento {
     private String nombreLocalidad;
     private String direccion;
     private Ciudades ciudad;
+    private MultipartFile imagen;
     private TipoLocalidad tipoLocalidad;
     private int capacidadMaxima;
     private int capacidadDisponible;

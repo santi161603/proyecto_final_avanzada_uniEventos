@@ -64,6 +64,7 @@ public class CuentaServicioImp implements CuentaServicio {
         usuario.setNombre(dtoCrearCuenta.nombre());
         usuario.setApellido(dtoCrearCuenta.apellido());
         usuario.setDireccion(dtoCrearCuenta.direccion());
+        usuario.setCiudad(dtoCrearCuenta.ciudad());
         usuario.setTelefono(dtoCrearCuenta.telefono());
         usuario.setContrasena(contrasenaEncrip);
         usuario.setEmail(dtoCrearCuenta.email());
@@ -192,13 +193,14 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public Boolean eliminarCuenta(String idUsuario) {
+    public void eliminarCuenta(String idUsuario) {
 
-        if (Cuentarepo.existsById(idUsuario)) {
-            Cuentarepo.deleteById(idUsuario);
-            return true;  // La cuenta fue eliminada
+        Optional<Cuenta> cuenta = cuentaRepository.findById(idUsuario);
+
+        if (cuenta.isPresent()) {
+            cuenta.get().setEstado(EstadoCuenta.ELIMINADO);
         } else {
-            return false; // La cuenta no fue encontrada
+            throw new RuntimeException("El usuario no existe");
         }
     }
 
@@ -255,6 +257,64 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
+    public void restablecerContrasena(RestablecerContrasenaDTO restablecerContrasenaDTO) throws Exception {
+
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(restablecerContrasenaDTO.email());
+
+        String nuevaContrasenaEncryp = encriptarPassword(restablecerContrasenaDTO.contrasenaNueva());
+
+        String oldPassword = cuenta.getUsuario().getContrasena();
+
+        if(oldPassword.equals(nuevaContrasenaEncryp)) {
+            throw new RuntimeException("Por favor coloque una contraseña diferente a una de sus contraseñas antiguas");
+        }
+
+        cuenta.getUsuario().setContrasena(nuevaContrasenaEncryp);
+
+        cuentaRepository.save(cuenta);
+
+    }
+
+    @Override
+    public void enviarToken(String correo) throws Exception {
+
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo);
+
+        int nuevoCodigoVerificacion = generarCodigoVerificacion();
+        CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
+
+        // Asignar el nuevo código y la fecha actual
+        codigoVerif.setCodigo(nuevoCodigoVerificacion);
+        codigoVerif.setFecha(LocalDateTime.now());
+
+        // Guardar los cambios en la base de datos
+        cuentaRepository.save(cuenta);
+
+        // Enviar el código de restablecimiento de contraseña por correo
+        String asunto = "Restablecimiento de contraseña para tu cuenta en UniEventos";
+        String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                "Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en UniEventos.\n" +
+                "Por favor, utiliza el siguiente código para completar el proceso de restablecimiento:\n\n" +
+                "Código de verificación: " + nuevoCodigoVerificacion + "\n\n" +
+                "Este código es válido por 15 minutos.\n" +
+                "Si no solicitaste el restablecimiento de contraseña, ignora este mensaje.\n\n" +
+                "Gracias,\n" +
+                "El equipo de UniEventos.";
+
+
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, correo);
+
+        try {
+            emailServicio.enviarCorreo(emailDTO);
+        } catch (Exception e) {
+            // Manejar la excepción en caso de fallo en el envío del correo
+            throw new RuntimeException("Error al enviar el nuevo correo de verificación", e);
+        }
+
+
+    }
+
+    @Override
     public void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
         Cuenta cuenta = cuentaRepository.findById(idUsuario)
@@ -305,9 +365,19 @@ public class CuentaServicioImp implements CuentaServicio {
                 usuario.getTelefono(), // Asumiendo que esto ya es una lista
                 usuario.getDireccion(),
                 usuario.getEmail(),
-                usuario.getContrasena(),
+                usuario.getCiudad(),
                 cuenta.getRol()
         );
+    }
+
+    public CuentaListadaDTO obtenerCuentaId(String idUsuario) throws Exception {
+        // Obtener todas las cuentas de la base de datos
+        Cuenta cuentas = Cuentarepo.findById(idUsuario).orElseThrow(
+                () -> new Exception("Cuenta no encontrada con ID: " + idUsuario)
+        );
+
+        // Convertir cada Cuenta a CuentaListadaDTO
+        return mapearACuentaListadaDTO(cuentas);
     }
 
     @Override

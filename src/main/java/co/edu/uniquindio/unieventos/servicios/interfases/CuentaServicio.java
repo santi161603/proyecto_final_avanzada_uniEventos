@@ -11,7 +11,7 @@ public interface CuentaServicio {
     String crearCuenta(DTOCrearCuenta cuenta) throws Exception;
 
     // Método para eliminar una cuenta por su ID
-    Boolean eliminarCuenta(String idUsuario)throws Exception;
+    void eliminarCuenta(String idUsuario)throws Exception;
 
     // Método para actualizar una cuenta
     void actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
@@ -27,4 +27,9 @@ public interface CuentaServicio {
 
     void subirImagenPerfilUsuario(String usuarioId, MultipartFile imagen) throws Exception;
 
+    void restablecerContrasena(RestablecerContrasenaDTO restablecerContrasenaDTO) throws Exception;
+
+    void enviarToken(String correo) throws Exception;
+
+    CuentaListadaDTO obtenerCuentaId(String idUsuario) throws Exception;
 }

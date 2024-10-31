@@ -44,21 +44,33 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Token reenviado"));
     }
 
-    @GetMapping("/obtener-evento")
-    public ResponseEntity<MensajeDTO<Evento>> obtenerEvento(@PathVariable String idEvento) throws Exception {
-        Evento evento = eventoServicio.obtenerEventoPorId(idEvento);
+    @PutMapping("/enviar-token-recuperar")
+    public ResponseEntity<MensajeDTO<String>> enviarTokenRecuperar(@PathVariable String correo) throws Exception{
+        cuentaServicio.enviarToken(correo);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Token enviado"));
+    }
+
+    @PutMapping("/restablecer-contrasena")
+    public ResponseEntity<MensajeDTO<String>> restablecerContrasena(@Valid @RequestBody RestablecerContrasenaDTO restablecerContrasenaDTO) throws Exception{
+        cuentaServicio.restablecerContrasena(restablecerContrasenaDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Contraseña cambiada con exito"));
+    }
+
+    @GetMapping("/obtener-evento/{idEvento}")
+    public ResponseEntity<MensajeDTO<EventoObtenidoDTO>> obtenerEvento(@PathVariable String idEvento) throws Exception {
+        EventoObtenidoDTO evento = eventoServicio.obtenerEventoPorId(idEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, evento));
     }
 
     @GetMapping("/obtener-todos-los-eventos-Por-Categoria")
-    public ResponseEntity<MensajeDTO<List<Evento>>> obtenerEventosPorCategoria(@Valid @RequestBody TipoEvento evento) throws Exception{
-        List<Evento> eventosCategoriaList = eventoServicio.obtenerEventoCategoria(evento);
+    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEventosPorCategoria(@Valid @RequestBody TipoEvento evento) throws Exception{
+        List<EventoObtenidoDTO> eventosCategoriaList = eventoServicio.obtenerEventoCategoria(evento);
         return ResponseEntity.ok(new MensajeDTO<>(false,eventosCategoriaList));
     }
 
     @GetMapping("/obtener-todas-localidad")
-    public ResponseEntity<MensajeDTO<List<LocalidadEvento>>> obtenerLocalidades() throws Exception {
-        List<LocalidadEvento> localidades = localidadServicio.obtenerLocalidades();
+    public ResponseEntity<MensajeDTO<List<LocalidadEventoObtenidoDTO>>> obtenerLocalidades() throws Exception {
+        List<LocalidadEventoObtenidoDTO> localidades = localidadServicio.obtenerLocalidades();
         return ResponseEntity.ok(new MensajeDTO<>(false, localidades));
     }
 

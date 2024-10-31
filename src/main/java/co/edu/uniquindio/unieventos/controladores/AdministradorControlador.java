@@ -44,14 +44,14 @@ public class AdministradorControlador {
     }
 
     @DeleteMapping("/eliminar-cuenta-definitivo/{idUsuario}")
-    public ResponseEntity<MensajeDTO<Boolean>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
-        Boolean result = cuentaAdministrador.eliminarCuenta(idUsuario);
-        return ResponseEntity.ok(new MensajeDTO<>(false, result));
+    public ResponseEntity<MensajeDTO<String>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
+        cuentaAdministrador.eliminarCuenta(idUsuario);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta eliminada"));
     }
 
     @GetMapping("/obtener-todas-las-cuentas")
-    public ResponseEntity<MensajeDTO<List<Cuenta>>> obtenerTodasLasCuentas() throws Exception{
-        List<Cuenta> cuentaList = cuentaAdministrador.obtenerTodasLasCuentas();
+    public ResponseEntity<MensajeDTO<List<CuentaListadaDTO>>> obtenerTodasLasCuentas() throws Exception{
+        List<CuentaListadaDTO> cuentaList = cuentaAdministrador.obtenerTodasLasCuentas();
         return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
     }
 

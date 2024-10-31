@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import lombok.*;
@@ -22,8 +23,8 @@ public class Evento {
     private String idEvento;
 
     private String nombre;
-    private Ciudades ciudad;
     private String descripcion;
+    private EstadoCuenta estadoEvento;
     private TipoEvento tipoEvento; // concierto, teatro, deporte, etc.
     private String imagenPoster;
     private List<SubEvento> subEvent;
