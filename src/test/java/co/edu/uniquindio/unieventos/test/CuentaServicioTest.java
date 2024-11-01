@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.test;
 import co.edu.uniquindio.unieventos.dto.DTOCrearCuenta;
 import co.edu.uniquindio.unieventos.dto.LoginDTO;
 import co.edu.uniquindio.unieventos.dto.TokenDTO;
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class CuentaServicioTest {
 
     @Test
     public void crearCuentaTest() throws Exception {
-        DTOCrearCuenta dto = new DTOCrearCuenta("1005088484", "Sebastian David","España", List.of("3108286354"), "Barrio Miraflorez Carrera 19a #36-3", "davideg3007@gmail.com", "david123", RolUsuario.MODERADOR);
+        DTOCrearCuenta dto = new DTOCrearCuenta("1005088484", "Sebastian David","España", List.of("3108286354"), "Barrio Miraflorez Carrera 19a #36-3", Ciudades.ABRIAQUI, "davideg3007@gmail.com", "david123", RolUsuario.MODERADOR);
         //Llamada al método que se está probando
         String idUsuario = cuentaServicio.crearCuenta(dto);
         // Verificación
@@ -45,8 +46,7 @@ public class CuentaServicioTest {
 
     @Test
     public void eliminarCuentaTest() throws Exception{
-        boolean result = cuentaServicio.eliminarCuenta("6704c027f38ff255bf5ca93b");
-        assertTrue(result);
+        cuentaServicio.eliminarCuenta("6704c027f38ff255bf5ca93b");
     }
 
     @Test

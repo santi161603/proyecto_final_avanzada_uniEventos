@@ -5,6 +5,7 @@ import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
 import co.edu.uniquindio.unieventos.dto.DTOSubEventos;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.servicios.Implement.EventoServicioImp;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +46,16 @@ public class EventoServicioTest {
         // Crear subeventos de prueba
         List<DTOSubEventos> subEventos = Arrays.asList(
                 //los sub eventos tienen la hora del evento, el id de la localidad y la cantidad de entradas
-                new DTOSubEventos(LocalDateTime.now(), "094ut09j3ifj290", 50),
-                new DTOSubEventos(LocalDateTime.now().plusDays(1), "eoihfwijfojeok", 100)
+                new DTOSubEventos(LocalDateTime.now(), "094ut09j3ifj290", LocalTime.of(3,40), 50, 500000),
+                new DTOSubEventos(LocalDateTime.now().plusDays(1), "eoihfwijfojeok", LocalTime.of(3,40), 50, 500000)
         );
 
         // Crear DTO del evento
         DTOCrearEvento dtoEvento = new DTOCrearEvento(
-                "Concierto de Rock", // nombre
-                Ciudades.BOGOTA,            // ciudad
+                "Concierto de Rock",// nombre
                 "Gran concierto de rock en Bogotá", // descripción
                 TipoEvento.CONCIERTO, // tipo de evento// el poster
+                EstadoCuenta.ACTIVO,            // ciudad
                 subEventos            // lista de subeventos
         );
 
@@ -76,15 +78,16 @@ public class EventoServicioTest {
 
         // Crear subeventos de prueba actualizados
         List<DTOSubEventos> subEventosActualizados = Arrays.asList(
-                new DTOSubEventos(LocalDateTime.now(), "oeifw09ur02924", 75),
-                new DTOSubEventos(LocalDateTime.now().plusDays(2), "wopuf092fio2f", 150)
+                new DTOSubEventos(LocalDateTime.now(), "oeifw09ur02924", LocalTime.of(3,40), 50, 500000),
+                new DTOSubEventos(LocalDateTime.now().plusDays(2), "wopuf092fio2f", LocalTime.of(3,40), 50, 500000)
         );
 
         // Crear DTO del evento a actualizar
         DTOActualizarEvento dtoActualizarEvento = new DTOActualizarEvento(
                 "Concierto de Rap",            // nombre actualizado
                 "Un increíble concierto de Rap", // descripción actualizada
-                imagenPoster,                  // nueva imagen del póster
+                imagenPoster,
+                EstadoCuenta.ACTIVO,// nueva imagen del póster
                 subEventosActualizados         // lista actualizada de subeventos
         );
 

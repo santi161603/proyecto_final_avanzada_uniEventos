@@ -257,7 +257,9 @@ public class EventoServicioImp implements EventoServicio{
             return new DTOSubEventos(
                     subEvento.getFechaEvento(), // Ajusta según los campos reales
                     subEvento.getLocalidad(),
-                    subEvento.getCantidadEntradas()// Ajusta según los campos reales
+                    subEvento.getHoraEvento(),
+                    subEvento.getCantidadEntradas(),// Ajusta según los campos reales
+                    subEvento.getPrecioEntrada()
                     // Continúa mapeando los demás campos necesarios
             );
 
