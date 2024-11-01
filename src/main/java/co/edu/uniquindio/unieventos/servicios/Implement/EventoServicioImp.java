@@ -107,7 +107,7 @@ public class EventoServicioImp implements EventoServicio{
             }
         };
 
-        // Llamar al método subirImagen
+        // Llamar al méodo subirImagen
         String imageUrl = imagenesServicio.subirImagen(multipartFile);
 
         nuevoEvento.setImagenPoster(imageUrl);
@@ -252,7 +252,7 @@ public class EventoServicioImp implements EventoServicio{
                 .collect(Collectors.toList()); // Recoge el resultado en una lista
     }
 
-        // Método para mapear subEvento a DTOSubEventos
+        // Méto para mapear subEvento a DTOSubEventos
         private DTOSubEventos mapearASubEventoDTO(SubEvento subEvento) {
             return new DTOSubEventos(
                     subEvento.getFechaEvento(), // Ajusta según los campos reales

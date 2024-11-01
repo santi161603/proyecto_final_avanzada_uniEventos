@@ -32,7 +32,7 @@ public class AdministradorControlador {
     }
 
     @PutMapping("/actualizar-evento/{idEvento}")
-    public ResponseEntity<MensajeDTO<String>> eliminarEvento(@PathVariable String idEvento, DTOActualizarEvento dtoActualizarEvento) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> eliminarEvento(@PathVariable String idEvento, @Valid @RequestBody DTOActualizarEvento dtoActualizarEvento) throws Exception {
         String result = eventoAdministrador.actualizarEvento(idEvento, dtoActualizarEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, result));
     }
@@ -81,8 +81,8 @@ public class AdministradorControlador {
     }
 
     @PutMapping("/actualizar-imagen")
-    public ResponseEntity<MensajeDTO<String>> actualizarImagen(@Valid @RequestBody String imageName, @Valid @RequestBody MultipartFile imagen) throws Exception {
-        imagenesServicio.ActualizarImagen(imageName, imagen);
+    public ResponseEntity<MensajeDTO<String>> actualizarImagen(@Valid @RequestBody DTOActualizarImagen dtoActualizarImagen) throws Exception {
+        imagenesServicio.ActualizarImagen(dtoActualizarImagen.imageName(), dtoActualizarImagen.imagen());
         return ResponseEntity.ok(new MensajeDTO<>(false, "Imagen actualizada exitosamente"));
     }
 

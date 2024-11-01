@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/servicios/cuenta-no-autenticada")
 @RequiredArgsConstructor
+@RequestMapping("/servicios/cuenta-no-autenticada")
 public class CuentaControlador {
 
     private final CuentaServicio cuentaServicio;
@@ -28,8 +27,8 @@ public class CuentaControlador {
 
     @PostMapping("/crear-cuenta")
     public ResponseEntity<MensajeDTO<String>> crearCuenta(@Valid @RequestBody DTOCrearCuenta cuenta) throws Exception {
-    String info = cuentaServicio.crearCuenta(cuenta);
-    return ResponseEntity.ok(new MensajeDTO<>(false, info));
+        String info = cuentaServicio.crearCuenta(cuenta);
+        return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
 
     @PutMapping("/activar-cuenta/{idUsuario}")
@@ -38,14 +37,14 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
-    @PutMapping("/reenviar-token")
+    @PutMapping("/reenviar-token/{idUsuario}")
     public ResponseEntity<MensajeDTO<String>> reenviarToken(@PathVariable String idUsuario) throws Exception{
         cuentaServicio.reenviarToken(idUsuario);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Token reenviado"));
     }
 
     @PutMapping("/enviar-token-recuperar")
-    public ResponseEntity<MensajeDTO<String>> enviarTokenRecuperar(@PathVariable String correo) throws Exception{
+    public ResponseEntity<MensajeDTO<String>> enviarTokenRecuperar(@Valid @RequestBody String correo) throws Exception{
         cuentaServicio.enviarToken(correo);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Token enviado"));
     }
@@ -88,4 +87,5 @@ public class CuentaControlador {
 
 
 }
+
 

@@ -10,13 +10,13 @@ import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.repositorio.OrdenRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.OrdenServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.OrdenServicio;/*
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
-import com.mercadopago.resources.preference.Preference;
+import com.mercadopago.resources.preference.Preference;*/
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +77,7 @@ public class OrdenServicioImp implements OrdenServicio {
         return "";
     }
 
-    @Override
+   /* @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
 
@@ -157,5 +157,5 @@ public class OrdenServicioImp implements OrdenServicio {
     @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
 
-    }
+    }*/
 }

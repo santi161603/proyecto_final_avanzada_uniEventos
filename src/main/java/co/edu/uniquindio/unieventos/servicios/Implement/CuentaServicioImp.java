@@ -121,7 +121,7 @@ public class CuentaServicioImp implements CuentaServicio {
                 }
             };
 
-            // Llamar al método subirImagen
+            // Llamar al méodo subirImagen
             String imageUrl = imagenesServicio.subirImagen(multipartFile);
 
             nuevaCuenta.setImageProfile(imageUrl);
