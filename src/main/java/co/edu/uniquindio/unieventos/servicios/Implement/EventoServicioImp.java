@@ -56,61 +56,7 @@ public class EventoServicioImp implements EventoServicio{
         nuevoEvento.setSubEvent(subEventos);
 
         //crear imagen de perfil
-        // Ruta del archivo de imagen local
-        String filePath = "src/main/resources/Image/evento.jpg";
-
-        // Cargar el archivo de imagen
-        File imageFile = new File(filePath);
-        String fileName = imageFile.getName(); // Obtener el nombre del archivo
-        String contentType = Files.probeContentType(imageFile.toPath()); // Detectar el tipo de contenido
-
-        // Crear el MultipartFile implementando la interfaz manualmente
-        MultipartFile multipartFile = new MultipartFile() {
-            @Override
-            public String getName() {
-                return fileName;
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return fileName;
-            }
-
-            @Override
-            public String getContentType() {
-                return contentType;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return imageFile.length() == 0;
-            }
-
-            @Override
-            public long getSize() {
-                return imageFile.length();
-            }
-
-            @Override
-            public byte[] getBytes() throws IOException {
-                return Files.readAllBytes(imageFile.toPath());
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return new FileInputStream(imageFile);
-            }
-
-            @Override
-            public void transferTo(File dest) throws IOException, IllegalStateException {
-                Files.copy(imageFile.toPath(), dest.toPath());
-            }
-        };
-
-        // Llamar al méodo subirImagen
-        String imageUrl = imagenesServicio.subirImagen(multipartFile);
-
-        nuevoEvento.setImagenPoster(imageUrl);
+        nuevoEvento.setImagenPoster("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/f8cca7dd-395f-40c8-ae39-6855add8dc0d-evento.jpg?alt=media&token=bb1dcccc-fa10-4a87-a0b3-c6ba1773e599");
 
         eventoRepository.save(nuevoEvento);
 

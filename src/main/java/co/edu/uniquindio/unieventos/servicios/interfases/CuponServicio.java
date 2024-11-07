@@ -1,23 +1,26 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
+import co.edu.uniquindio.unieventos.dto.CuponActualizadoDTO;
+import co.edu.uniquindio.unieventos.dto.CuponObtenidoDTO;
+import co.edu.uniquindio.unieventos.dto.DTOCrearCupon;
+
+import java.util.List;
+
 public interface CuponServicio {
-/*
 
-    // Método para crear un cupón
-    String crearCupon(DTOCrearCupon cupon) throws Exception;
+    void crearCupon(DTOCrearCupon cuponDTO) throws Exception;
 
-    // Método para eliminar un cupón por su ID
     void eliminarCupon(String idCupon) throws Exception;
 
-    // Método para actualizar un cupón
-    Cupon actualizarCupon(String idCupon, DTOActualizarCupon cuponActualizado) throws Exception;
+    void actualizarCupon(String idCupon, CuponActualizadoDTO cuponActualizado) throws Exception;
 
-    // Método para obtener un cupón por su ID
-    Cupon obtenerCuponPorId(String idCupon) throws Exception;
+    CuponObtenidoDTO obtenerCuponPorId(String idCupon) throws Exception;
 
-    // Método para obtener todos los cupones
-    List<Cupon> obtenerTodosLosCupones() throws Exception;
-*/
+    List<CuponObtenidoDTO> obtenerTodosLosCupones() throws Exception;
+
+    void reducirCantidadCupon(String idCupon, int cantidadReducir) throws Exception;
+
+    void aumentarCantidadCupon(String idCupon) throws Exception;
 
 }
 

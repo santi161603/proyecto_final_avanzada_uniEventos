@@ -20,7 +20,6 @@ public record DTOCrearCuenta(
         @Length(max = 100) String direccion,
         @NotNull Ciudades ciudad,
         @NotBlank @Length(max = 50) @Email String email,
-        @NotBlank @Length(min = 7, max = 20) String contrasena,
-        @NotNull RolUsuario rol
+        @NotBlank @Length(min = 7, max = 20) String contrasena
 ) {
 }

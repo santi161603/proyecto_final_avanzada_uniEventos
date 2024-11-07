@@ -69,62 +69,7 @@ public class CuentaServicioImp implements CuentaServicio {
         usuario.setContrasena(contrasenaEncrip);
         usuario.setEmail(dtoCrearCuenta.email());
 
-        //crear imagen de perfil
-        // Ruta del archivo de imagen local
-        String filePath = "src/main/resources/Image/usuario.jpg";
-
-        // Cargar el archivo de imagen
-        File imageFile = new File(filePath);
-        String fileName = imageFile.getName(); // Obtener el nombre del archivo
-        String contentType = Files.probeContentType(imageFile.toPath()); // Detectar el tipo de contenido
-
-            // Crear el MultipartFile implementando la interfaz manualmente
-            MultipartFile multipartFile = new MultipartFile() {
-                @Override
-                public String getName() {
-                    return fileName;
-                }
-
-                @Override
-                public String getOriginalFilename() {
-                    return fileName;
-                }
-
-                @Override
-                public String getContentType() {
-                    return contentType;
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    return imageFile.length() == 0;
-                }
-
-                @Override
-                public long getSize() {
-                    return imageFile.length();
-                }
-
-                @Override
-                public byte[] getBytes() throws IOException {
-                    return Files.readAllBytes(imageFile.toPath());
-                }
-
-                @Override
-                public InputStream getInputStream() throws IOException {
-                    return new FileInputStream(imageFile);
-                }
-
-                @Override
-                public void transferTo(File dest) throws IOException, IllegalStateException {
-                    Files.copy(imageFile.toPath(), dest.toPath());
-                }
-            };
-
-            // Llamar al méodo subirImagen
-            String imageUrl = imagenesServicio.subirImagen(multipartFile);
-
-            nuevaCuenta.setImageProfile(imageUrl);
+            nuevaCuenta.setImageProfile("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/11f17bd7-a025-4ea2-af87-f34f3bcff858-usuario.jpg?alt=media&token=9f26ebc4-54fb-476a-8fd5-67f365add5c3");
             nuevaCuenta.setUsuario(usuario);
             nuevaCuenta.setCodigoVerificacion(codigoVerif);
 
