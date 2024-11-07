@@ -47,7 +47,7 @@ public class FiltroToken extends OncePerRequestFilter {
         // Obtener la URI de la petición que se está realizando
         String requestURI = request.getRequestURI();
 
-        List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/", "/v3/api-docs/","/swagger-ui/index.html","/swagger-ui/swagger-initializer.js","/v3/api-docs");
+        List<String> urisPublicas = Arrays.asList("/servicios/autenticacion", "/servicios/obtener-enums","/servicios/cuenta-no-autenticada", "/swagger-ui.html", "/swagger-ui/", "/v3/api-docs/","/swagger-ui/index.html","/swagger-ui/swagger-initializer.js","/v3/api-docs");
         List<String> urisclientes = List.of("/servicios/cuenta-autenticada");
         // Si la URI solicitada es pública, no validar el token, simplemente continuar
         if (urisPublicas.stream().anyMatch(requestURI::startsWith)) {
