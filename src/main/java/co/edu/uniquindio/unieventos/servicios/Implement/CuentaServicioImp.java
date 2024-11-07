@@ -4,6 +4,7 @@ import co.edu.uniquindio.unieventos.config.JWTUtils;
 import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import co.edu.uniquindio.unieventos.modelo.vo.CodigoVerificacion;
 import co.edu.uniquindio.unieventos.modelo.vo.Usuario;
 import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
@@ -47,7 +48,7 @@ public class CuentaServicioImp implements CuentaServicio {
         // Crear una nueva instancia de Cuenta
         Cuenta nuevaCuenta = new Cuenta();
         // Asignar los valores del DTO a la entidad Cuenta
-        nuevaCuenta.setRol(dtoCrearCuenta.rol());
+        nuevaCuenta.setRol(RolUsuario.CLIENTE);
         nuevaCuenta.setEstado(EstadoCuenta.INACTIVO);
 
         String contrasenaEncrip = encriptarPassword(dtoCrearCuenta.contrasena());

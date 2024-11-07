@@ -23,7 +23,7 @@ public class CuentaServicioTest {
 
     @Test
     public void crearCuentaTest() throws Exception {
-        DTOCrearCuenta dto = new DTOCrearCuenta("1005088484", "Sebastian David","España", List.of("3108286354"), "Barrio Miraflorez Carrera 19a #36-3", Ciudades.ABRIAQUI, "davideg3007@gmail.com", "david123", RolUsuario.MODERADOR);
+        DTOCrearCuenta dto = new DTOCrearCuenta("1005088484", "Sebastian David","España", List.of("3108286354"), "Barrio Miraflorez Carrera 19a #36-3", Ciudades.ABRIAQUI, "davideg3007@gmail.com", "david123");
         //Llamada al método que se está probando
         String idUsuario = cuentaServicio.crearCuenta(dto);
         // Verificación
