@@ -2,7 +2,9 @@ package co.edu.uniquindio.unieventos.controladores;
 
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
+import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +27,16 @@ public class EnumsControlador {
     public List<Ciudades> getCiudades() {
         return Arrays.asList(Ciudades.values());
     }
+
+    @GetMapping("/get-tipo-evento")
+    public List<TipoEvento> getTipoEvento() {
+        return Arrays.asList(TipoEvento.values());
+    }
+
+    @GetMapping("/get-estado-cuenta")
+    public List<EstadoCuenta> getEstadoCuenta() {
+        return Arrays.asList(EstadoCuenta.values());
+    }
+
 
 }

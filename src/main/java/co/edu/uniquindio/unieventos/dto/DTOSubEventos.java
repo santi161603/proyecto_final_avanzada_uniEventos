@@ -6,14 +6,15 @@ import org.bson.types.ObjectId;
 import org.checkerframework.checker.units.qual.Time;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public record DTOSubEventos(
 
-        @NotNull LocalDateTime fechaEvento,
+        @NotNull LocalDate fechaEvento,
         @NotNull String localidad,
-        @NotNull LocalTime horaEvento, // Eliminado @Time
+        @NotNull String horaEvento, // Eliminado @Time
         @Min(1) int cantidadEntradas,
         @Min(100) float precioEntrada
 

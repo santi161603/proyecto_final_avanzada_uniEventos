@@ -18,5 +18,4 @@ public record EventoObtenidoDTO(
         @NotEmpty List<DTOSubEventos> subEventos, // Aquí agregamos la lista de subeventos
         @NotNull String imagenPoster
 
-) {
-}
+) {}

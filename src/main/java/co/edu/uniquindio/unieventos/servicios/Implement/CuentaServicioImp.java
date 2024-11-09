@@ -261,7 +261,7 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception {
+    public void activarCuenta(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
         Cuenta cuenta = cuentaRepository.findById(idUsuario)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
@@ -272,12 +272,12 @@ public class CuentaServicioImp implements CuentaServicio {
         // Validar si el código ha expirado (más de 15 minutos de antigüedad)
         LocalDateTime fechaActual = LocalDateTime.now();
         if (codigoVerif.getFecha().plusMinutes(15).isBefore(fechaActual)) {
-            throw new RuntimeException("El código de verificación ha expirado. Solicite uno nuevo.");
+            throw new Exception("El código de verificación ha expirado. Solicite uno nuevo.");
         }
 
         // Validar si el código recibido es igual al guardado en la cuenta
-        if (codigoVerif.getCodigo() != codigoVerificacionRecibido) {
-            throw new RuntimeException("El código de verificación es incorrecto.");
+        if (codigoVerif.getCodigo() != codigoVerificacionDTO.codigo()) {
+            throw new Exception("El código de verificación es incorrecto.");
         }
 
         // Si el código es correcto, activar la cuenta

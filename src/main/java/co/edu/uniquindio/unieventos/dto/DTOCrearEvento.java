@@ -18,5 +18,4 @@ public record DTOCrearEvento (
         @NotNull EstadoCuenta estadoEvento,// concierto, teatro, deporte, etc.
         @NotEmpty List<DTOSubEventos> subEventos // Aquí agregamos la lista de subeventos
 
-){
-}
+){}

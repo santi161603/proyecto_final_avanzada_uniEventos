@@ -22,7 +22,6 @@ public class LocalidadEvento {
     private String nombreLocalidad;
     private String direccion;
     private Ciudades ciudad;
-    //private MultipartFile imagen;
     private TipoLocalidad tipoLocalidad;
     private int capacidadMaxima;
     private int capacidadDisponible;

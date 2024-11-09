@@ -27,13 +27,13 @@ public class CuentaControlador {
 
     @PostMapping("/crear-cuenta")
     public ResponseEntity<MensajeDTO<String>> crearCuenta(@Valid @RequestBody DTOCrearCuenta cuenta) throws Exception {
-        String info = cuentaServicio.crearCuenta(cuenta);
-        return ResponseEntity.ok(new MensajeDTO<>(false, info));
+        String idUsuario = cuentaServicio.crearCuenta(cuenta);
+        return ResponseEntity.ok(new MensajeDTO<>(false, idUsuario));
     }
 
     @PutMapping("/activar-cuenta/{idUsuario}")
-    public ResponseEntity<MensajeDTO<String>> activarCuenta(@PathVariable String idUsuario,@Valid @RequestBody int codigoVerificacionRecibido) throws Exception {
-        cuentaServicio.activarCuenta(idUsuario,codigoVerificacionRecibido);
+    public ResponseEntity<MensajeDTO<String>> activarCuenta(@PathVariable String idUsuario,@Valid @RequestBody CodigoVerificacionDTO codigoVerificacionDTO ) throws Exception {
+        cuentaServicio.activarCuenta(idUsuario,codigoVerificacionDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
@@ -58,6 +58,12 @@ public class CuentaControlador {
     @GetMapping("/obtener-evento/{idEvento}")
     public ResponseEntity<MensajeDTO<EventoObtenidoDTO>> obtenerEvento(@PathVariable String idEvento) throws Exception {
         EventoObtenidoDTO evento = eventoServicio.obtenerEventoPorId(idEvento);
+        return ResponseEntity.ok(new MensajeDTO<>(false, evento));
+    }
+
+    @GetMapping("/obtener-todos-eventos")
+    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEvento() throws Exception {
+        List<EventoObtenidoDTO> evento = eventoServicio.obtenerTodosLosEventos();
         return ResponseEntity.ok(new MensajeDTO<>(false, evento));
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/servicios/cuenta-autenticada")
+@RequestMapping("/servicios/cuenta-administrador")
 public class AdministradorControlador {
 
     private final CuentaServicio cuentaAdministrador;

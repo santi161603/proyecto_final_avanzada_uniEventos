@@ -164,11 +164,9 @@ public class EventoServicioImp implements EventoServicio{
     public List<EventoObtenidoDTO> obtenerTodosLosEventos() throws Exception {
 
         List<Evento> evento = eventoRepository.findAll();
-
         return evento.stream()
                 .map(this::mapearAEventoObtenidoDTO)
                 .collect(Collectors.toList());
-
     }
 
     @Override

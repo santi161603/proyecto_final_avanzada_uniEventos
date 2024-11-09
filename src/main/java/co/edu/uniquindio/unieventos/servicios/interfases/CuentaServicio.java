@@ -16,7 +16,7 @@ public interface CuentaServicio {
     // Método para actualizar una cuenta
     void actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
 
-    void activarCuenta(String idUsuario, int codigoVerificacionRecibido) throws Exception;
+    void activarCuenta(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception;
 
     // Método para obtener todas las cuentas
     List<CuentaListadaDTO> obtenerTodasLasCuentas()throws Exception;

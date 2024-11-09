@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class ItemCarritoVO {
 
     private String eventoId;
-    private LocalDateTime fecha;
+    private LocalDate fecha;
     private int cantidadEntradas;
 
 }
