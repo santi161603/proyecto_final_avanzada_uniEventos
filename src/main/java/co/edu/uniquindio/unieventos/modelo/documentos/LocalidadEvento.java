@@ -18,6 +18,7 @@ public class LocalidadEvento {
     @Id
     @EqualsAndHashCode.Include
     private String IdLocalidad;
+
     private String nombreLocalidad;
     private String direccion;
     private Ciudades ciudad;

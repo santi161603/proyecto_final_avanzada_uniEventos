@@ -14,7 +14,7 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream(
-                "src/main/resources/unieventos-d397d-firebase-adminsdk-zgm7k-e4fc0a098a.json"
+                "src/main/resources/unieventos-d397.json"
         );
 
         FirebaseOptions options = FirebaseOptions.builder()
