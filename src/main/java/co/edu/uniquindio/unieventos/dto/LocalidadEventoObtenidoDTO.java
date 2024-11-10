@@ -17,6 +17,9 @@ public record LocalidadEventoObtenidoDTO(
         @NotNull(message = "La ciudad no puede ser nula")
         Ciudades ciudad,
 
+        @NotBlank(message = "El nombre de la imagen no puede estar vacío")
+        String imageLocalidad,
+
         @NotNull(message = "El tipo de localidad no puede ser nulo")
         TipoLocalidad tipoLocalidad,
 

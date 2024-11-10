@@ -1,11 +1,7 @@
 package co.edu.uniquindio.unieventos.controladores;
 
 import co.edu.uniquindio.unieventos.dto.*;
-import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
-import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
-import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
-import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
@@ -37,6 +33,12 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
+    @PutMapping("/verificar-codigo/{idUsuario}")
+    public ResponseEntity<MensajeDTO<String>> verificarCodigo(@PathVariable String idUsuario,@Valid @RequestBody CodigoVerificacionDTO codigoVerificacionDTO ) throws Exception {
+        cuentaServicio.verificarCodigo(idUsuario,codigoVerificacionDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Codigo exitoso"));
+    }
+
     @PutMapping("/reenviar-token/{idUsuario}")
     public ResponseEntity<MensajeDTO<String>> reenviarToken(@PathVariable String idUsuario) throws Exception{
         cuentaServicio.reenviarToken(idUsuario);
@@ -44,9 +46,9 @@ public class CuentaControlador {
     }
 
     @PutMapping("/enviar-token-recuperar")
-    public ResponseEntity<MensajeDTO<String>> enviarTokenRecuperar(@Valid @RequestBody String correo) throws Exception{
-        cuentaServicio.enviarToken(correo);
-        return ResponseEntity.ok(new MensajeDTO<>(false, "Token enviado"));
+    public ResponseEntity<MensajeDTO<String>> enviarTokenRecuperar(@Valid @RequestBody CorreoDTO correo) throws Exception{
+        String id = cuentaServicio.enviarToken(correo);
+        return ResponseEntity.ok(new MensajeDTO<>(false, id));
     }
 
     @PutMapping("/restablecer-contrasena")
@@ -67,8 +69,8 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, evento));
     }
 
-    @GetMapping("/obtener-todos-los-eventos-Por-Categoria")
-    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEventosPorCategoria(@Valid @RequestBody TipoEvento evento) throws Exception{
+    @PutMapping("/obtener-todos-los-eventos-por-categoria")
+    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEventosPorCategoria(@Valid @RequestBody TipoEventoDTO evento) throws Exception{
         List<EventoObtenidoDTO> eventosCategoriaList = eventoServicio.obtenerEventoCategoria(evento);
         return ResponseEntity.ok(new MensajeDTO<>(false,eventosCategoriaList));
     }

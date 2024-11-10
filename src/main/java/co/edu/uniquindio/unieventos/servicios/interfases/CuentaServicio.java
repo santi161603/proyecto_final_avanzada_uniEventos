@@ -1,7 +1,6 @@
 package co.edu.uniquindio.unieventos.servicios.interfases;
 
 import co.edu.uniquindio.unieventos.dto.*;
-import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,6 +15,8 @@ public interface CuentaServicio {
     // Método para actualizar una cuenta
     void actualizarCuenta(DTOActualizarCuenta cuentaActualizada) throws Exception;
 
+    void verificarCodigo(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception;
+
     void activarCuenta(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception;
 
     // Método para obtener todas las cuentas
@@ -29,7 +30,7 @@ public interface CuentaServicio {
 
     void restablecerContrasena(RestablecerContrasenaDTO restablecerContrasenaDTO) throws Exception;
 
-    void enviarToken(String correo) throws Exception;
+    String enviarToken(CorreoDTO correo) throws Exception;
 
     CuentaListadaDTO obtenerCuentaId(String idUsuario) throws Exception;
 }

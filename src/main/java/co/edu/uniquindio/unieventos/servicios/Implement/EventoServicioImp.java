@@ -55,9 +55,11 @@ public class EventoServicioImp implements EventoServicio{
             // Agregar la lista de subeventos al evento
         nuevoEvento.setSubEvent(subEventos);
 
-        //crear imagen de perfil
-        nuevoEvento.setImagenPoster("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/f8cca7dd-395f-40c8-ae39-6855add8dc0d-evento.jpg?alt=media&token=bb1dcccc-fa10-4a87-a0b3-c6ba1773e599");
-
+        if(evento.imageEvento() == null) {
+            nuevoEvento.setImagenPoster("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/f8cca7dd-395f-40c8-ae39-6855add8dc0d-evento.jpg?alt=media&token=bb1dcccc-fa10-4a87-a0b3-c6ba1773e599");
+        }else {
+            nuevoEvento.setImagenPoster(evento.imageEvento());
+        }
         eventoRepository.save(nuevoEvento);
 
         // Persistir el evento en la base de datos
@@ -170,9 +172,9 @@ public class EventoServicioImp implements EventoServicio{
     }
 
     @Override
-    public List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEvento tipoEvento) throws Exception {
+    public List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEventoDTO tipoEvento) throws Exception {
 
-        List<Evento> eventos = eventoRepository.findByCategoria(tipoEvento);
+        List<Evento> eventos = eventoRepository.findByCategoria(tipoEvento.tipoEvento());
 
         return eventos.stream()
                 .map(this::mapearAEventoObtenidoDTO)

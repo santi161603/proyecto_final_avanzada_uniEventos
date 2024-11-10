@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.servicios.interfases;
 import co.edu.uniquindio.unieventos.dto.DTOActualizarLocalidad;
 import co.edu.uniquindio.unieventos.dto.DTOCrearLocalidad;
 import co.edu.uniquindio.unieventos.dto.LocalidadEventoObtenidoDTO;
+import co.edu.uniquindio.unieventos.dto.NombreyIdLocalidadObtenidaDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 
@@ -21,5 +22,7 @@ public interface LocalidadServicio {
     LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String localidadId) throws Exception;
 
     List<LocalidadEventoObtenidoDTO> obtenerLocalidadesPorCiudad(Ciudades ciudad) throws Exception;
+
+    List<NombreyIdLocalidadObtenidaDTO> obtenerTodasLasLocalidadesNombreID() throws Exception;
 
 }

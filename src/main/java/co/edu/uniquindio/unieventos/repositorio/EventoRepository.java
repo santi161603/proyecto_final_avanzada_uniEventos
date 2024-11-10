@@ -15,8 +15,8 @@ import java.util.Optional;
 @Repository
 public interface EventoRepository extends MongoRepository<Evento, String> {
 
-    @Query(value = "{ 'categoria' : ?0 }")
-    List<Evento> findByCategoria(TipoEvento categoria);
+    @Query(value = "{ 'tipoEvento' : ?0 }")
+    List<Evento> findByCategoria(TipoEvento tipoEvento);
 
     @Query(value = "{ 'subEvent.fechaEvento' : ?0 }", fields = "{ 'subEvent.$': 1 }")
     Optional<SubEvento> findBySubEventoFecha(LocalDate localDateTime);

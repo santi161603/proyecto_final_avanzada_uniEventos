@@ -19,11 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -205,14 +200,14 @@ public class CuentaServicioImp implements CuentaServicio {
     @Override
     public void restablecerContrasena(RestablecerContrasenaDTO restablecerContrasenaDTO) throws Exception {
 
-        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(restablecerContrasenaDTO.email());
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(restablecerContrasenaDTO.correo());
 
         String nuevaContrasenaEncryp = encriptarPassword(restablecerContrasenaDTO.contrasenaNueva());
 
         String oldPassword = cuenta.getUsuario().getContrasena();
 
         if(oldPassword.equals(nuevaContrasenaEncryp)) {
-            throw new RuntimeException("Por favor coloque una contraseña diferente a una de sus contraseñas antiguas");
+            throw new Exception("Por favor coloque una contraseña diferente a una de sus contraseñas antiguas");
         }
 
         cuenta.getUsuario().setContrasena(nuevaContrasenaEncryp);
@@ -222,9 +217,9 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public void enviarToken(String correo) throws Exception {
+    public String enviarToken(CorreoDTO correo) throws Exception {
 
-        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo);
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo.correo());
 
         int nuevoCodigoVerificacion = generarCodigoVerificacion();
         CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
@@ -248,7 +243,7 @@ public class CuentaServicioImp implements CuentaServicio {
                 "El equipo de UniEventos.";
 
 
-        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, correo);
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, correo.correo());
 
         try {
             emailServicio.enviarCorreo(emailDTO);
@@ -257,7 +252,27 @@ public class CuentaServicioImp implements CuentaServicio {
             throw new RuntimeException("Error al enviar el nuevo correo de verificación", e);
         }
 
+        return cuenta.getIdUsuario();
+    }
 
+    @Override
+    public void verificarCodigo(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception {
+        // Buscar la cuenta en el repositorio usando el ID del usuario
+        Cuenta cuenta = cuentaRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
+
+        CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
+
+        // Validar si el código ha expirado (más de 15 minutos de antigüedad)
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (codigoVerif.getFecha().plusMinutes(15).isBefore(fechaActual)) {
+            throw new Exception("El código de verificación ha expirado. Solicite uno nuevo.");
+        }
+
+        // Validar si el código recibido es igual al guardado en la cuenta
+        if (codigoVerif.getCodigo() != codigoVerificacionDTO.codigo()) {
+            throw new Exception("El código de verificación es incorrecto.");
+        }
     }
 
     @Override

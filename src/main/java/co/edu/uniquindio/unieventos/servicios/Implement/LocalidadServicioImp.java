@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 import co.edu.uniquindio.unieventos.dto.DTOActualizarLocalidad;
 import co.edu.uniquindio.unieventos.dto.DTOCrearLocalidad;
 import co.edu.uniquindio.unieventos.dto.LocalidadEventoObtenidoDTO;
+import co.edu.uniquindio.unieventos.dto.NombreyIdLocalidadObtenidaDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,11 @@ public class LocalidadServicioImp implements LocalidadServicio {
         localidadEvento.setDireccion(localidad.direccion());
         localidadEvento.setCiudad(localidad.ciudad());
         localidadEvento.setTipoLocalidad(localidad.tipoLocalidad());
+        if (localidad.imageLocalidad() == null) {
+            localidadEvento.setImageLocalidad("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/59397e25c9a392b78c1528abc99e3cc0.jpg?alt=media&token=d5e2991f-c54b-41dc-9305-bf1cdb2a7de6");
+        }else {
+            localidadEvento.setImageLocalidad(localidad.imageLocalidad());
+        }
         localidadEvento.setCapacidadMaxima(localidad.capacidadMaxima());
         localidadEvento.setCapacidadDisponible(localidad.capacidadDisponible());
 
@@ -111,11 +118,29 @@ public class LocalidadServicioImp implements LocalidadServicio {
                 .collect(Collectors.toList()); // Recoge el resultado en una lista
     }
 
+    @Override
+    public List<NombreyIdLocalidadObtenidaDTO> obtenerTodasLasLocalidadesNombreID() throws Exception {
+
+        List<LocalidadEvento> localidadEventos =  localidadRepository.findAll();
+
+        return localidadEventos.stream()
+                .map(this::mapearALocalidadEventoNombreidDTO) // Mapea cada localidad a LocalidadEventoObtenidoDTO
+                .collect(Collectors.toList()); // Recoge el resultado en una lista
+    }
+
+    private NombreyIdLocalidadObtenidaDTO mapearALocalidadEventoNombreidDTO(LocalidadEvento localidad) {
+        return new NombreyIdLocalidadObtenidaDTO(
+                localidad.getNombreLocalidad(),
+                localidad.getIdLocalidad()
+        );
+    }
+
     private LocalidadEventoObtenidoDTO mapearALocalidadEventoObtenidoDTO(LocalidadEvento localidad) {
         return new LocalidadEventoObtenidoDTO(
                 localidad.getNombreLocalidad(),
                 localidad.getDireccion(),
                 localidad.getCiudad(),
+                localidad.getImageLocalidad(),
                 localidad.getTipoLocalidad(),
                 localidad.getCapacidadMaxima(),
                 localidad.getCapacidadDisponible()

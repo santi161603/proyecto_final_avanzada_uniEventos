@@ -29,6 +29,11 @@ public class CuponServicioImp implements CuponServicio {
         Cupon cupon = new Cupon();
         cupon.setDescripcionCupon(cuponDTO.descripcionCupon());
         cupon.setNombreCupon(cuponDTO.nombreCupon());
+        if(cuponDTO.userCupon() == null){
+            cupon.setUserCupon("N/A");
+        }else {
+            cupon.setUserCupon(cuponDTO.userCupon());
+        }
         cupon.setPorcentajeDescuento(cuponDTO.porcentajeDescuento());
         cupon.setCantidad(cuponDTO.cantidad());
         cupon.setFechaVencimiento(cuponDTO.fechaVencimiento());

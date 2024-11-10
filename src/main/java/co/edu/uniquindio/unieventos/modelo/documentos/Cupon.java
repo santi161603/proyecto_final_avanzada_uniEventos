@@ -22,6 +22,7 @@ public class Cupon {
     private String nombreCupon;
     private String descripcionCupon;
     private EstadoCupon estadoCupon;
+    private String userCupon;
     private double porcentajeDescuento;
     private LocalDateTime fechaVencimiento;
     private int cantidad;

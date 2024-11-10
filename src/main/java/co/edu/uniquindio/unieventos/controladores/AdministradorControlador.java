@@ -55,6 +55,12 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
     }
 
+    @GetMapping("/obtener-todas-localidades-id-nombre")
+    public ResponseEntity<MensajeDTO<List<NombreyIdLocalidadObtenidaDTO>>> obtenerTodasLocalidadesNombreId() throws Exception{
+        List<NombreyIdLocalidadObtenidaDTO> cuentaList = localidadServicio.obtenerTodasLasLocalidadesNombreID();
+        return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
+    }
+
     @PostMapping("/crear-localidad")
     public ResponseEntity<MensajeDTO<String>> crearLocalidad(@Valid @RequestBody DTOCrearLocalidad localidad) throws Exception {
         localidadServicio.crearLocalidad(localidad);
@@ -75,11 +81,10 @@ public class AdministradorControlador {
     }
 
     @PostMapping("/subir-imagen")
-    public ResponseEntity<MensajeDTO<String>> subirImagen(@Valid @RequestBody MultipartFile imagen) throws Exception {
-        imagenesServicio.subirImagen(imagen);
-        return ResponseEntity.ok(new MensajeDTO<>(false, "Imagen Subida con exito"));
+    public ResponseEntity<MensajeDTO<String>> subirImagen(@RequestParam("imagen") MultipartFile imagen) throws Exception {
+        String url = imagenesServicio.subirImagen(imagen);
+        return ResponseEntity.ok(new MensajeDTO<>(false, url));
     }
-
     @PutMapping("/actualizar-imagen")
     public ResponseEntity<MensajeDTO<String>> actualizarImagen(@Valid @RequestBody DTOActualizarImagen dtoActualizarImagen) throws Exception {
         imagenesServicio.ActualizarImagen(dtoActualizarImagen.imageName(), dtoActualizarImagen.imagen());

@@ -17,6 +17,8 @@ public record DTOCrearLocalidad(
         @NotNull(message = "La ciudad no puede ser nula")
         Ciudades ciudad,
 
+        String imageLocalidad,
+
         @NotNull(message = "El tipo de localidad no puede ser nulo")
         TipoLocalidad tipoLocalidad,
 
