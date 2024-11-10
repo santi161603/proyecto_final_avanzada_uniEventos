@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -24,6 +25,6 @@ public class Cupon {
     private EstadoCupon estadoCupon;
     private String userCupon;
     private double porcentajeDescuento;
-    private LocalDateTime fechaVencimiento;
+    private LocalDate fechaVencimiento;
     private int cantidad;
 }

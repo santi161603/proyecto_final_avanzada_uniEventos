@@ -3,10 +3,7 @@ import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
-import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +20,7 @@ public class AdministradorControlador {
     private final CuentaServicio cuentaAdministrador;
     private final EventoServicio eventoAdministrador;
     private final LocalidadServicio localidadServicio;
+    private final CuponServicio cuponServicio;
     private final ImagenesServicio imagenesServicio;
 
     @PostMapping("/crear-evento")
@@ -65,6 +63,12 @@ public class AdministradorControlador {
     public ResponseEntity<MensajeDTO<String>> crearLocalidad(@Valid @RequestBody DTOCrearLocalidad localidad) throws Exception {
         localidadServicio.crearLocalidad(localidad);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Localidad creada exitosamente"));
+    }
+
+    @PostMapping("/crear-cupon")
+    public ResponseEntity<MensajeDTO<String>> crearCupon(@Valid @RequestBody DTOCrearCupon cupon) throws Exception {
+        cuponServicio.crearCupon(cupon);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cupon creado exitosamente"));
     }
 
     @PutMapping("/actualizar-localidad/{localidadId}")

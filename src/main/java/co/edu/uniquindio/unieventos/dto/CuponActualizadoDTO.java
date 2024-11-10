@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventos.dto;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCupon;
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record CuponActualizadoDTO(
@@ -18,7 +19,7 @@ public record CuponActualizadoDTO(
 
         @NotNull(message = "La fecha de vencimiento no puede ser nula")
         @Future(message = "La fecha de vencimiento debe estar en el futuro")
-        LocalDateTime fechaVencimiento,
+        LocalDate fechaVencimiento,
 
         @NotNull
         EstadoCupon estadoCupon,

@@ -1,11 +1,13 @@
 package co.edu.uniquindio.unieventos.controladores;
 
 import co.edu.uniquindio.unieventos.dto.CuentaListadaDTO;
+import co.edu.uniquindio.unieventos.dto.CuponObtenidoDTO;
 import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
 import co.edu.uniquindio.unieventos.dto.MensajeDTO;
 import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.servicios.interfases.CarritoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.CuponServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,19 @@ import java.util.List;
 public class CuentaAutenticadaControlador {
 
     private final CuentaServicio cuentaServicio;
+    private final CuponServicio cuponServicio;
     private final CarritoServicio carritoServicio;
 
     @PutMapping("/actualizar-cuenta")
     public ResponseEntity<MensajeDTO<String>> actualizarCuenta(@Valid @RequestBody DTOActualizarCuenta cuentaActualizada) throws Exception {
         cuentaServicio.actualizarCuenta(cuentaActualizada);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta actualizada con exito"));
+    }
+
+    @GetMapping("/obtener-todos-los-cupones")
+    public ResponseEntity<MensajeDTO<List<CuponObtenidoDTO>>> obtenerTodosLosCupones() throws Exception {
+        List<CuponObtenidoDTO> cupones =cuponServicio.obtenerTodosLosCupones();
+        return ResponseEntity.ok(new MensajeDTO<>(false, cupones));
     }
 
     @GetMapping("/obtener-cuentaid/{usuarioId}")

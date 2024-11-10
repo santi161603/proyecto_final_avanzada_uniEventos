@@ -2,7 +2,7 @@ package co.edu.uniquindio.unieventos.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record DTOCrearCupon(
         @NotBlank(message = "El nombre del cupón no puede estar en blanco")
@@ -19,9 +19,8 @@ public record DTOCrearCupon(
 
         @NotNull(message = "La fecha de vencimiento no puede ser nula")
         @Future(message = "La fecha de vencimiento debe estar en el futuro")
-        LocalDateTime fechaVencimiento,
+        LocalDate fechaVencimiento,
 
         @Min(value = 10, message = "La cantidad debe ser al menos 10")
         int cantidad
-) {
-}
+) {}

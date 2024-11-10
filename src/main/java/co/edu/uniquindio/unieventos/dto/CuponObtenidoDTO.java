@@ -2,6 +2,7 @@ package co.edu.uniquindio.unieventos.dto;
 
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record CuponObtenidoDTO(
@@ -17,6 +18,6 @@ public record CuponObtenidoDTO(
 
         @NotNull(message = "La fecha de vencimiento no puede ser nula")
         @Future(message = "La fecha de vencimiento debe estar en el futuro")
-        LocalDateTime fechaVencimiento
+        LocalDate fechaVencimiento
 ) {
 }
