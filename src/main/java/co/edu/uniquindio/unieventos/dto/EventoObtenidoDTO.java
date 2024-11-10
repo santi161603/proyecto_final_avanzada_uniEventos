@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.List;
 
 public record EventoObtenidoDTO(
+        @NotBlank String idEvento,
         @NotBlank @Length(max = 50) String nombre,
         @NotBlank @Length(max = 700) String descripcion,
         @NotNull EstadoCuenta estadoEvento,

@@ -2,22 +2,18 @@ package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
+import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
-import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
+import co.edu.uniquindio.unieventos.repositorio.LocalidadRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +25,7 @@ import java.util.stream.Collectors;
 public class EventoServicioImp implements EventoServicio{
 
     private final EventoRepository eventoRepository;
+    private final LocalidadRepository localidadRepository;
     private final ImagenesServicio imagenesServicio;
 
     @Override
@@ -181,9 +178,28 @@ public class EventoServicioImp implements EventoServicio{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<EventoObtenidoDTO> obtenerEventosPorCiudad(Ciudades ciudad) throws Exception {
+        // 1. Obtener las localidades en la ciudad especificada
+        List<LocalidadEvento> localidades = localidadRepository.findByCity(ciudad);
+
+        // 2. Extraer los IDs de esas localidades
+        List<String> localidadesIds = localidades.stream()
+                .map(LocalidadEvento::getIdLocalidad)
+                .collect(Collectors.toList());
+
+        // 3. Buscar los eventos que tengan subeventos en esas localidades
+        List<Evento> eventoList = eventoRepository.findBySubEventoLocalidadIn(localidadesIds);
+
+        return eventoList.stream()
+                .map(this::mapearAEventoObtenidoDTO)
+                .collect(Collectors.toList());
+    }
+
     private EventoObtenidoDTO mapearAEventoObtenidoDTO(Evento evento) {
 
         return new EventoObtenidoDTO(
+                evento.getIdEvento(),
                 evento.getNombre(),
                 evento.getDescripcion(),
                 evento.getEstadoEvento(),

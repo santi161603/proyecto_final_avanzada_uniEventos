@@ -4,8 +4,7 @@ import co.edu.uniquindio.unieventos.dto.DTOActualizarEvento;
 import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
 import co.edu.uniquindio.unieventos.dto.EventoObtenidoDTO;
 import co.edu.uniquindio.unieventos.dto.TipoEventoDTO;
-import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
-import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 
 import java.util.List;
 
@@ -28,5 +27,7 @@ public interface EventoServicio {
 
     // Método para obtener un evento por categoria
     List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEventoDTO evento) throws Exception;
+
+    List<EventoObtenidoDTO> obtenerEventosPorCiudad(Ciudades ciudad) throws Exception;
 }
 
