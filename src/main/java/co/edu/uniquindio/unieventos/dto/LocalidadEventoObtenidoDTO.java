@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.dto;
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoLocalidad;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoLocalidad;
 import jakarta.validation.constraints.*;
 
@@ -16,6 +17,9 @@ public record LocalidadEventoObtenidoDTO(
         @NotBlank(message = "La dirección no puede estar en blanco")
         @Size(min = 5, max = 150, message = "La dirección debe tener entre 5 y 150 caracteres")
         String direccion,
+
+        @NotNull(message = "La ciudad no puede ser nula")
+        EstadoLocalidad estadoLocalidad,
 
         @NotNull(message = "La ciudad no puede ser nula")
         Ciudades ciudad,

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.dto;
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoLocalidad;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoLocalidad;
 import jakarta.validation.constraints.*;
 
@@ -11,6 +12,8 @@ public record DTOActualizarLocalidad(
 
         @Size(min = 5, max = 150, message = "La dirección debe tener entre 5 y 150 caracteres")
         String direccion,
+
+        EstadoLocalidad estadoLocalidad,
 
         Ciudades ciudad,
 

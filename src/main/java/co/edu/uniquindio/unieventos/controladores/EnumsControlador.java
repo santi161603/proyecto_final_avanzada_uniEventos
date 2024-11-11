@@ -39,4 +39,9 @@ public class EnumsControlador {
     public List<TipoLocalidad> getTipoLocalidad() {
         return Arrays.asList(TipoLocalidad.values());
     }
+
+    @GetMapping("/get-estado-localidad")
+    public List<EstadoLocalidad> getEstadoLocalidad() {
+        return Arrays.asList(EstadoLocalidad.values());
+    }
 }

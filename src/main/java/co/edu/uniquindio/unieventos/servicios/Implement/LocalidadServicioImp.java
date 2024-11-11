@@ -7,6 +7,7 @@ import co.edu.uniquindio.unieventos.dto.NombreyIdLocalidadObtenidaDTO;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoLocalidad;
 import co.edu.uniquindio.unieventos.repositorio.LocalidadRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
@@ -36,6 +37,7 @@ public class LocalidadServicioImp implements LocalidadServicio {
         localidadEvento.setDireccion(localidad.direccion());
         localidadEvento.setCiudad(localidad.ciudad());
         localidadEvento.setTipoLocalidad(localidad.tipoLocalidad());
+        localidadEvento.setEstadoLocalidad(EstadoLocalidad.DISPONIBLE);
         if (localidad.imageLocalidad() == null) {
             localidadEvento.setImageLocalidad("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/59397e25c9a392b78c1528abc99e3cc0.jpg?alt=media&token=d5e2991f-c54b-41dc-9305-bf1cdb2a7de6");
         }else {
@@ -73,6 +75,9 @@ public class LocalidadServicioImp implements LocalidadServicio {
             if (localidad.direccion() != null && !localidad.direccion().equals(localidadExi.getDireccion())) {
                 localidadExi.setDireccion(localidad.direccion());
             }
+            if(localidad.estadoLocalidad() != null && !localidad.estadoLocalidad().equals(localidadExi.getEstadoLocalidad())){
+                localidadExi.setEstadoLocalidad(localidad.estadoLocalidad());
+            }
             if (localidad.ciudad() != null && !localidad.ciudad().equals(localidadExi.getCiudad())) {
                 localidadExi.setCiudad(localidad.ciudad());
             }
@@ -94,7 +99,6 @@ public class LocalidadServicioImp implements LocalidadServicio {
         }else {
             throw new Exception("No se encontro la localidad");
         }
-
     }
 
     @Override
@@ -102,8 +106,14 @@ public class LocalidadServicioImp implements LocalidadServicio {
 
         Optional<LocalidadEvento> localidadEvento = localidadRepository.findById(localidadId);
 
-        localidadEvento.ifPresent(localidadRepository::delete);
+        if(localidadEvento.isEmpty()){
+            throw new Exception("No se encontro la localidad a eliminar");
+        }
 
+        LocalidadEvento localidadExi = localidadEvento.get();
+
+        localidadExi.setEstadoLocalidad(EstadoLocalidad.ELIMINADA);
+        localidadRepository.save(localidadExi);
     }
 
     @Override
@@ -152,6 +162,7 @@ public class LocalidadServicioImp implements LocalidadServicio {
                 localidad.getIdLocalidad(),
                 localidad.getNombreLocalidad(),
                 localidad.getDireccion(),
+                localidad.getEstadoLocalidad(),
                 localidad.getCiudad(),
                 localidad.getImageLocalidad(),
                 localidad.getTipoLocalidad(),

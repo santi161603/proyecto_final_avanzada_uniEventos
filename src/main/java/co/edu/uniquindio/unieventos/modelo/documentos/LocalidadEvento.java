@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.modelo.documentos;
 
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoLocalidad;
 import co.edu.uniquindio.unieventos.modelo.enums.TipoLocalidad;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -24,6 +25,7 @@ public class LocalidadEvento {
     private String direccion;
     private Ciudades ciudad;
     private String imageLocalidad;
+    private EstadoLocalidad estadoLocalidad;
     private TipoLocalidad tipoLocalidad;
     private int capacidadMaxima;
     private int capacidadDisponible;
