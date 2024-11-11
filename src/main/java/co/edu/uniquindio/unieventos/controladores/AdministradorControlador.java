@@ -53,12 +53,6 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
     }
 
-    @GetMapping("/obtener-todas-localidades-id-nombre")
-    public ResponseEntity<MensajeDTO<List<NombreyIdLocalidadObtenidaDTO>>> obtenerTodasLocalidadesNombreId() throws Exception{
-        List<NombreyIdLocalidadObtenidaDTO> cuentaList = localidadServicio.obtenerTodasLasLocalidadesNombreID();
-        return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
-    }
-
     @PostMapping("/crear-localidad")
     public ResponseEntity<MensajeDTO<String>> crearLocalidad(@Valid @RequestBody DTOCrearLocalidad localidad) throws Exception {
         localidadServicio.crearLocalidad(localidad);

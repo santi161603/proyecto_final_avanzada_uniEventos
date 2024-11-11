@@ -81,7 +81,7 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false,eventosCategoriaList));
     }
 
-    @GetMapping("/obtener-todas-localidad")
+    @GetMapping("/obtener-todas-localidades")
     public ResponseEntity<MensajeDTO<List<LocalidadEventoObtenidoDTO>>> obtenerLocalidades() throws Exception {
         List<LocalidadEventoObtenidoDTO> localidades = localidadServicio.obtenerLocalidades();
         return ResponseEntity.ok(new MensajeDTO<>(false, localidades));
@@ -98,6 +98,13 @@ public class CuentaControlador {
         List<LocalidadEventoObtenidoDTO> localidades = localidadServicio.obtenerLocalidadesPorCiudad(ciudad);
         return ResponseEntity.ok(new MensajeDTO<>(false, localidades));
     }
+
+    @GetMapping("/obtener-todas-localidades-id-nombre")
+    public ResponseEntity<MensajeDTO<List<NombreyIdLocalidadObtenidaDTO>>> obtenerTodasLocalidadesNombreId() throws Exception{
+        List<NombreyIdLocalidadObtenidaDTO> cuentaList = localidadServicio.obtenerTodasLasLocalidadesNombreID();
+        return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
+    }
+
 
 
 }
