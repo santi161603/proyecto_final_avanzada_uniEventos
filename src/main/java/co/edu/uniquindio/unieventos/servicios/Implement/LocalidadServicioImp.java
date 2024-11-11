@@ -82,8 +82,12 @@ public class LocalidadServicioImp implements LocalidadServicio {
                 localidadExi.setCiudad(localidad.ciudad());
             }
             if (localidad.imageLocalidad() != null && !localidad.imageLocalidad().equals(localidadExi.getImageLocalidad())) {
-                imagenesServicio.eliminarImagen(localidadExi.getImageLocalidad());
-                localidadExi.setImageLocalidad(localidad.imageLocalidad());
+                if(localidadExi.getImageLocalidad().equals("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/59397e25c9a392b78c1528abc99e3cc0.jpg?alt=media&token=d5e2991f-c54b-41dc-9305-bf1cdb2a7de6")){
+                    localidadExi.setImageLocalidad(localidad.imageLocalidad());
+                }else {
+                    imagenesServicio.eliminarImagen(localidadExi.getImageLocalidad());
+                    localidadExi.setImageLocalidad(localidad.imageLocalidad());
+                }
             }
             if (localidad.tipoLocalidad() != null && !localidad.tipoLocalidad().equals(localidadExi.getTipoLocalidad())) {
                 localidadExi.setTipoLocalidad(localidad.tipoLocalidad());
