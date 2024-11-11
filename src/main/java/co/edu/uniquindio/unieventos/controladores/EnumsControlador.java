@@ -44,4 +44,9 @@ public class EnumsControlador {
     public List<EstadoLocalidad> getEstadoLocalidad() {
         return Arrays.asList(EstadoLocalidad.values());
     }
+
+    @GetMapping("/get-estado-cupones")
+    public List<EstadoCupon> getEstadoCupon() {
+        return Arrays.asList(EstadoCupon.values());
+    }
 }

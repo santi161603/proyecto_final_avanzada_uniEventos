@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record CuponActualizadoDTO(
+
         @NotBlank(message = "El nombre del cupón no puede estar en blanco")
         String nombreCupon,
 

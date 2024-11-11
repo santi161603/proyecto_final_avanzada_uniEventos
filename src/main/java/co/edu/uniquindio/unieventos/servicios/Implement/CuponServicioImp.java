@@ -107,10 +107,14 @@ public class CuponServicioImp implements CuponServicio {
 
     private CuponObtenidoDTO mapearCuponObtenido(Cupon cuponObtenido) {
         return new CuponObtenidoDTO(
+                cuponObtenido.getCodigoCupon(),
                 cuponObtenido.getNombreCupon(),
                 cuponObtenido.getDescripcionCupon(),
                 cuponObtenido.getPorcentajeDescuento(),
-                cuponObtenido.getFechaVencimiento()
+                cuponObtenido.getEstadoCupon(),
+                cuponObtenido.getUserCupon(),
+                cuponObtenido.getFechaVencimiento(),
+                cuponObtenido.getCantidad()
         );
     }
 

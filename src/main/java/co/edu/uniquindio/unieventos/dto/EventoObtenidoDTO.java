@@ -16,6 +16,6 @@ public record EventoObtenidoDTO(
         @NotBlank @Length(max = 700) String descripcion,
         @NotNull EstadoCuenta estadoEvento,
         @NotNull TipoEvento tipoEvento, // concierto, teatro, deporte, etc.
-        @NotEmpty List<DTOSubEventos> subEventos, // Aquí agregamos la lista de subeventos
+        @NotEmpty List<SubEventoObtenidoDto> subEventos, // Aquí agregamos la lista de subeventos
         @NotNull String imagenPoster
 ) {}

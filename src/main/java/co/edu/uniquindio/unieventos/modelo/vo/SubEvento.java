@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventos.modelo.vo;
 
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +15,11 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @ToString
 public class SubEvento {
+    private  int idSubEvento;
     private LocalDate fechaEvento;
     private String horaEvento;
     private String localidad;
+    private EstadoCuenta estadoSubevento;
     private int cantidadEntradas;
     private float precioEntrada;
 }

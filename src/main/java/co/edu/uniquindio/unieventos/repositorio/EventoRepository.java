@@ -22,7 +22,7 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
     @Query(value = "{ 'subEvent.localidad' : { $in: ?0 } }")
     List<Evento> findBySubEventoLocalidadIn(List<String> localidadesIds);
 
-    @Query(value = "{ 'subEvent.fechaEvento' : ?0 }", fields = "{ 'subEvent.$': 1 }")
-    Optional<SubEvento> findBySubEventoFecha(LocalDate localDateTime);
+    @Query(value = "{ 'subEvent.idSubEvento' : ?0 }", fields = "{ 'subEvent.$': 1 }")
+    SubEvento findBySubEventoFecha(int id);
 
 }

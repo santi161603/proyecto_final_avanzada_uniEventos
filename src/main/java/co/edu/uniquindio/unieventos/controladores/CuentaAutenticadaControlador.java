@@ -39,6 +39,12 @@ public class CuentaAutenticadaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, cupones));
     }
 
+    @GetMapping("/obtener-cupon-id/{idCupon}")
+    public ResponseEntity<MensajeDTO<CuponObtenidoDTO>> obtenerTodosLosCupones(@PathVariable String idCupon) throws Exception {
+        CuponObtenidoDTO cupones = cuponServicio.obtenerCuponPorId(idCupon);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cupones));
+    }
+
     @GetMapping("/obtener-cuentaid/{usuarioId}")
     public ResponseEntity<MensajeDTO<CuentaListadaDTO>> obtenerCuentaId(@PathVariable String usuarioId) throws Exception {
         CuentaListadaDTO cuentaListadaDTO = cuentaServicio.obtenerCuentaId(usuarioId);

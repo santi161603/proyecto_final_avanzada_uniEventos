@@ -98,11 +98,7 @@ public class OrdenServicioImp implements OrdenServicio {
             // Obtener el evento y la localidad del ítem
             EventoObtenidoDTO evento = eventoServicio.obtenerEventoPorId(item.getEventoId());
 
-            Optional<SubEvento> subEvento = eventoRepository.findBySubEventoFecha(item.getFecha());
-
-            if (subEvento.isEmpty()) {
-                throw new Exception("No se puede realizar el Pago, no se encontro la entrada");
-            }
+            SubEvento subEvento = eventoRepository.findBySubEventoFecha(1);
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
@@ -113,7 +109,7 @@ public class OrdenServicioImp implements OrdenServicio {
                             .categoryId(evento.tipoEvento().name())
                             .quantity(item.getCantidadEntradas())
                             .currencyId("COP")
-                            .unitPrice(BigDecimal.valueOf(subEvento.get().getPrecioEntrada()))
+                            .unitPrice(BigDecimal.valueOf(subEvento.getPrecioEntrada()))
                             .build();
 
 
