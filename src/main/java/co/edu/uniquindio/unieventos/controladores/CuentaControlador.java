@@ -76,8 +76,8 @@ public class CuentaControlador {
     }
 
     @PutMapping("/obtener-todos-los-eventos-por-ciudad")
-    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEventosPorCiudad(@Valid @RequestBody Ciudades ciudad) throws Exception{
-        List<EventoObtenidoDTO> eventosCategoriaList = eventoServicio.obtenerEventosPorCiudad(ciudad);
+    public ResponseEntity<MensajeDTO<List<EventoObtenidoDTO>>> obtenerEventosPorCiudad(@Valid @RequestBody CiudadesDTO ciudad) throws Exception{
+        List<EventoObtenidoDTO> eventosCategoriaList = eventoServicio.obtenerEventosPorCiudad(ciudad.ciudad());
         return ResponseEntity.ok(new MensajeDTO<>(false,eventosCategoriaList));
     }
 
@@ -87,9 +87,9 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, localidades));
     }
 
-    @GetMapping("/obtener-por-id-localidad/{localidadId}")
-    public ResponseEntity<MensajeDTO<LocalidadEventoObtenidoDTO>> obtenerLocalidadPorId(@PathVariable String localidadId) throws Exception {
-        LocalidadEventoObtenidoDTO localidad = localidadServicio.obtenerLocalidadPorId(localidadId);
+    @GetMapping("/obtener-por-id-localidad/{idLocalidad}")
+    public ResponseEntity<MensajeDTO<LocalidadEventoObtenidoDTO>> obtenerLocalidadPorId(@PathVariable String idLocalidad) throws Exception {
+        LocalidadEventoObtenidoDTO localidad = localidadServicio.obtenerLocalidadPorId(idLocalidad);
         return ResponseEntity.ok(new MensajeDTO<>(false, localidad));
     }
 

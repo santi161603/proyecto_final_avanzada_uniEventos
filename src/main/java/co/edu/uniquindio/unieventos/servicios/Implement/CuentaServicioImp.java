@@ -8,9 +8,7 @@ import co.edu.uniquindio.unieventos.modelo.enums.RolUsuario;
 import co.edu.uniquindio.unieventos.modelo.vo.CodigoVerificacion;
 import co.edu.uniquindio.unieventos.modelo.vo.Usuario;
 import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
-import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.EmailServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,8 @@ public class CuentaServicioImp implements CuentaServicio {
     private final EmailServicio emailServicio;
     private final CuentaRepository cuentaRepository;
     private final ImagenesServicio imagenesServicio;
-    private final CarritoServicioImp carritoServicio;
+    private final CarritoServicio carritoServicio;
+    private final CuponServicio cuponServicio;
 
     @Override
     public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) throws Exception {
@@ -79,6 +79,9 @@ public class CuentaServicioImp implements CuentaServicio {
             nuevaCuenta.setCarrito(idCarrito);
 
             cuentaRepository.save(nuevaCuenta);
+
+
+
 
             // Enviar el código de verificación por correo
             String asunto = "Código de verificación para activar tu cuenta en UniEventos";
@@ -297,6 +300,39 @@ public class CuentaServicioImp implements CuentaServicio {
 
         // Si el código es correcto, activar la cuenta
         cuenta.setEstado(EstadoCuenta.ACTIVO);
+
+        DTOCrearCupon crearCupon = new DTOCrearCupon(
+                "Bienvenido",
+                "Cupon de bienvenida para nuevos usuarios",
+                50.0,
+                idUsuario,
+                LocalDate.now().plusYears(1),
+                1
+        );
+
+        cuponServicio.crearCupon(crearCupon);
+
+        // Enviar el código de bienvenida por correo
+        String asunto = "¡Gracias por activar tu cuenta en UniEventos!";
+        String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                "Gracias por activar tu cuenta en UniEventos. Como parte de la bienvenida, " +
+                "has recibido un cupón especial.\n\n" +
+                "Para aprovechar tu descuento del 50% en tu primera compra, por favor " +
+                "introduce el siguiente código en el campo 'Redimir cupón':\n\n" +
+                "Código de cupón: Bienvenido\n\n" +
+                "Este cupón es válido para tu primera compra en UniEventos. ¡No te lo pierdas!\n\n" +
+                "Si tienes alguna duda, no dudes en contactarnos.\n\n" +
+                "Gracias,\n" +
+                "El equipo de UniEventos.";
+
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, cuenta.getUsuario().getEmail());
+
+        try {
+            emailServicio.enviarCorreo(emailDTO);
+        } catch (Exception e) {
+            // Manejar la excepción en caso de fallo en el envío del correo
+            throw new RuntimeException("Error al enviar el nuevo correo de verificación", e);
+        }
 
         // Guardar los cambios en la base de datos
         cuentaRepository.save(cuenta);

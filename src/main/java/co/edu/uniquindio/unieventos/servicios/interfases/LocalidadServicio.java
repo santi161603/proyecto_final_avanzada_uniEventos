@@ -15,11 +15,11 @@ public interface LocalidadServicio {
 
     List<LocalidadEventoObtenidoDTO> obtenerLocalidades() throws Exception;
 
-    void actualizarLocalidad(DTOActualizarLocalidad localidad, String localidadId) throws Exception;
+    void actualizarLocalidad(DTOActualizarLocalidad localidad, String idLocalidad) throws Exception;
 
     void eliminarLocalidad(String localidadId) throws Exception;
 
-    LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String localidadId) throws Exception;
+    LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String idLocalidad) throws Exception;
 
     List<LocalidadEventoObtenidoDTO> obtenerLocalidadesPorCiudad(Ciudades ciudad) throws Exception;
 

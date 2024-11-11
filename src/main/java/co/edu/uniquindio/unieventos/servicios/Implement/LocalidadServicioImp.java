@@ -8,6 +8,7 @@ import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.repositorio.LocalidadRepository;
+import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class LocalidadServicioImp implements LocalidadServicio {
 
     private final LocalidadRepository localidadRepository;
+    private final ImagenesServicio imagenesServicio;
 
     @Override
     public void crearLocalidad(DTOCrearLocalidad localidad) throws Exception {
@@ -57,9 +59,9 @@ public class LocalidadServicioImp implements LocalidadServicio {
     }
 
     @Override
-    public void actualizarLocalidad(DTOActualizarLocalidad localidad, String localidadId) throws Exception {
+    public void actualizarLocalidad(DTOActualizarLocalidad localidad, String idLocalidad) throws Exception {
 
-        Optional<LocalidadEvento> localidadEvento = localidadRepository.findById(localidadId);
+        Optional<LocalidadEvento> localidadEvento = localidadRepository.findById(idLocalidad);
 
         if(localidadEvento.isPresent()) {
 
@@ -73,6 +75,10 @@ public class LocalidadServicioImp implements LocalidadServicio {
             }
             if (localidad.ciudad() != null && !localidad.ciudad().equals(localidadExi.getCiudad())) {
                 localidadExi.setCiudad(localidad.ciudad());
+            }
+            if (localidad.imageLocalidad() != null && !localidad.imageLocalidad().equals(localidadExi.getImageLocalidad())) {
+                imagenesServicio.eliminarImagen(localidadExi.getImageLocalidad());
+                localidadExi.setImageLocalidad(localidad.imageLocalidad());
             }
             if (localidad.tipoLocalidad() != null && !localidad.tipoLocalidad().equals(localidadExi.getTipoLocalidad())) {
                 localidadExi.setTipoLocalidad(localidad.tipoLocalidad());
@@ -101,11 +107,17 @@ public class LocalidadServicioImp implements LocalidadServicio {
     }
 
     @Override
-    public LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String localidadId) throws Exception {
+    public LocalidadEventoObtenidoDTO obtenerLocalidadPorId(String idLocalidad) throws Exception {
 
-        LocalidadEvento localidadEvento = localidadRepository.findById(localidadId).orElseThrow(() -> new Exception("Evento no encontrado con ID: " + localidadId));
+        Optional<LocalidadEvento> localidadEvento = localidadRepository.findById(idLocalidad);
 
-      return mapearALocalidadEventoObtenidoDTO(localidadEvento);
+        if(localidadEvento.isEmpty()) {
+            throw new Exception("No se encontro la localidad"+ idLocalidad);
+        }
+
+        LocalidadEvento localidadExi = localidadEvento.get();
+
+      return mapearALocalidadEventoObtenidoDTO(localidadExi);
 
     }
 
@@ -137,6 +149,7 @@ public class LocalidadServicioImp implements LocalidadServicio {
 
     private LocalidadEventoObtenidoDTO mapearALocalidadEventoObtenidoDTO(LocalidadEvento localidad) {
         return new LocalidadEventoObtenidoDTO(
+                localidad.getIdLocalidad(),
                 localidad.getNombreLocalidad(),
                 localidad.getDireccion(),
                 localidad.getCiudad(),

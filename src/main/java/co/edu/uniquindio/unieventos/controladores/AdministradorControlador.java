@@ -71,10 +71,10 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cupon creado exitosamente"));
     }
 
-    @PutMapping("/actualizar-localidad/{localidadId}")
+    @PutMapping("/actualizar-localidad/{idLocalidad}")
     public ResponseEntity<MensajeDTO<String>> actualizarLocalidad(@Valid @RequestBody DTOActualizarLocalidad localidad,
-                                                                @PathVariable String localidadId) throws Exception {
-        localidadServicio.actualizarLocalidad(localidad, localidadId);
+                                                                @PathVariable String idLocalidad) throws Exception {
+        localidadServicio.actualizarLocalidad(localidad, idLocalidad);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Localidad actualizada exitosamente"));
     }
 
