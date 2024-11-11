@@ -78,6 +78,13 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cupon actualizada exitosamente"));
     }
 
+    @DeleteMapping("/eliminar-cupon/{idCupon}")
+    public ResponseEntity<MensajeDTO<String>> eliminarCupon(@PathVariable String idCupon) throws Exception {
+        cuponServicio.eliminarCupon(idCupon);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cupón eliminado exitosamente"));
+    }
+
+
     @DeleteMapping("/eliminar-localidad/{localidadId}")
     public ResponseEntity<MensajeDTO<String>> eliminarLocalidad(@PathVariable String localidadId) throws Exception {
         localidadServicio.eliminarLocalidad(localidadId);
