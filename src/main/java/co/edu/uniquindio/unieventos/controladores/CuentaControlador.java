@@ -105,8 +105,6 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
     }
 
-
-
 }
 
 

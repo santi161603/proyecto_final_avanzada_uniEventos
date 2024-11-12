@@ -25,6 +25,19 @@ public class JWTUtils {
                 .compact();
     }
 
+    public String refreshToken(String refreshToken) {
+        try {
+            Jws<Claims> claims = parseJwt(refreshToken);
+            String email = claims.getBody().getSubject();
+
+            // Generar un nuevo access token con la misma información
+            Map<String, Object> claimsMap = claims.getBody();
+            return generarToken(email, claimsMap);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+            throw new RuntimeException("El refresh token es inválido", e);
+        }
+    }
+
     public Jws<Claims> parseJwt(String jwtString) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, IllegalArgumentException {
         JwtParser jwtParser = Jwts.parser().verifyWith( getKey() ).build();
         return jwtParser.parseSignedClaims(jwtString);

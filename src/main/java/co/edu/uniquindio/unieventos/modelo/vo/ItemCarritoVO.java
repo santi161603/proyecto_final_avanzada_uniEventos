@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ItemCarritoVO {
 
     private String eventoId;
-    private LocalDate fecha;
+    private int idSubevento;
     private int cantidadEntradas;
 
 }

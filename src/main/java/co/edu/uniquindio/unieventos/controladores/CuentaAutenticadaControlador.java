@@ -1,9 +1,6 @@
 package co.edu.uniquindio.unieventos.controladores;
 
-import co.edu.uniquindio.unieventos.dto.CuentaListadaDTO;
-import co.edu.uniquindio.unieventos.dto.CuponObtenidoDTO;
-import co.edu.uniquindio.unieventos.dto.DTOActualizarCuenta;
-import co.edu.uniquindio.unieventos.dto.MensajeDTO;
+import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.servicios.interfases.CarritoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
@@ -58,13 +55,13 @@ public class CuentaAutenticadaControlador {
     }
 
     @PostMapping("/anadir-item/{usuarioId}")
-    public ResponseEntity<MensajeDTO<String>> anadirItem(@Valid @RequestBody List<ItemCarritoVO> items, @PathVariable String usuarioId) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> anadirItem(@Valid @RequestBody ItemCarritoDTO items, @PathVariable String usuarioId) throws Exception {
         carritoServicio.anadirItem(items, usuarioId);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Items añadidos al carrito exitosamente"));
     }
 
-    @DeleteMapping("/eliminar-item/{usuarioId}")
-    public ResponseEntity<MensajeDTO<String>> eliminarItem(@Valid @RequestBody List<LocalDateTime> item, @PathVariable String usuarioId) throws Exception {
+    @PutMapping("/eliminar-item/{usuarioId}")
+    public ResponseEntity<MensajeDTO<String>> eliminarItem(@Valid @RequestBody ItemCarritoDTO item, @PathVariable String usuarioId) throws Exception {
         carritoServicio.eliminarItem(item, usuarioId);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Item eliminado del carrito exitosamente"));
     }
@@ -85,6 +82,24 @@ public class CuentaAutenticadaControlador {
     public ResponseEntity<MensajeDTO<String>> subirImagenPerdil(@PathVariable String usuarioId,@Valid @RequestBody MultipartFile imagen) throws Exception {
         cuentaServicio.subirImagenPerfilUsuario(usuarioId,imagen);
         return ResponseEntity.ok(new MensajeDTO<>(false,"Imagen de perfil actualizada exitosamente"));
+    }
+
+    @GetMapping("/obtener-carrito/{usuarioId}")
+    public ResponseEntity<MensajeDTO<CarritoObtenidoDTO>> obtenerCarrito(@PathVariable String usuarioId) throws Exception {
+        CarritoObtenidoDTO carritoObtenidoDTO = carritoServicio.obtenerCarrito(usuarioId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, carritoObtenidoDTO));
+    }
+
+    @PutMapping("/reducir-cantidad-item/{usuarioId}")
+    public ResponseEntity<MensajeDTO<String>> reducirCantidadItemCarrito(@Valid @RequestBody ItemCarritoDTO itemCarritoDTO,@PathVariable String usuarioId) throws Exception {
+        carritoServicio.reducirCantidad(itemCarritoDTO,usuarioId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cantidad reducida"));
+    }
+
+    @PutMapping("/aumentar-cantidad-item/{usuarioId}")
+    public ResponseEntity<MensajeDTO<String>> aumentarCantidadItemCarrito(@Valid @RequestBody ItemCarritoDTO itemCarritoDTO,@PathVariable String usuarioId) throws Exception {
+        carritoServicio.aumentarCantidad(itemCarritoDTO,usuarioId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cantidad reducida"));
     }
 
 }
