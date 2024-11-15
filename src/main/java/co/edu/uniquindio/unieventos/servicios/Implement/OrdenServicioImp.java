@@ -338,9 +338,9 @@ public class OrdenServicioImp implements OrdenServicio {
 
         // Configurar las urls de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("URL PAGO EXITOSO")
-                .failure("URL PAGO FALLIDO")
-                .pending("URL PAGO PENDIENTE")
+                .success("https://unieventos-d397d.web.app/pago-exitoso")
+                .failure("https://unieventos-d397d.web.app/pago-fallido")
+                .pending("https://unieventos-d397d.web.app/pago-pendiente")
                 .build();
 
 
@@ -349,7 +349,7 @@ public class OrdenServicioImp implements OrdenServicio {
                 .backUrls(backUrls)
                 .items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.get().getIdOrden()))
-                .notificationUrl("https://af6e-201-190-119-223.ngrok-free.app/servicios/cuenta-no-autenticada/notificacion-mercado-pago")
+                .notificationUrl("https://proyecto-final-avanzada-unieventos.onrender.com/servicios/cuenta-no-autenticada/notificacion-mercado-pago")
                 .build();
 
 
