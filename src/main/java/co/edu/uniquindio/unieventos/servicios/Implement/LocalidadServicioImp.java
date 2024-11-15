@@ -157,7 +157,10 @@ public class LocalidadServicioImp implements LocalidadServicio {
     private NombreyIdLocalidadObtenidaDTO mapearALocalidadEventoNombreidDTO(LocalidadEvento localidad) {
         return new NombreyIdLocalidadObtenidaDTO(
                 localidad.getNombreLocalidad(),
-                localidad.getIdLocalidad()
+                localidad.getIdLocalidad(),
+                localidad.getCiudad(),
+                localidad.getImageLocalidad(),
+                localidad.getCapacidadDisponible()
         );
     }
 

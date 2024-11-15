@@ -5,13 +5,13 @@ import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.LocalidadEvento;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.repositorio.LocalidadRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +50,7 @@ public class EventoServicioImp implements EventoServicio{
             subevento.setHoraEvento(subeventoDTO.horaEvento());
             subevento.setCantidadEntradas(subeventoDTO.cantidadEntradas());
             subevento.setPrecioEntrada(subeventoDTO.precioEntrada());
+            subevento.setEstadoSubevento(EstadoCuenta.ACTIVO);
             subEventos.add(subevento); // Agregar el subevento a la lista
         }
             // Agregar la lista de subeventos al evento
@@ -232,20 +233,22 @@ public class EventoServicioImp implements EventoServicio{
                 evento.getImagenPoster()
                 );}
 
-    private List<DTOSubEventos> mapearListaDeSubEventos(List<SubEvento> subEventos) {
+    private List<SubEventoObtenidoDto> mapearListaDeSubEventos(List<SubEvento> subEventos) {
         return subEventos.stream()
                 .map(this::mapearASubEventoDTO) // Mapea cada subEvento a DTOSubEventos
                 .collect(Collectors.toList()); // Recoge el resultado en una lista
     }
 
         // Méto para mapear subEvento a DTOSubEventos
-        private DTOSubEventos mapearASubEventoDTO(SubEvento subEvento) {
-            return new DTOSubEventos(
+        private SubEventoObtenidoDto mapearASubEventoDTO(SubEvento subEvento) {
+            return new SubEventoObtenidoDto(
+                    subEvento.getIdSubEvento(),
                     subEvento.getFechaEvento(), // Ajusta según los campos reales
                     subEvento.getLocalidad(),
                     subEvento.getHoraEvento(),
                     subEvento.getCantidadEntradas(),// Ajusta según los campos reales
-                    subEvento.getPrecioEntrada()
+                    subEvento.getPrecioEntrada(),
+                    subEvento.getEstadoSubevento()
                     // Continúa mapeando los demás campos necesarios
             );
 
@@ -270,5 +273,22 @@ public class EventoServicioImp implements EventoServicio{
                 // Continúa mapeando los demás campos necesarios
         );
 
+    }
+
+    @Override
+    public void reducirCantidadEntradasSubEvento(ItemCarritoVO item) throws Exception{
+
+        Evento evento = eventoRepository.findById(item.getEventoId()).orElseThrow(() -> new Exception("no se encontro el evetno con ID: " + item.getEventoId()));
+
+        SubEvento subEventoExistente = evento.getSubEvent().stream()
+                .filter(s -> s.getIdSubEvento() == item.getIdSubevento())
+                .findFirst()
+                .orElse(null);
+
+        int cantidadActual = subEventoExistente.getCantidadEntradas();
+
+        subEventoExistente.setCantidadEntradas(cantidadActual - item.getCantidadEntradas());
+
+        eventoRepository.save(evento);
     }
 }

@@ -1,6 +1,9 @@
 package co.edu.uniquindio.unieventos.dto;
 
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record NombreyIdLocalidadObtenidaDTO(
@@ -10,7 +13,16 @@ public record NombreyIdLocalidadObtenidaDTO(
         String nombreLocalidad,
 
         @NotBlank(message = "El ID de la localidad no puede estar en blanco")
-        String IdLocalidad
+        String IdLocalidad,
+
+        @NotNull
+        Ciudades ciudades,
+
+        @NotBlank
+        String imageLocalidad,
+
+        @Positive
+        int capacidadDisponible
 
 ) {
 }

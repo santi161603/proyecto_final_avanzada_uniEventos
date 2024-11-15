@@ -5,12 +5,14 @@ import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.EventoServicio;
 import co.edu.uniquindio.unieventos.servicios.interfases.LocalidadServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.OrdenServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class CuentaControlador {
     private final CuentaServicio cuentaServicio;
     private final EventoServicio eventoServicio;
     private final LocalidadServicio localidadServicio;
+    private final OrdenServicio ordenServicio;
 
     @PostMapping("/crear-cuenta")
     public ResponseEntity<MensajeDTO<String>> crearCuenta(@Valid @RequestBody DTOCrearCuenta cuenta) throws Exception {
@@ -104,6 +107,25 @@ public class CuentaControlador {
         List<NombreyIdLocalidadObtenidaDTO> cuentaList = localidadServicio.obtenerTodasLasLocalidadesNombreID();
         return ResponseEntity.ok(new MensajeDTO<>(false,cuentaList));
     }
+
+    @PostMapping("/notificacion-mercado-pago")
+    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object> request){
+        ordenServicio.recibirNotificacionMercadoPago(request);
+    }
+
+    @PutMapping("/suspender-cuenta")
+    public ResponseEntity<MensajeDTO<String>> suspenderCuenta(@Valid @RequestBody LoginDTO loginDTO){
+        cuentaServicio.suspenderCuenta(loginDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(true, "SUSPENDIDA"));
+    }
+
+    @PutMapping("/enviar-token-suspe")
+    public ResponseEntity<MensajeDTO<String>> suspenderCuenta(@Valid @RequestBody CorreoDTO correoDTO) throws Exception{
+        String id = cuentaServicio.enviarTokenRestablecer(correoDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, id));
+    }
+
+
 
 }
 

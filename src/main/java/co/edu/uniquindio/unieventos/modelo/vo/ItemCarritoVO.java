@@ -17,5 +17,5 @@ public class ItemCarritoVO {
     private String eventoId;
     private int idSubevento;
     private int cantidadEntradas;
-
+    private String cupon;
 }

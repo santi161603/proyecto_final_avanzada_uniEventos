@@ -32,5 +32,9 @@ public interface CuentaServicio {
 
     String enviarToken(CorreoDTO correo) throws Exception;
 
-    CuentaListadaDTO obtenerCuentaId(String idUsuario) throws Exception;
+    CuentaObtenidaClienteDTO obtenerCuentaId(String idUsuario) throws Exception;
+
+    void suspenderCuenta(LoginDTO loginDTO);
+
+    String enviarTokenRestablecer(CorreoDTO correo) throws Exception;
 }

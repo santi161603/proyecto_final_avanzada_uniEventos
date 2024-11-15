@@ -30,6 +30,8 @@ public interface CarritoServicio {
     // Limpiar carrito
     void limpiarCarrito(String usuarioId) throws Exception;
 
+    void actualizarItemCarrito(ItemCarritoDTO items, String usuarioId) throws Exception;
+
 }
 
 

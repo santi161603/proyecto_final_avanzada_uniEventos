@@ -4,7 +4,9 @@ import co.edu.uniquindio.unieventos.dto.CuponActualizadoDTO;
 import co.edu.uniquindio.unieventos.dto.CuponObtenidoDTO;
 import co.edu.uniquindio.unieventos.dto.DTOCrearCupon;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cupon;
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCupon;
+import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import co.edu.uniquindio.unieventos.repositorio.CuponRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.CuponServicio;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.plugins.tiff.TIFFDirectory;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,11 +32,19 @@ public class CuponServicioImp implements CuponServicio {
         Cupon cupon = new Cupon();
         cupon.setDescripcionCupon(cuponDTO.descripcionCupon());
         cupon.setNombreCupon(cuponDTO.nombreCupon());
-        if(cuponDTO.userCupon() == null){
+        if(cuponDTO.userCupon() == null || cuponDTO.userCupon().isEmpty()){
             cupon.setUserCupon("N/A");
         }else {
             cupon.setUserCupon(cuponDTO.userCupon());
         }
+        if(cuponDTO.ciudad() != null && !cuponDTO.ciudad().isEmpty()) {
+            cupon.setCiudad(Ciudades.valueOf(cuponDTO.ciudad()));
+        }
+        if(cuponDTO.tipoEvento() != null && !cuponDTO.tipoEvento().isEmpty()) {
+            cupon.setTipoEvento(TipoEvento.valueOf(cuponDTO.tipoEvento()));
+        }
+
+
         cupon.setPorcentajeDescuento(cuponDTO.porcentajeDescuento());
         cupon.setCantidad(cuponDTO.cantidad());
         cupon.setFechaVencimiento(cuponDTO.fechaVencimiento());
@@ -113,6 +124,8 @@ public class CuponServicioImp implements CuponServicio {
                 cuponObtenido.getPorcentajeDescuento(),
                 cuponObtenido.getEstadoCupon(),
                 cuponObtenido.getUserCupon(),
+                cuponObtenido.getCiudad(),
+                cuponObtenido.getTipoEvento(),
                 cuponObtenido.getFechaVencimiento(),
                 cuponObtenido.getCantidad()
         );
@@ -129,13 +142,9 @@ public class CuponServicioImp implements CuponServicio {
     }
 
     @Override
-    public void reducirCantidadCupon(String idCupon, int cantidadReducir) throws Exception {
+    public void reducirCantidadCupon(String idCupon) throws Exception {
         Cupon cupon = cuponRepository.findById(idCupon)
                 .orElseThrow(() -> new Exception("Cupon no encontrado"));
-
-        if (cupon.getCantidad() <= 0) {
-            throw new Exception("No hay cupones disponibles");
-        }
 
         cupon.setCantidad(cupon.getCantidad() - 1);
         cuponRepository.save(cupon);

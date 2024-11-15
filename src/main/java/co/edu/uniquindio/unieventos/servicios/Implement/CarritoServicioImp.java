@@ -320,10 +320,40 @@ public class CarritoServicioImp implements CarritoServicio {
 
         // Limpiar la lista de items
         carritoCompras.getItems().clear();
+        carritoCompras.setTotalPrecio(0.0);
 
         // Guardar el carrito actualizado (vacío)
         carritoRepository.save(carritoCompras);
     }
+
+    @Override
+    public void actualizarItemCarrito(ItemCarritoDTO items, String usuarioId) throws Exception {
+
+        CarritoCompras carritoCompras = carritoRepository.findByUsuarioId(usuarioId);
+
+        if(carritoCompras == null){
+            throw new Exception("Carrito de usuario no encontrado");
+        }
+
+        // Buscar el item en el carrito con el mismo eventoId e idSubevento
+        Optional<ItemCarritoVO> itemExistente = carritoCompras.getItems().stream()
+                .filter(item -> item.getEventoId().equals(items.eventoId()) &&
+                        item.getIdSubevento() == items.idSubevento())
+                .findFirst();
+
+        // Validar si el item existe en el carrito
+        if (!itemExistente.isPresent()) {
+            throw new Exception("Item no encontrado en el carrito");
+        }
+
+        // Asignar el cupón al item encontrado
+        itemExistente.get().setCupon(items.cupon());
+
+        // Guardar los cambios en el carrito
+        carritoRepository.save(carritoCompras);
+
+    }
+
 
     private CarritoObtenidoDTO mapearCarritoUsuario(CarritoCompras carrito){
        return new CarritoObtenidoDTO(

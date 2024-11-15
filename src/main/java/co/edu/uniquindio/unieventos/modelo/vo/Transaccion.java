@@ -15,6 +15,5 @@ public class Transaccion {
 
     private List<ItemCarritoVO> productos;
     private String idCliente;
-    private String idPago;
     private String qr;
 }

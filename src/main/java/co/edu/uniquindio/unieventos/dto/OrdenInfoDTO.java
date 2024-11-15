@@ -5,10 +5,16 @@ import jakarta.validation.constraints.NotNull;
 
 public record OrdenInfoDTO(
 
+        String idOrden,
+
         @NotNull(message = "La transacción no puede ser nula")
         @Valid TransaccionDto transaccion,
 
         @NotNull(message = "El pago no puede ser nulo")
-        @Valid PagoDTO pago
+        @Valid PagoObtenidoDTO pago,
+
+        double montoTotal,
+
+        double montoTotalSinDescuento
 ) {
 }

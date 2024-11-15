@@ -22,4 +22,6 @@ public class Orden {
     private String codigoPasarela;
     private Transaccion transaccion;
     private Pago pago;
+    private double montoTotal;
+    private double montoTotalSinDescuento;
 }

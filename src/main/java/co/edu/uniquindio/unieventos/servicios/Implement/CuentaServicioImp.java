@@ -65,7 +65,7 @@ public class CuentaServicioImp implements CuentaServicio {
         usuario.setContrasena(contrasenaEncrip);
         usuario.setEmail(dtoCrearCuenta.email());
 
-            nuevaCuenta.setImageProfile("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/11f17bd7-a025-4ea2-af87-f34f3bcff858-usuario.jpg?alt=media&token=9f26ebc4-54fb-476a-8fd5-67f365add5c3");
+            nuevaCuenta.setImageProfile("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/usuario.png?alt=media&token=cc3d5899-5b1f-4188-b4e4-37c6102ee1d7");
             nuevaCuenta.setUsuario(usuario);
             nuevaCuenta.setCodigoVerificacion(codigoVerif);
 
@@ -120,6 +120,9 @@ public class CuentaServicioImp implements CuentaServicio {
         }
         if (cuentaActualizada.direccion() != null && !cuentaActualizada.direccion().equals(usuario.getDireccion())) {
             usuario.setDireccion(cuentaActualizada.direccion());
+        }
+        if(cuentaActualizada.ciudad() !=null && !cuentaActualizada.ciudad().equals(usuario.getCiudad())) {
+            usuario.setCiudad(cuentaActualizada.ciudad());
         }
         if(cuentaActualizada.telefono() != null && !cuentaActualizada.telefono().equals(usuario.getTelefono())) {
             usuario.setTelefono(cuentaActualizada.telefono());
@@ -187,14 +190,17 @@ public class CuentaServicioImp implements CuentaServicio {
         Optional<Cuenta> usuarioCuenta = cuentaRepository.findById(usuarioId);
 
         if (usuarioCuenta.isPresent()) {
-
             Cuenta cuenta = usuarioCuenta.get();
-
-            String uriImagenProfile = imagenesServicio.ActualizarImagen(cuenta.getImageProfile(),imagen);
-
-            cuenta.setImageProfile(uriImagenProfile);
-
+            if(cuenta.getImageProfile().equals("https://firebasestorage.googleapis.com/v0/b/unieventos-d397d.appspot.com/o/usuario.png?alt=media&token=cc3d5899-5b1f-4188-b4e4-37c6102ee1d7")) {
+                String uriImagenProfile = imagenesServicio.subirImagen(imagen);
+                cuenta.setImageProfile(uriImagenProfile);
+            }else {
+                imagenesServicio.eliminarImagen(cuenta.getImageProfile());
+                String uriImagenProfile = imagenesServicio.subirImagen(imagen);
+                cuenta.setImageProfile(uriImagenProfile);
+            }
             cuentaRepository.save(cuenta);
+
         }else {
             throw new RuntimeException("Cuenta no encontrada");
         }
@@ -276,6 +282,8 @@ public class CuentaServicioImp implements CuentaServicio {
         if (codigoVerif.getCodigo() != codigoVerificacionDTO.codigo()) {
             throw new Exception("El código de verificación es incorrecto.");
         }
+        cuenta.setEstado(EstadoCuenta.ACTIVO);
+        cuentaRepository.save(cuenta);
     }
 
     @Override
@@ -302,10 +310,12 @@ public class CuentaServicioImp implements CuentaServicio {
         cuenta.setEstado(EstadoCuenta.ACTIVO);
 
         DTOCrearCupon crearCupon = new DTOCrearCupon(
-                "Bienvenido",
+                "BIENVENIDO",
                 "Cupon de bienvenida para nuevos usuarios",
-                50.0,
+                15.0,
                 idUsuario,
+                null,
+                null,
                 LocalDate.now().plusYears(1),
                 1
         );
@@ -367,20 +377,43 @@ public class CuentaServicioImp implements CuentaServicio {
         );
     }
 
-    public CuentaListadaDTO obtenerCuentaId(String idUsuario) throws Exception {
+    public CuentaObtenidaClienteDTO obtenerCuentaId(String idUsuario) throws Exception {
         // Obtener todas las cuentas de la base de datos
         Cuenta cuentas = Cuentarepo.findById(idUsuario).orElseThrow(
                 () -> new Exception("Cuenta no encontrada con ID: " + idUsuario)
         );
 
         // Convertir cada Cuenta a CuentaListadaDTO
-        return mapearACuentaListadaDTO(cuentas);
+        return mapearACuentaObtenidaClienteDTO(cuentas);
+    }
+
+    private CuentaObtenidaClienteDTO mapearACuentaObtenidaClienteDTO(Cuenta cuentas) {
+        Usuario usuario  = cuentas.getUsuario();
+
+        return new CuentaObtenidaClienteDTO(
+                usuario.getCedula(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getTelefono(), // Asumiendo que esto ya es una lista
+                usuario.getDireccion(),
+                usuario.getEmail(),
+                usuario.getCiudad(),
+                cuentas.getImageProfile()
+        );
     }
 
     @Override
     public TokenDTO iniciarSesion( LoginDTO loginDTO) throws Exception {
 
         Cuenta cuenta = obtenerPorEmail(loginDTO.email());
+
+        if (cuenta.getEstado().equals(EstadoCuenta.SUSPENDIDO)){
+            throw new Exception("suspendida");
+        }
+
+        if(cuenta.getEstado().equals(EstadoCuenta.ELIMINADO)){
+            throw new Exception("Haz eliminado tu cuenta, si quieres recuperarla por favor contacta con un administrador");
+        }
 
         if (cuenta.getEstado() != EstadoCuenta.ACTIVO) {
             throw new Exception("La cuenta está inactiva. Por favor, actívala para continuar.");
@@ -413,6 +446,56 @@ public class CuentaServicioImp implements CuentaServicio {
             throw new EntityNotFoundException("No se encontró una cuenta con el email: " + email);
         }
         return cuenta;
+    }
+
+    @Override
+    public void suspenderCuenta(LoginDTO loginDTO){
+
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(loginDTO.email());
+
+        cuenta.setEstado(EstadoCuenta.SUSPENDIDO);
+
+        cuentaRepository.save(cuenta);
+    }
+
+    @Override
+    public String enviarTokenRestablecer(CorreoDTO correo) throws Exception {
+
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo.correo());
+
+        int nuevoCodigoVerificacion = generarCodigoVerificacion();
+        CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
+
+        // Asignar el nuevo código y la fecha actual
+        codigoVerif.setCodigo(nuevoCodigoVerificacion);
+        codigoVerif.setFecha(LocalDateTime.now());
+
+        // Guardar los cambios en la base de datos
+        cuentaRepository.save(cuenta);
+
+        // Enviar el token de reactivación de cuenta por correo
+        String asunto = "Reactivación de cuenta para tu cuenta en UniEventos";
+        String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                "Hemos recibido una solicitud para reactivar tu cuenta en UniEventos.\n" +
+                "Por favor, utiliza el siguiente token para completar el proceso de reactivación:\n\n" +
+                "Token de reactivación: " + nuevoCodigoVerificacion + "\n\n" +
+                "Este token es válido por 15 minutos.\n" +
+                "Si no solicitaste la reactivación de tu cuenta, ignora este mensaje.\n\n" +
+                "Gracias,\n" +
+                "El equipo de UniEventos.";
+
+
+
+        EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, correo.correo());
+
+        try {
+            emailServicio.enviarCorreo(emailDTO);
+        } catch (Exception e) {
+            // Manejar la excepción en caso de fallo en el envío del correo
+            throw new RuntimeException("Error al enviar el nuevo correo de verificación", e);
+        }
+
+        return cuenta.getIdUsuario();
     }
 
 

@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -15,9 +16,12 @@ import java.util.Date;
 @ToString
 public class Pago {
 
+    private String pagoCodigo;
     private String metodoPago; // MercadoPago, PayPal, etc.
-    private EstadoPago estadoPago; // completado, pendiente, fallido
-    private LocalDateTime fechaPago;
-    private String cupon;
-    private double montoTotal;
+    private String estadoPago; // completado, pendiente, fallido
+    private LocalDate fechaPago;
+    private String detalleEstadoPago;
+    private String tipoPago;
+    private String moneda;
+    private String codifoAutorizacion;
 }

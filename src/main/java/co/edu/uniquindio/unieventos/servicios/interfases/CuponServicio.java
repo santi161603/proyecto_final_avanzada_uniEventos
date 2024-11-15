@@ -18,7 +18,7 @@ public interface CuponServicio {
 
     List<CuponObtenidoDTO> obtenerTodosLosCupones() throws Exception;
 
-    void reducirCantidadCupon(String idCupon, int cantidadReducir) throws Exception;
+    void reducirCantidadCupon(String idCupon) throws Exception;
 
     void aumentarCantidadCupon(String idCupon) throws Exception;
 

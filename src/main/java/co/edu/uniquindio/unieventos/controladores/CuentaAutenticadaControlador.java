@@ -2,10 +2,8 @@ package co.edu.uniquindio.unieventos.controladores;
 
 import co.edu.uniquindio.unieventos.dto.*;
 import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
-import co.edu.uniquindio.unieventos.servicios.interfases.CarritoServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.CuentaServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.CuponServicio;
-import co.edu.uniquindio.unieventos.servicios.interfases.ImagenesServicio;
+import co.edu.uniquindio.unieventos.servicios.interfases.*;
+import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +21,7 @@ public class CuentaAutenticadaControlador {
     private final CuentaServicio cuentaServicio;
     private final CuponServicio cuponServicio;
     private final CarritoServicio carritoServicio;
+    private final OrdenServicio ordenServicio;
 
     @PutMapping("/actualizar-cuenta")
     public ResponseEntity<MensajeDTO<String>> actualizarCuenta(@Valid @RequestBody DTOActualizarCuenta cuentaActualizada) throws Exception {
@@ -43,9 +42,9 @@ public class CuentaAutenticadaControlador {
     }
 
     @GetMapping("/obtener-cuentaid/{usuarioId}")
-    public ResponseEntity<MensajeDTO<CuentaListadaDTO>> obtenerCuentaId(@PathVariable String usuarioId) throws Exception {
-        CuentaListadaDTO cuentaListadaDTO = cuentaServicio.obtenerCuentaId(usuarioId);
-        return ResponseEntity.ok(new MensajeDTO<>(false, cuentaListadaDTO));
+    public ResponseEntity<MensajeDTO<CuentaObtenidaClienteDTO>> obtenerCuentaId(@PathVariable String usuarioId) throws Exception {
+        CuentaObtenidaClienteDTO cuentaObtenidaClienteDTO = cuentaServicio.obtenerCuentaId(usuarioId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, cuentaObtenidaClienteDTO));
     }
 
     @PostMapping("/crear-carrito/{usuarioId}")
@@ -79,7 +78,7 @@ public class CuentaAutenticadaControlador {
     }
 
     @PostMapping("/actualizar-imagen-perfil/{usuarioId}")
-    public ResponseEntity<MensajeDTO<String>> subirImagenPerdil(@PathVariable String usuarioId,@Valid @RequestBody MultipartFile imagen) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> subirImagenPerfil(@PathVariable String usuarioId,@RequestParam("imageProfile")  MultipartFile imagen) throws Exception {
         cuentaServicio.subirImagenPerfilUsuario(usuarioId,imagen);
         return ResponseEntity.ok(new MensajeDTO<>(false,"Imagen de perfil actualizada exitosamente"));
     }
@@ -102,4 +101,39 @@ public class CuentaAutenticadaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cantidad reducida"));
     }
 
+    @PostMapping("/crear-orden")
+    public ResponseEntity<MensajeDTO<String>> crearOrden(@Valid @RequestBody DTOCrearOrden orden) throws Exception {
+        String idOrden = ordenServicio.crearOrden(orden);
+        return ResponseEntity.ok(new MensajeDTO<>(false, idOrden));
+    }
+
+    @GetMapping("/crear-orden-desde-carrito/{usuarioId}")
+    public ResponseEntity<MensajeDTO<String>> crearOrdenDesdeCarrito(@PathVariable String usuarioId) throws Exception {
+        String idOrden = ordenServicio.crearOrdenDesdeCarrito(usuarioId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, idOrden));
+    }
+
+
+    @GetMapping("/realizar-pago/{idOrden}")
+    public ResponseEntity<MensajeDTO<Preference>> realizarPago(@PathVariable String idOrden) throws Exception {
+        Preference resultado = ordenServicio.realizarPago(idOrden);
+        return ResponseEntity.ok(new MensajeDTO<>(false, resultado));
+    }
+
+    @GetMapping("/obtener-ordenes-cliente/{idCliente}")
+    public ResponseEntity<MensajeDTO<List<OrdenInfoDTO>>> obtenerTodasLasOrdenesCliente(@PathVariable String idCliente) throws Exception {
+        List<OrdenInfoDTO> ordenInfoDTO = ordenServicio.obtenerTodasLasOrdenerCliente(idCliente);
+        return ResponseEntity.ok(new MensajeDTO<>(false, ordenInfoDTO));
+    }
+
+    @PutMapping("/actualizar-item-carrito/{usuarioID}")
+    public ResponseEntity<MensajeDTO<String>> actualizarItemCarrito(@Valid @RequestBody ItemCarritoDTO itemCarritoDTO, @PathVariable String usuarioID) throws Exception{
+        carritoServicio.actualizarItemCarrito(itemCarritoDTO, usuarioID);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Carrito actualizado exitosamente"));
+    }
+    @GetMapping("/obtener-orden-por-id/{ordenId}")
+    public ResponseEntity<MensajeDTO<OrdenInfoDTO>> obtenerOrdenPorId(@PathVariable String ordenId) throws Exception{
+        OrdenInfoDTO ordenInfoDTO = ordenServicio.obtenerOrdenPorId(ordenId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, ordenInfoDTO));
+    }
 }

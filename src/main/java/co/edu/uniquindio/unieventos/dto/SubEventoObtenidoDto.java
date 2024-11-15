@@ -12,6 +12,6 @@ public record SubEventoObtenidoDto(
         @NotNull String localidad,
         @NotNull String horaEvento,
         @Min(1) int cantidadEntradas,
-        @Min(100) float precioEntrada,
+        @Min(100) double precioEntrada,
         @NotNull EstadoCuenta estadoSubEvento
         ) {}

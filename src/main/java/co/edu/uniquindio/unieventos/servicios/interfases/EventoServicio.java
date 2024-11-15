@@ -5,6 +5,7 @@ import co.edu.uniquindio.unieventos.dto.DTOCrearEvento;
 import co.edu.uniquindio.unieventos.dto.EventoObtenidoDTO;
 import co.edu.uniquindio.unieventos.dto.TipoEventoDTO;
 import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 
 import java.util.List;
 
@@ -29,5 +30,7 @@ public interface EventoServicio {
     List<EventoObtenidoDTO> obtenerEventoCategoria(TipoEventoDTO evento) throws Exception;
 
     List<EventoObtenidoDTO> obtenerEventosPorCiudad(Ciudades ciudad) throws Exception;
+
+    void reducirCantidadEntradasSubEvento(ItemCarritoVO idEvento) throws Exception;
 }
 

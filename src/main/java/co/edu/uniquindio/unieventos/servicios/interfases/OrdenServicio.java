@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrdenServicio {
 
     // Método para crear una orden
-    void crearOrden(DTOCrearOrden orden) throws Exception;
+    String crearOrden(DTOCrearOrden orden) throws Exception;
 
     // Método para eliminar una orden por su ID
     void eliminarOrden(String idOrden) throws Exception;
@@ -25,8 +25,10 @@ public interface OrdenServicio {
     // Método para obtener todas las órdenes
     List<OrdenInfoDTO> obtenerTodasLasOrdenes() throws Exception;
 
+    List<OrdenInfoDTO> obtenerTodasLasOrdenerCliente(String idCliente) throws Exception;
+
     //metodo para crear una orden atravez del carrito
-    void crearOrdenDesdeCarrito(String idCarrito) throws Exception;
+    String crearOrdenDesdeCarrito(String usuarioid) throws Exception;
 
 
    //Realizar pago

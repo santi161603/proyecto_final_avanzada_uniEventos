@@ -21,5 +21,5 @@ public class SubEvento {
     private String localidad;
     private EstadoCuenta estadoSubevento;
     private int cantidadEntradas;
-    private float precioEntrada;
+    private double precioEntrada;
 }

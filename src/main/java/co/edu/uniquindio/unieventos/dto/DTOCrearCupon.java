@@ -1,5 +1,7 @@
 package co.edu.uniquindio.unieventos.dto;
 
+import co.edu.uniquindio.unieventos.modelo.enums.Ciudades;
+import co.edu.uniquindio.unieventos.modelo.enums.TipoEvento;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -16,6 +18,10 @@ public record DTOCrearCupon(
         double porcentajeDescuento,
 
         String userCupon,
+
+        String ciudad,
+
+        String tipoEvento,
 
         @NotNull(message = "La fecha de vencimiento no puede ser nula")
         @Future(message = "La fecha de vencimiento debe estar en el futuro")

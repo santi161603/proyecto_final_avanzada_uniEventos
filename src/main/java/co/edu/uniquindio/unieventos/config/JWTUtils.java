@@ -26,15 +26,17 @@ public class JWTUtils {
     }
 
     public String refreshToken(String refreshToken) {
+        System.out.println("Estoy aqui");
         try {
-            Jws<Claims> claims = parseJwt(refreshToken);
+            // Validar el refreshToken
+            Jws<Claims> claims = parseJwt(refreshToken); // Asegúrate de que `parseJwt` maneje bien las excepciones
             String email = claims.getBody().getSubject();
 
             // Generar un nuevo access token con la misma información
             Map<String, Object> claimsMap = claims.getBody();
-            return generarToken(email, claimsMap);
+            return generarToken(email, claimsMap); // Aquí generas el nuevo token
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
-            throw new RuntimeException("El refresh token es inválido", e);
+            throw new RuntimeException("El refresh token es inválido o caducado", e);
         }
     }
 
