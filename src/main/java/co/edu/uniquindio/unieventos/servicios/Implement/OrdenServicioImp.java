@@ -249,6 +249,8 @@ public class OrdenServicioImp implements OrdenServicio {
         boolean isWithinRange = !fechaSubevento.isBefore(hoy) && !fechaSubevento.isBefore(dosDiasDespues);
         System.out.println("Subevento está dentro del rango: " + isWithinRange);
 
+
+
         // Solo incluir si el estado es "ACTIVO" y está dentro del rango
         return subEvento.getEstadoSubevento().equals(EstadoCuenta.ACTIVO) && isWithinRange;
 
