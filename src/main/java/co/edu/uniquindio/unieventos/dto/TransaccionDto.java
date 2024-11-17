@@ -13,6 +13,8 @@ public record TransaccionDto(
         List<ItemCarritoDTO> productos,
 
         @NotBlank(message = "El ID del cliente no puede estar en blanco")
-        String idCliente
+        String idCliente,
+
+        String qR
 ) {
 }

@@ -22,6 +22,7 @@ public class AdministradorControlador {
     private final LocalidadServicio localidadServicio;
     private final CuponServicio cuponServicio;
     private final ImagenesServicio imagenesServicio;
+    private final OrdenServicio ordenServicio;
 
     @PostMapping("/crear-evento")
     public ResponseEntity<MensajeDTO<String>> crearEvento(@Valid @RequestBody DTOCrearEvento dtoCrearEvento) throws Exception {
@@ -100,6 +101,12 @@ public class AdministradorControlador {
     public ResponseEntity<MensajeDTO<String>> actualizarImagen(@Valid @RequestBody DTOActualizarImagen dtoActualizarImagen) throws Exception {
         imagenesServicio.ActualizarImagen(dtoActualizarImagen.imageName(), dtoActualizarImagen.imagen());
         return ResponseEntity.ok(new MensajeDTO<>(false, "Imagen actualizada exitosamente"));
+    }
+
+    @GetMapping("/obtener-todas-las-ordenes")
+    public ResponseEntity<MensajeDTO<List<OrdenInfoDTO>>> obtenerTodasLasOrdenes() throws Exception {
+        List<OrdenInfoDTO> ordenInfoDTOList = ordenServicio.obtenerTodasLasOrdenes();
+        return ResponseEntity.ok(new MensajeDTO<>(false, ordenInfoDTOList));
     }
 
     @DeleteMapping("/eliminar-imagen")

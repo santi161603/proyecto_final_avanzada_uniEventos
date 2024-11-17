@@ -55,7 +55,8 @@ public class EmailServicioImp implements EmailServicio {
                 .from("unieventost@gmail.com")
                 .to(emailDTO.destinatario())
                 .withSubject(emailDTO.asunto())
-                .withAttachment("imagen.jpg", dataSource)
+                .withPlainText(emailDTO.cuerpo())
+                .withAttachment("orden.jpg", dataSource)
                 .buildEmail();
         try (Mailer mailer = MailerBuilder
                 .withSMTPServer("smtp.gmail.com", 587, "unieventost@gmail.com", "vrqg vfkn neez hfpu")

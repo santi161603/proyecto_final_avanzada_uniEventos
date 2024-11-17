@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unieventos.servicios.Implement;
 
 import co.edu.uniquindio.unieventos.dto.*;
+import co.edu.uniquindio.unieventos.modelo.documentos.Cuenta;
 import co.edu.uniquindio.unieventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.Orden;
@@ -9,10 +10,16 @@ import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.modelo.vo.Pago;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
 import co.edu.uniquindio.unieventos.modelo.vo.Transaccion;
+import co.edu.uniquindio.unieventos.repositorio.CuentaRepository;
 import co.edu.uniquindio.unieventos.repositorio.CuponRepository;
 import co.edu.uniquindio.unieventos.repositorio.EventoRepository;
 import co.edu.uniquindio.unieventos.repositorio.OrdenRepository;
 import co.edu.uniquindio.unieventos.servicios.interfases.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -24,8 +31,12 @@ import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +55,9 @@ public class OrdenServicioImp implements OrdenServicio {
     private final CuponRepository cuponRepository;
     private final CuponServicio cuponServicio;
     private final CarritoServicio carritoServicio;
+    private final ImagenesServicio imagenesServicio;
+    private final CuentaRepository cuentaRepository;
+    private final EmailServicio emailServicio;
 
     @Override
     public String crearOrden(DTOCrearOrden orden) throws Exception {
@@ -126,7 +140,17 @@ public class OrdenServicioImp implements OrdenServicio {
 
     @Override
     public List<OrdenInfoDTO> obtenerTodasLasOrdenes() throws Exception {
-        return null;
+
+        List<Orden> ordenes = ordenRepository.findAll();
+
+        if(ordenes.isEmpty()){
+            throw  new Exception("No se encontraron ordenes");
+        }
+
+        return ordenes.stream()
+                .map(this::mapearAOrdenInfoDTO) // Mapea cada subEvento a DTOSubEventos
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -147,7 +171,8 @@ public class OrdenServicioImp implements OrdenServicio {
 
         TransaccionDto transaccionDto = new TransaccionDto(
                 convertirAItemCarritoDTO(orden.getTransaccion().getProductos()),
-                orden.getTransaccion().getIdCliente()
+                orden.getTransaccion().getIdCliente(),
+                orden.getTransaccion().getQr()
         );
 
         LocalDate fechaPago = orden.getPago().getFechaPago() != null ? orden.getPago().getFechaPago() : LocalDate.now();
@@ -404,6 +429,34 @@ public class OrdenServicioImp implements OrdenServicio {
                 reducirCantidad(payment, orden);
                 Pago pago = crearPago(payment);
                 orden.setPago(pago);
+                File qR =generarQr(orden.getIdOrden());
+
+                String url = imagenesServicio.subirImagenDesdeArchivo(qR);
+
+                Cuenta cuenta = cuentaRepository.findById(orden.getTransaccion().getIdCliente()).orElseThrow(() -> new Exception("Cliente no encontrado"));
+                String asunto = "Pago procesado con éxito";
+                String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                        "Tu pago ha sido procesado correctamente. " +
+                        "Puedes ver los detalles de tu orden escaneando el código QR que se muestra a continuación.\n\n" +
+                        "Gracias por tu compra en UniEventos. ¡Esperamos que disfrutes de tu evento!\n\n" +
+                        "Si tienes alguna duda o necesitas ayuda, no dudes en contactarnos.\n\n" +
+                        "Gracias,\n" +
+                        "El equipo de UniEventos.";
+                EmailDTO emailDTO = new EmailDTO(
+                        asunto,
+                        cuerpo,
+                        cuenta.getUsuario().getEmail()
+                );
+
+                try {
+                    // Enviar el correo
+                    emailServicio.enviarCorreoImagen(emailDTO,url);
+                } catch (Exception e) {
+                    // Manejar la excepción en caso de fallo en el envío del correo
+                    throw new RuntimeException("Error al enviar el correo de confirmación de pago", e);
+                }
+                orden.getTransaccion().setQr(url);
+
                 orden.setMontoTotal(payment.getTransactionAmount().floatValue());
                 ordenRepository.save(orden);
 
@@ -432,6 +485,51 @@ public class OrdenServicioImp implements OrdenServicio {
     private void reducirCantidad(Payment payment, Orden orden) throws Exception {
         System.out.println("Aqui estoy pago" + payment.getStatus());
         if (payment.getStatus().equals("approved")) {
+
+            // Validación fuera del for: obtener todas las órdenes con estado de pago "approved"
+            List<Orden> ordenesAprobadas = ordenRepository.findByPagoEstadoPago("approved");
+
+            System.out.println("cantidad ordenes: " + ordenesAprobadas + ordenesAprobadas.size());
+            // Verificamos el tamaño de la lista
+            if (ordenesAprobadas.isEmpty()) {
+                DTOCrearCupon crearCupon = new DTOCrearCupon(
+                        "PRIMERACOMPRA",  // Nombre del cupón actualizado
+                        "Cupon de descuento para tu primera compra",  // Descripción actualizada
+                        10.0,  // Descuento actualizado al 10%
+                        orden.getTransaccion().getIdCliente(),
+                        null,
+                        null,
+                        LocalDate.now().plusYears(1),  // Válido por un año
+                        1
+                );
+
+                cuponServicio.crearCupon(crearCupon);
+
+                Cuenta cuenta = cuentaRepository.findById(orden.getTransaccion().getIdCliente()).orElseThrow(() -> new Exception("Cuenta no encontrada"));
+
+                String asunto = "¡Gracias por tu primera compra en UniEventos!";
+                String cuerpo = "Hola " + cuenta.getUsuario().getNombre() + ",\n\n" +
+                        "Gracias por realizar tu primera compra en UniEventos. Como agradecimiento, " +
+                        "te regalamos un cupón con un descuento del 10% para tu próxima compra.\n\n" +
+                        "Para aprovechar este descuento, por favor introduce el siguiente código en el campo 'Redimir cupón':\n\n" +
+                        "Código de cupón: PRIMERACOMPRA\n\n" +
+                        "Este cupón es válido para tu próxima compra en UniEventos. ¡No te lo pierdas!\n\n" +
+                        "Si tienes alguna duda, no dudes en contactarnos.\n\n" +
+                        "Gracias,\n" +
+                        "El equipo de UniEventos.";
+
+
+                EmailDTO emailDTO = new EmailDTO(asunto, cuerpo, cuenta.getUsuario().getEmail());
+
+                try {
+                    // Enviar el correo
+                    emailServicio.enviarCorreo(emailDTO);
+                } catch (Exception e) {
+                    // Manejar la excepción en caso de fallo en el envío del correo
+                    throw new RuntimeException("Error al enviar el correo de agradecimiento por la primera compra", e);
+                }
+            }
+
             for (ItemCarritoVO item : orden.getTransaccion().getProductos()) {
                 eventoServicio.reducirCantidadEntradasSubEvento(item);
 
@@ -447,5 +545,20 @@ public class OrdenServicioImp implements OrdenServicio {
 
             }
         }
+    }
+
+    public File generarQr(String idOrden) throws WriterException, IOException {
+        String qrContent = "https://unieventos-d397d.web.app/detalle-orden/" + idOrden;
+        String filePath = "qr-" + idOrden + ".png"; // Nombre del archivo
+        int width = 300;  // Ancho del QR
+        int height = 300; // Alto del QR
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, width, height);
+
+        Path path = FileSystems.getDefault().getPath(filePath);
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+
+        return new File(filePath); // Retorna el archivo QR
     }
 }
