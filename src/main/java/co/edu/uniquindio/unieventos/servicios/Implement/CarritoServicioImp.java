@@ -66,24 +66,40 @@ public class CarritoServicioImp implements CarritoServicio {
         double precioSubevento = subEvento.getPrecioEntrada();
         double totalPrecioItem = items.cantidadEntradas() * precioSubevento;
 
-        // Crear el item de carrito
-        ItemCarritoVO itemCarritoVO = new ItemCarritoVO();
-        itemCarritoVO.setEventoId(items.eventoId());
-        itemCarritoVO.setIdSubevento(items.idSubevento());
-        itemCarritoVO.setCantidadEntradas(items.cantidadEntradas());
+        // Verificar si ya existe el item con el mismo eventoId y subeventoId en el carrito
+        Optional<ItemCarritoVO> existingItemOptional = carritoCompras.getItems().stream()
+                .filter(item -> item.getEventoId().equals(items.eventoId()) && item.getIdSubevento() == items.idSubevento())
+                .findFirst();
 
-        // Añadir el item al carrito
-        carritoCompras.getItems().add(itemCarritoVO);
+        if (existingItemOptional.isPresent()) {
+            // Si el item ya existe, sumamos las entradas al item existente
+            ItemCarritoVO existingItem = existingItemOptional.get();
+            existingItem.setCantidadEntradas(existingItem.getCantidadEntradas() + items.cantidadEntradas());
 
-        // Actualizar el total del carrito (sumar el precio del item)
-        if(carritoCompras.getTotalPrecio() == null){
-            carritoCompras.setTotalPrecio(totalPrecioItem);
-        }else {
+            // Actualizar el total del carrito
             carritoCompras.setTotalPrecio(carritoCompras.getTotalPrecio() + totalPrecioItem);
+        } else {
+            // Si el item no existe, crear uno nuevo
+            ItemCarritoVO itemCarritoVO = new ItemCarritoVO();
+            itemCarritoVO.setEventoId(items.eventoId());
+            itemCarritoVO.setIdSubevento(items.idSubevento());
+            itemCarritoVO.setCantidadEntradas(items.cantidadEntradas());
+
+            // Añadir el nuevo item al carrito
+            carritoCompras.getItems().add(itemCarritoVO);
+
+            // Actualizar el total del carrito con el nuevo item
+            if (carritoCompras.getTotalPrecio() == null) {
+                carritoCompras.setTotalPrecio(totalPrecioItem);
+            } else {
+                carritoCompras.setTotalPrecio(carritoCompras.getTotalPrecio() + totalPrecioItem);
+            }
         }
+
         // Guardar el carrito actualizado con los items añadidos
         carritoRepository.save(carritoCompras);
     }
+
 
 
 
