@@ -59,6 +59,12 @@ public class CuentaAutenticadaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Items añadidos al carrito exitosamente"));
     }
 
+    @DeleteMapping("/eliminar-cuenta/{idUsuario}")
+    public ResponseEntity<MensajeDTO<String>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
+        cuentaServicio.eliminarCuenta(idUsuario);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta eliminada"));
+    }
+
     @PutMapping("/eliminar-item/{usuarioId}")
     public ResponseEntity<MensajeDTO<String>> eliminarItem(@Valid @RequestBody ItemCarritoDTO item, @PathVariable String usuarioId) throws Exception {
         carritoServicio.eliminarItem(item, usuarioId);
