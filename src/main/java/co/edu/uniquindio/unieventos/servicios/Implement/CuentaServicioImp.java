@@ -414,7 +414,7 @@ public class CuentaServicioImp implements CuentaServicio {
         }
 
         if (cuenta.getEstado() != EstadoCuenta.ACTIVO) {
-            throw new Exception("La cuenta está inactiva. Por favor, actívala para continuar.");
+            throw new Exception("inactiva");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
