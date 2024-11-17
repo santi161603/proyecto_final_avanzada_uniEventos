@@ -287,10 +287,9 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public void activarCuenta(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception {
+    public void activarCuenta(CorreoDTO correo, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
-        Cuenta cuenta = cuentaRepository.findById(idUsuario)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo.correo());
 
         // Obtener el objeto CodigoVerificacion de la cuenta
         CodigoVerificacion codigoVerif = cuenta.getCodigoVerificacion();
@@ -313,7 +312,7 @@ public class CuentaServicioImp implements CuentaServicio {
                 "BIENVENIDO",
                 "Cupon de bienvenida para nuevos usuarios",
                 15.0,
-                idUsuario,
+                cuenta.getIdUsuario(),
                 null,
                 null,
                 LocalDate.now().plusYears(1),
