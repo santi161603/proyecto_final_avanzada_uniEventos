@@ -36,6 +36,8 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
+
+
     @PutMapping("/verificar-codigo/{idUsuario}")
     public ResponseEntity<MensajeDTO<String>> verificarCodigo(@PathVariable String idUsuario,@Valid @RequestBody CodigoVerificacionDTO codigoVerificacionDTO ) throws Exception {
         cuentaServicio.verificarCodigo(idUsuario,codigoVerificacionDTO);

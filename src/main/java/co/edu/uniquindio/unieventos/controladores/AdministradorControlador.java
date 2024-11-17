@@ -42,12 +42,6 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Evento eliminado"));
     }
 
-    @DeleteMapping("/eliminar-cuenta/{idUsuario}")
-    public ResponseEntity<MensajeDTO<String>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
-        cuentaAdministrador.eliminarCuenta(idUsuario);
-        return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta eliminada"));
-    }
-
     @GetMapping("/obtener-todas-las-cuentas")
     public ResponseEntity<MensajeDTO<List<CuentaListadaDTO>>> obtenerTodasLasCuentas() throws Exception{
         List<CuentaListadaDTO> cuentaList = cuentaAdministrador.obtenerTodasLasCuentas();
