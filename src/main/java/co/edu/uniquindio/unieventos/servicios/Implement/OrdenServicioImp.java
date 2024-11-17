@@ -123,6 +123,11 @@ public class OrdenServicioImp implements OrdenServicio {
     @Override
     public void eliminarOrden(String idOrden) throws Exception {
 
+        Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new Exception("No se encontro la orden"));
+
+        orden.getPago().setMetodoPago("ELIMINADO");
+
+        ordenRepository.save(orden);
     }
 
     @Override
