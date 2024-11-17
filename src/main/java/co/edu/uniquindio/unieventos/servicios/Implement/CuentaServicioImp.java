@@ -338,7 +338,7 @@ public class CuentaServicioImp implements CuentaServicio {
                 "has recibido un cupón especial.\n\n" +
                 "Para aprovechar tu descuento del 15% en tu primera compra, por favor " +
                 "introduce el siguiente código en el campo 'Redimir cupón':\n\n" +
-                "Código de cupón: BIENVEMIDO\n\n" +
+                "Código de cupón: BIENVENIDO\n\n" +
                 "Este cupón es válido para tu primera compra en UniEventos. ¡No te lo pierdas!\n\n" +
                 "Si tienes alguna duda, no dudes en contactarnos.\n\n" +
                 "Gracias,\n" +
