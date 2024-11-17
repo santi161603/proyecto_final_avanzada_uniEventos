@@ -42,9 +42,9 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Codigo exitoso"));
     }
 
-    @PutMapping("/reenviar-token/{idUsuario}")
-    public ResponseEntity<MensajeDTO<String>> reenviarToken(@PathVariable String idUsuario) throws Exception{
-        cuentaServicio.reenviarToken(idUsuario);
+    @PutMapping("/reenviar-token")
+    public ResponseEntity<MensajeDTO<String>> reenviarToken(@Valid @RequestBody CorreoDTO correo) throws Exception{
+        cuentaServicio.reenviarToken(correo);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Token reenviado"));
     }
 

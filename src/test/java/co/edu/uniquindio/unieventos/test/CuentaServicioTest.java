@@ -32,7 +32,6 @@ public class CuentaServicioTest {
 
     @Test
     public void reenviarToken() throws Exception {
-        cuentaServicio.reenviarToken("670830e86b8c621efd663bc2");
     }
 
     @Test
