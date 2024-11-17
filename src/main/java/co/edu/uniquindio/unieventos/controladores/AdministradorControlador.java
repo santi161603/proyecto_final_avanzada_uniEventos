@@ -42,7 +42,7 @@ public class AdministradorControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Evento eliminado"));
     }
 
-    @DeleteMapping("/eliminar-cuenta-definitivo/{idUsuario}")
+    @DeleteMapping("/eliminar-cuenta/{idUsuario}")
     public ResponseEntity<MensajeDTO<String>> eliminarCuenta(@PathVariable String idUsuario) throws Exception {
         cuentaAdministrador.eliminarCuenta(idUsuario);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta eliminada"));
