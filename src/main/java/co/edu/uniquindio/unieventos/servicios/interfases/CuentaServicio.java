@@ -24,7 +24,7 @@ public interface CuentaServicio {
 
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
-    void  reenviarToken(String idUsuario) throws Exception;
+    void  reenviarToken(CorreoDTO correo) throws Exception;
 
     void subirImagenPerfilUsuario(String usuarioId, MultipartFile imagen) throws Exception;
 

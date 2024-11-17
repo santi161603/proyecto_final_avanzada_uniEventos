@@ -152,10 +152,9 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public void reenviarToken(String idUsuario) throws Exception {
+    public void reenviarToken(CorreoDTO correo) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
-        Cuenta cuenta = cuentaRepository.findById(idUsuario)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró la cuenta con ID: " + idUsuario));
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo.correo());
 
         // Generar un nuevo código de verificación
         int nuevoCodigoVerificacion = generarCodigoVerificacion();
