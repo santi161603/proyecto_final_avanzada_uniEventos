@@ -8,6 +8,8 @@ import com.google.cloud.storage.*;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.UUID;
 
 @Service
@@ -72,6 +74,22 @@ public class ImagenesServicioImpl implements ImagenesServicio {
         // Elimina la imagen del almacenamiento
         blob.delete();
     }
+
+    public String subirImagenDesdeArchivo(File file) throws Exception {
+        Bucket bucket = StorageClient.getInstance().bucket();
+
+        String fileName = String.format("%s-%s", UUID.randomUUID(), file.getName());
+
+        // Usa FileInputStream para leer el archivo
+        Blob blob = bucket.create(fileName, new FileInputStream(file), "application/octet-stream");
+
+        return String.format(
+                "https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media",
+                bucket.getName(),
+                blob.getName()
+        );
+    }
+
 
     private String extraerNombreImagen(String urlImagen) {
 

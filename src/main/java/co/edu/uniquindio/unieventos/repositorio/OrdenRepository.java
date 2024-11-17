@@ -14,4 +14,6 @@ public interface OrdenRepository extends MongoRepository<Orden, String> {
     @Query("{ 'transaccion.idCliente' : ?0 }")
     List<Orden> findByIdCliente(String idCliente);
 
+    @Query("{'pago.estadoPago': ?0 }")
+    List<Orden> findByPagoEstadoPago(String approved);
 }
