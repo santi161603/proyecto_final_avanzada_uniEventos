@@ -6,6 +6,7 @@ import co.edu.uniquindio.unieventos.modelo.documentos.Cupon;
 import co.edu.uniquindio.unieventos.modelo.documentos.Evento;
 import co.edu.uniquindio.unieventos.modelo.documentos.Orden;
 import co.edu.uniquindio.unieventos.modelo.enums.EstadoCuenta;
+import co.edu.uniquindio.unieventos.modelo.enums.EstadoCupon;
 import co.edu.uniquindio.unieventos.modelo.vo.ItemCarritoVO;
 import co.edu.uniquindio.unieventos.modelo.vo.Pago;
 import co.edu.uniquindio.unieventos.modelo.vo.SubEvento;
@@ -323,7 +324,11 @@ public class OrdenServicioImp implements OrdenServicio {
                 }
                 System.out.println(cupon.getPorcentajeDescuento() + "este es el porcentaje de descuento");
                 if (cupon.getCantidad() > 0) {
-                    valorEntrada -= subEvento.getPrecioEntrada() * (cupon.getPorcentajeDescuento() / 100);
+                    if(cupon.getEstadoCupon().equals(EstadoCupon.ACTIVO)) {
+                        valorEntrada -= subEvento.getPrecioEntrada() * (cupon.getPorcentajeDescuento() / 100);
+                    }else {
+                        throw new Exception("Uno de los cupones ya no esta activo");
+                    }
                 } else {
                     throw new Exception("No se puede realizar el Pago, Uno de los cupones ya no tiene existencias");
                 }
