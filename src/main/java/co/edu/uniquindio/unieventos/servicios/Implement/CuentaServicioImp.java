@@ -151,7 +151,9 @@ public class CuentaServicioImp implements CuentaServicio {
 
         Optional<Cuenta> cuenta = cuentaRepository.findById(idUsuario);
 
+        System.out.println("estoy dentro de eliminar la cuenta" + cuenta + "aqui el id" + idUsuario + "otro:" + cuenta.get().getIdUsuario());
         if (cuenta.isPresent()) {
+            System.out.println("estoy borrando la cuenta");
             cuenta.get().setEstado(EstadoCuenta.ELIMINADO);
         } else {
             throw new RuntimeException("El usuario no existe");
