@@ -17,7 +17,7 @@ public interface CuentaServicio {
 
     void verificarCodigo(String idUsuario, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception;
 
-    void activarCuenta(CorreoDTO correo, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception;
+    void activarCuenta(CorreoActivaDTO correo) throws Exception;
 
     // Método para obtener todas las cuentas
     List<CuentaListadaDTO> obtenerTodasLasCuentas()throws Exception;

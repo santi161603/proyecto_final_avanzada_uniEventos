@@ -286,7 +286,7 @@ public class CuentaServicioImp implements CuentaServicio {
     }
 
     @Override
-    public void activarCuenta(CorreoDTO correo, CodigoVerificacionDTO codigoVerificacionDTO) throws Exception {
+    public void activarCuenta(CorreoActivaDTO correo) throws Exception {
         // Buscar la cuenta en el repositorio usando el ID del usuario
         Cuenta cuenta = cuentaRepository.findByUsuarioEmail(correo.correo());
 
@@ -300,7 +300,7 @@ public class CuentaServicioImp implements CuentaServicio {
         }
 
         // Validar si el código recibido es igual al guardado en la cuenta
-        if (codigoVerif.getCodigo() != codigoVerificacionDTO.codigo()) {
+        if (codigoVerif.getCodigo() != correo.codigo().codigo()) {
             throw new Exception("El código de verificación es incorrecto.");
         }
 
