@@ -30,9 +30,9 @@ public class CuentaControlador {
         return ResponseEntity.ok(new MensajeDTO<>(false, idUsuario));
     }
 
-    @PutMapping("/activar-cuenta/{idUsuario}")
-    public ResponseEntity<MensajeDTO<String>> activarCuenta(@PathVariable String idUsuario,@Valid @RequestBody CodigoVerificacionDTO codigoVerificacionDTO ) throws Exception {
-        cuentaServicio.activarCuenta(idUsuario,codigoVerificacionDTO);
+    @PutMapping("/activar-cuenta")
+    public ResponseEntity<MensajeDTO<String>> activarCuenta(@Valid @RequestBody CorreoDTO correo,@Valid @RequestBody CodigoVerificacionDTO codigoVerificacionDTO ) throws Exception {
+        cuentaServicio.activarCuenta(correo,codigoVerificacionDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Cuenta activada con exito"));
     }
 
