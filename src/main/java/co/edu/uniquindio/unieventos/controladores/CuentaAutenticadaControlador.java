@@ -136,4 +136,10 @@ public class CuentaAutenticadaControlador {
         OrdenInfoDTO ordenInfoDTO = ordenServicio.obtenerOrdenPorId(ordenId);
         return ResponseEntity.ok(new MensajeDTO<>(false, ordenInfoDTO));
     }
+
+    @DeleteMapping("/cancelar-orden/{ordenId}")
+    public ResponseEntity<MensajeDTO<String>> cancelarOrden(@PathVariable String ordenId) throws Exception{
+        ordenServicio.eliminarOrden(ordenId);
+        return ResponseEntity.ok(new MensajeDTO<>(false, "Orden cancelada con exito"));
+    }
 }
