@@ -487,11 +487,24 @@ public class OrdenServicioImp implements OrdenServicio {
         if (payment.getStatus().equals("approved")) {
 
             // Validación fuera del for: obtener todas las órdenes con estado de pago "approved"
+            // Obtener todas las órdenes con estado de pago "approved"
             List<Orden> ordenesAprobadas = ordenRepository.findByPagoEstadoPago("approved");
+
+            if (ordenesAprobadas.isEmpty()) {
+                throw new Exception("Error: no se encontraron órdenes aprobadas.");
+            }
+
+// Filtrar las órdenes aprobadas cuyo `idUsuario` coincide con el `idCliente`
+            List<Orden> ordenesFiltradas = ordenesAprobadas.stream()
+                    .filter(ordenUso ->
+                            ordenUso.getTransaccion() != null &&
+                                    ordenUso.getTransaccion().getIdCliente() == orden.getTransaccion().getIdCliente()
+                    )
+                    .toList();
 
             System.out.println("cantidad ordenes: " + ordenesAprobadas + ordenesAprobadas.size());
             // Verificamos el tamaño de la lista
-            if (ordenesAprobadas.isEmpty()) {
+            if (ordenesFiltradas.size() <=1) {
                 DTOCrearCupon crearCupon = new DTOCrearCupon(
                         "PRIMERACOMPRA",  // Nombre del cupón actualizado
                         "Cupon de descuento para tu primera compra",  // Descripción actualizada
