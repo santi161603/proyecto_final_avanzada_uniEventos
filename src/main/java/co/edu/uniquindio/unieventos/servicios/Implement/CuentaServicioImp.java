@@ -44,7 +44,7 @@ public class CuentaServicioImp implements CuentaServicio {
 
         Cuenta cuenta = cuentaRepository.findByUsuarioEmail(dtoCrearCuenta.email());
 
-        if(cuenta.getIdUsuario() != null){
+        if(cuenta != null){
             throw new Exception("El usuario ya existe");
         }
 
