@@ -41,6 +41,13 @@ public class CuentaServicioImp implements CuentaServicio {
     @Override
     public String crearCuenta(DTOCrearCuenta dtoCrearCuenta) throws Exception {
         // Crear una nueva instancia de Cuenta
+
+        Cuenta cuenta = cuentaRepository.findByUsuarioEmail(dtoCrearCuenta.email());
+
+        if(cuenta.getIdUsuario() != null){
+            throw new Exception("El usuario ya existe");
+        }
+
         Cuenta nuevaCuenta = new Cuenta();
         // Asignar los valores del DTO a la entidad Cuenta
         nuevaCuenta.setRol(RolUsuario.CLIENTE);
