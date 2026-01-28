@@ -11,7 +11,7 @@ RUN gradle bootJar
 #
 # Package stage
 #
-FROM eclipse-temurin:17
+FROM amazoncorretto:17
 ARG JAR_FILE=build/libs/*.jar
 COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
 EXPOSE ${PORT}
